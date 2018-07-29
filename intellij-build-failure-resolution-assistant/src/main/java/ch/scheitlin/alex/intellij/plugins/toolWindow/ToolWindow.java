@@ -17,6 +17,7 @@ public class ToolWindow implements ToolWindowFactory {
     private LoginPanel panelLogin;
     private OverviewPanel panelOverview;
     private InformationPanel panelInformation;
+    private TreeViewPanel panelTreeView;
     private FixPanel panelFix;
 
     private Project project;
@@ -82,13 +83,16 @@ public class ToolWindow implements ToolWindowFactory {
                     errors,
                     project
             );
-            setToolWindowContent(panelInformation);
+
+            this.panelTreeView = new TreeViewPanel(controller.getMavenModules());
+
+            setToolWindowContent(this.panelInformation, "Summary", this.panelTreeView, "Tree View");
 
         } else if (controller.isFixing()) {
             // show build fix panel if user is fixing a broken build
             this.panelFix = new FixPanel();
 
-            setToolWindowContent(panelFix);
+            setToolWindowContent(this.panelFix);
         }
     }
 
@@ -97,5 +101,14 @@ public class ToolWindow implements ToolWindowFactory {
         Content content = contentFactory.createContent(component, "", false);
         this.overview.getContentManager().removeAllContents(true);
         this.overview.getContentManager().addContent(content);
+    }
+
+    private void setToolWindowContent(JComponent component1, String title1, JComponent component2, String title2) {
+        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        Content content1 = contentFactory.createContent(component1, title1, false);
+        Content content2 = contentFactory.createContent(component2, title2, false);
+        this.overview.getContentManager().removeAllContents(true);
+        this.overview.getContentManager().addContent(content1);
+        this.overview.getContentManager().addContent(content2);
     }
 }
