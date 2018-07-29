@@ -2,7 +2,8 @@
 .idea/gradle.xml
 .idea/vcs.xml
 .idea/workspace.xml
+.idea/libraries/*
+.idea/uiDesigner.xml
 
 # gradle
-.gradle
-*/out/*
+.gradle/*

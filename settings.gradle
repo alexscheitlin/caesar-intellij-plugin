@@ -1,2 +1,3 @@
-rootProject.name = 'build-failure-resolution-assistant-intellij-plugin'
-
+include 'build-swing-component'
+include 'error-swing-component'
+include 'intellij-build-failure-resolution-assistant'

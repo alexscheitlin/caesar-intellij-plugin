@@ -15,10 +15,16 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <applicationService serviceImplementation="ch.scheitlin.alex.intellij.plugins.services.Controller"/>
+        <applicationService serviceImplementation="ch.scheitlin.alex.intellij.plugins.services.Storage"/>
+        <toolWindow id="Build Fixer" secondary="true" anchor="right" factoryClass="ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow" />
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        <group id="IntelliJPlugin.Menu" text="Build _Fixer" description="">
+            <add-to-group group-id="MainMenu" anchor="last" />
+            <action id="IntelliJPlugin.Login" class="ch.scheitlin.alex.intellij.plugins.actions.LoginAction" text="Log _in..." description="" />
+            <action id="TeamCityAPI.Logout" class="ch.scheitlin.alex.intellij.plugins.actions.LogoutAction" text="Log _out..." description="" />
+        </group>
     </actions>
 </idea-plugin>
