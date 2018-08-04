@@ -76,6 +76,12 @@ public class Main {
         mavenGoal3.lines.add("3: Goal 3");
         mavenModule2.goals.add(mavenGoal3);
 
+        MavenModule mavenModule3 = new MavenModule();
+        mavenModule3.status = MavenModuleStatus.SKIPPED;
+        mavenModule3.name = "Module 3";
+        mavenModule3.version = "v1";
+        mavenBuild.modules.add(mavenModule3);
+
         return mavenBuild;
     }
 }
