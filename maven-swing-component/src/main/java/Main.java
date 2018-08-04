@@ -10,6 +10,7 @@ public class Main {
 
         // create new maven swing component
         MavenPanel errorComponent = new MavenPanel(mavenBuild);
+        errorComponent.setFont(new Font("Courier", Font.BOLD,20));
 
         // create frame and add error components
         JFrame frame = new JFrame();
@@ -51,10 +52,14 @@ public class Main {
 
         MavenGoal mavenGoal1 = new MavenGoal();
         mavenGoal1.name = "Goal 1";
+        mavenGoal1.lines.add("1: Goal 1");
+        mavenGoal1.lines.add("2: Goal 1");
         mavenModule1.goals.add(mavenGoal1);
 
         MavenGoal mavenGoal2 = new MavenGoal();
         mavenGoal2.name = "Goal 2";
+        mavenGoal2.lines.add("1: Goal 2");
+        mavenGoal2.lines.add("2: Goal 2");
         mavenModule1.goals.add(mavenGoal2);
 
         MavenModule mavenModule2 = new MavenModule();
@@ -66,6 +71,9 @@ public class Main {
 
         MavenGoal mavenGoal3 = new MavenGoal();
         mavenGoal3.name = "Goal 3";
+        mavenGoal3.lines.add("1: Goal 3");
+        mavenGoal3.lines.add("2: Goal 3");
+        mavenGoal3.lines.add("3: Goal 3");
         mavenModule2.goals.add(mavenGoal3);
 
         return mavenBuild;

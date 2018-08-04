@@ -8,8 +8,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 
 public class MavenPanel extends JPanel {
     private JTree treeMavenBuild;
@@ -53,7 +52,8 @@ public class MavenPanel extends JPanel {
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeMavenBuild.getLastSelectedPathComponent();
 
                 if (selectedNode.isLeaf()) {
-                    labelSelectedGoal.setText(selectedNode.getUserObject().toString());
+                    MavenGoal goal = getGoal(selectedNode.getUserObject().toString());
+                    labelSelectedGoal.setText(goal.getLines());
                 } else {
                     labelSelectedGoal.setText("");
                 }
@@ -79,5 +79,17 @@ public class MavenPanel extends JPanel {
         c.weightx = 1.0;
         c.weighty = 0.0;
         this.add(this.labelSelectedGoal, c);
+    }
+
+    private MavenGoal getGoal(String goalName) {
+        for (MavenModule module : this.mavenBuild.modules) {
+            for (MavenGoal goal : module.goals) {
+                if (goal.name.equals(goalName)) {
+                    return goal;
+                }
+            }
+        }
+
+        return null;
     }
 }
