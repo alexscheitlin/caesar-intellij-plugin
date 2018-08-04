@@ -6,8 +6,8 @@ import ch.scheitlin.alex.build.model.Error;
 import ch.scheitlin.alex.build.model.BuildConfiguration;
 import ch.scheitlin.alex.intellij.plugins.dialogs.LoginDialog;
 import ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow;
+import ch.scheitlin.alex.maven.MavenBuild;
 import ch.scheitlin.alex.maven.MavenGoal;
-import ch.scheitlin.alex.maven.MavenModule;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -218,7 +218,7 @@ public class Controller {
         return this.storage.selectedTeamCityProject;
     }
 
-    public List<MavenModule> getMavenModules() {
-        return this.helper.mavenBuild.modules;
+    public MavenBuild getMavenBuild() {
+        return this.helper.mavenBuild;
     }
 }

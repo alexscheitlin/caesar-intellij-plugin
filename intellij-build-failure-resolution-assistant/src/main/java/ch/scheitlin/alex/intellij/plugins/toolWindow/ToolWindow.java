@@ -84,7 +84,7 @@ public class ToolWindow implements ToolWindowFactory {
                     project
             );
 
-            this.panelTreeView = new TreeViewPanel(controller.getMavenModules());
+            this.panelTreeView = new TreeViewPanel(controller.getMavenBuild());
 
             setToolWindowContent(this.panelInformation, "Summary", this.panelTreeView, "Tree View");
 

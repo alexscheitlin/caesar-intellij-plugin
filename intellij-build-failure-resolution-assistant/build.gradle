@@ -29,6 +29,7 @@ dependencies {
     compile name: 'build-failure-resolution-assistant-1.0-SNAPSHOT-jar-with-dependencies'
 
     compile project(':build-swing-component')
+    compile project(':maven-swing-component')
     compile project(':error-swing-component')
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
