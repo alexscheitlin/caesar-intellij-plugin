@@ -1,7 +1,7 @@
 package ch.scheitlin.alex.intellij.plugins.toolWindow;
 
-import ch.scheitlin.alex.maven.model.MavenGoal;
-import ch.scheitlin.alex.maven.model.MavenModule;
+import ch.scheitlin.alex.maven.MavenGoal;
+import ch.scheitlin.alex.maven.MavenModule;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
