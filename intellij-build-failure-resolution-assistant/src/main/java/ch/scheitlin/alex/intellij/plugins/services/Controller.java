@@ -1,6 +1,6 @@
 package ch.scheitlin.alex.intellij.plugins.services;
 
-import ch.scheitlin.alex.build.Helper;
+import ch.scheitlin.alex.build.Assistant;
 import ch.scheitlin.alex.build.model.Build;
 import ch.scheitlin.alex.build.model.Error;
 import ch.scheitlin.alex.build.model.BuildConfiguration;
@@ -17,11 +17,11 @@ import java.util.List;
 
 public class Controller {
     private Storage storage;
-    private Helper helper;
+    private Assistant assistant;
 
     public Controller() {
         this.storage = ServiceManager.getService(Storage.class);
-        this.helper = new Helper();
+        this.assistant = new Assistant();
     }
 
     public static Controller getInstance() {
@@ -54,7 +54,7 @@ public class Controller {
         }
 
         // check whether the login was successful or not
-        if (this.helper.connect(host, username, password)) {
+        if (this.assistant.connect(host, username, password)) {
             // update tool window
             if (this.getToolWindow() != null) {
                 this.getToolWindow().update();
@@ -67,7 +67,7 @@ public class Controller {
     }
 
     public void logout() {
-        this.helper.disconnect();
+        this.assistant.disconnect();
 
         // update tool window
         this.getToolWindow().update();
@@ -86,11 +86,11 @@ public class Controller {
     }
 
     public List<String> getTeamCityProjectNames() {
-        return this.helper.getBuildServerInformation().getProjectNames();
+        return this.assistant.getBuildServerInformation().getProjectNames();
     }
 
     public List<BuildConfiguration> getBuildConfigurationsToShow(String projectName) {
-        return this.helper.getBuildServerInformation().getProject(projectName).getBuildConfigurations();
+        return this.assistant.getBuildServerInformation().getProject(projectName).getBuildConfigurations();
     }
 
     public String getGitRepositoryOriginUrl() {
@@ -98,23 +98,23 @@ public class Controller {
     }
 
     public boolean isInNoStage() {
-        return this.helper.isInNoStage();
+        return this.assistant.isInNoStage();
     }
 
     public boolean isConnected() {
-        return this.helper.isConnected();
+        return this.assistant.isConnected();
     }
 
     public boolean hasDownloaded() {
-        return this.helper.hasDownloaded();
+        return this.assistant.hasDownloaded();
     }
 
     public boolean hasProcessed() {
-        return this.helper.hasProcessed();
+        return this.assistant.hasProcessed();
     }
 
     public boolean isFixing() {
-        return this.helper.isFixing();
+        return this.assistant.isFixing();
     }
 
     public void saveTeamCityCredentials(String host, String username, String password) {
@@ -126,17 +126,17 @@ public class Controller {
 }
 
     public boolean testTeamCityConnection(String host, String username, String password) {
-        return this.helper.testTeamCityConnection(host, username, password);
+        return this.assistant.testTeamCityConnection(host, username, password);
     }
 
     public void getBuildInformation(String buildConfigurationName, Build build) {
         this.storage.teamCityBuildConfigurationName = buildConfigurationName;
 
-        if (!this.helper.download(build)) {
+        if (!this.assistant.download(build)) {
             System.out.println("Could not download build log from build server!");
         }
 
-        if (!this.helper.process()) {
+        if (!this.assistant.process()) {
             System.out.println("Could not process build log!");
         }
 
@@ -144,19 +144,19 @@ public class Controller {
     }
 
     public void startFixingBrokenBuild() {
-        this.helper.fix(this.getGitRepositoryOriginUrl());
+        this.assistant.fix(this.getGitRepositoryOriginUrl());
         reloadProjectFiles();
         updateToolWindow();
     }
 
     public void stopFixingBrokenBuild() {
-        this.helper.finish();
+        this.assistant.finish();
         reloadProjectFiles();
         updateToolWindow();
     }
 
     public void abortBuildFix() {
-        this.helper.abort();
+        this.assistant.abort();
 
         updateToolWindow();
     }
@@ -174,12 +174,12 @@ public class Controller {
     }
 
     public String getBuildStatus() {
-        return this.helper.mavenBuild.getStatus().toString();
+        return this.assistant.mavenBuild.getStatus().toString();
     }
 
     public String getFailedGoal() {
-        if (this.helper.mavenBuild.getFailedGoal() != null) {
-            MavenGoal failedGoal = this.helper.mavenBuild.getFailedGoal();
+        if (this.assistant.mavenBuild.getFailedGoal() != null) {
+            MavenGoal failedGoal = this.assistant.mavenBuild.getFailedGoal();
             return failedGoal.getPlugin() + ":" + failedGoal.getVersion() + ":" + failedGoal.getName();
         } else {
             return "No failed goal detected!";
@@ -187,15 +187,15 @@ public class Controller {
     }
 
     public String getFailureCategory() {
-        if (this.helper.failureCategory != null) {
-            return this.helper.failureCategory;
+        if (this.assistant.failureCategory != null) {
+            return this.assistant.failureCategory;
         } else {
             return "No category found!";
         }
     }
 
     public List<Error> getErrors() {
-        return this.helper.errors;
+        return this.assistant.errors;
     }
 
     public Project getIntelliJProject() {
@@ -219,6 +219,6 @@ public class Controller {
     }
 
     public MavenBuild getMavenBuild() {
-        return this.helper.mavenBuild;
+        return this.assistant.mavenBuild;
     }
 }
