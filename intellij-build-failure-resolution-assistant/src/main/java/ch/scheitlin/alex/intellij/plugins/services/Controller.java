@@ -86,11 +86,11 @@ public class Controller {
     }
 
     public List<String> getTeamCityProjectNames() {
-        return this.helper.getTeamCityProjectNames();
+        return this.helper.getBuildServerInformation().getProjectNames();
     }
 
     public List<BuildConfiguration> getBuildConfigurationsToShow(String projectName) {
-        return this.helper.getBuildConfigurationsToShow(projectName);
+        return this.helper.getBuildServerInformation().getProject(projectName).getBuildConfigurations();
     }
 
     public String getGitRepositoryOriginUrl() {

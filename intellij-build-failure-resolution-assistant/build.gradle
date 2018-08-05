@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile name: 'build-model-1.0-SNAPSHOT'
+    compile name: 'build-server-model-1.0-SNAPSHOT'
     compile name: 'maven-model-1.0-SNAPSHOT'
     compile name: 'error-model-1.0-SNAPSHOT'
 
