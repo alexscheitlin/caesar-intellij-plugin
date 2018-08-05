@@ -1,6 +1,4 @@
-# IntelliJ Build Failure Resolution Assistand
-
-![Architecture](assets/architecture.png)
+# IntelliJ Build Failure Resolution Assistant
 
 ## Workflow
 
