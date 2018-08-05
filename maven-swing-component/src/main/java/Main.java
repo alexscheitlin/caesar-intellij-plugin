@@ -3,6 +3,7 @@ import ch.scheitlin.alex.maven.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -39,48 +40,44 @@ public class Main {
     }
 
     private static MavenBuild getDummyData() {
-        MavenBuild mavenBuild = new MavenBuild();
-        mavenBuild.status = MavenBuildStatus.FAILURE;
-        mavenBuild.modules = new ArrayList<MavenModule>();
-
-        MavenModule mavenModule1 = new MavenModule();
-        mavenModule1.status = MavenModuleStatus.SUCCESS;
-        mavenModule1.name = "Module 1";
-        mavenModule1.version = "v1";
-        mavenModule1.goals = new ArrayList<MavenGoal>();
-        mavenBuild.modules.add(mavenModule1);
+        MavenModule mavenModule1 = new MavenModule("Module 1");
+        mavenModule1.setStatus(MavenModuleStatus.SUCCESS);
+        mavenModule1.setVersion("v1");
 
         MavenGoal mavenGoal1 = new MavenGoal();
-        mavenGoal1.name = "Goal 1";
-        mavenGoal1.lines.add("1: Goal 1");
-        mavenGoal1.lines.add("2: Goal 1");
-        mavenModule1.goals.add(mavenGoal1);
+        mavenGoal1.setName("Goal 1");
+        mavenGoal1.addLine("1: Goal 1");
+        mavenGoal1.addLine("2: Goal 1");
+        mavenModule1.addGoal(mavenGoal1);
 
         MavenGoal mavenGoal2 = new MavenGoal();
-        mavenGoal2.name = "Goal 2";
-        mavenGoal2.lines.add("1: Goal 2");
-        mavenGoal2.lines.add("2: Goal 2");
-        mavenModule1.goals.add(mavenGoal2);
+        mavenGoal2.setName("Goal 2");
+        mavenGoal2.addLine("1: Goal 2");
+        mavenGoal2.addLine("2: Goal 2");
+        mavenModule1.addGoal(mavenGoal2);
 
-        MavenModule mavenModule2 = new MavenModule();
-        mavenModule2.status = MavenModuleStatus.FAILURE;
-        mavenModule2.name = "Module 2";
-        mavenModule2.version = "v1";
-        mavenModule2.goals = new ArrayList<MavenGoal>();
-        mavenBuild.modules.add(mavenModule2);
+        MavenModule mavenModule2 = new MavenModule("Module 2");
+        mavenModule2.setStatus(MavenModuleStatus.FAILURE);
+        mavenModule2.setVersion("v1");
 
         MavenGoal mavenGoal3 = new MavenGoal();
-        mavenGoal3.name = "Goal 3";
-        mavenGoal3.lines.add("1: Goal 3");
-        mavenGoal3.lines.add("2: Goal 3");
-        mavenGoal3.lines.add("3: Goal 3");
-        mavenModule2.goals.add(mavenGoal3);
+        mavenGoal3.setName("Goal 3");
+        mavenGoal3.addLine("1: Goal 3");
+        mavenGoal3.addLine("2: Goal 3");
+        mavenGoal3.addLine("3: Goal 3");
+        mavenModule2.addGoal(mavenGoal3);
 
-        MavenModule mavenModule3 = new MavenModule();
-        mavenModule3.status = MavenModuleStatus.SKIPPED;
-        mavenModule3.name = "Module 3";
-        mavenModule3.version = "v1";
-        mavenBuild.modules.add(mavenModule3);
+        MavenModule mavenModule3 = new MavenModule("Module 3");
+        mavenModule3.setStatus(MavenModuleStatus.SKIPPED);
+        mavenModule3.setVersion("v1");
+
+        List<MavenModule> modules = new ArrayList<MavenModule>();
+        modules.add(mavenModule1);
+        modules.add(mavenModule2);
+        modules.add(mavenModule3);
+
+        MavenBuild mavenBuild = new MavenBuild(MavenBuildStatus.FAILURE, null);
+        mavenBuild.setModules(modules);
 
         return mavenBuild;
     }

@@ -27,13 +27,13 @@ public class MavenPanel extends JPanel {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Maven Build");
 
         // add modules to tree
-        for (MavenModule module : this.mavenBuild.modules) {
-            DefaultMutableTreeNode node = new DefaultMutableTreeNode(module.name);
+        for (MavenModule module : this.mavenBuild.getModules()) {
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(module.getName());
             root.add(node);
 
             // add goals to module
-            for (MavenGoal goal : module.goals) {
-                node.add(new DefaultMutableTreeNode(goal.name));
+            for (MavenGoal goal : module.getGoals()) {
+                node.add(new DefaultMutableTreeNode(goal.getName()));
             }
         }
         this.treeMavenBuild = new JTree(root);
@@ -60,7 +60,7 @@ public class MavenPanel extends JPanel {
                 if (selectedNode.isLeaf()) {
                     MavenGoal goal = getGoal(selectedNode.getUserObject().toString());
                     if (goal != null) {
-                        labelSelectedGoal.setText(goal.getLines());
+                        labelSelectedGoal.setText(goal.getLinesAsMultiLineString());
                     }
                 } else {
                     labelSelectedGoal.setText("");
@@ -105,11 +105,12 @@ public class MavenPanel extends JPanel {
                 return this;
             }
 
-            if (module.status == MavenModuleStatus.SUCCESS) {
+            MavenModuleStatus status = module.getStatus();
+            if (status == MavenModuleStatus.SUCCESS) {
                 setForeground(Color.green);
-            } else if (module.status == MavenModuleStatus.FAILURE) {
+            } else if (status == MavenModuleStatus.FAILURE) {
                 setForeground(Color.red);
-            } else if (module.status == MavenModuleStatus.SKIPPED) {
+            } else if (status == MavenModuleStatus.SKIPPED) {
                 setForeground(Color.yellow);
             }
 
@@ -118,8 +119,8 @@ public class MavenPanel extends JPanel {
     }
 
     private MavenModule getModule(String moduleName) {
-        for (MavenModule module : this.mavenBuild.modules) {
-            if (module.name.equals(moduleName)) {
+        for (MavenModule module : this.mavenBuild.getModules()) {
+            if (module.getName().equals(moduleName)) {
                 return module;
             }
         }
@@ -128,9 +129,9 @@ public class MavenPanel extends JPanel {
     }
 
     private MavenGoal getGoal(String goalName) {
-        for (MavenModule module : this.mavenBuild.modules) {
-            for (MavenGoal goal : module.goals) {
-                if (goal.name.equals(goalName)) {
+        for (MavenModule module : this.mavenBuild.getModules()) {
+            for (MavenGoal goal : module.getGoals()) {
+                if (goal.getName().equals(goalName)) {
                     return goal;
                 }
             }

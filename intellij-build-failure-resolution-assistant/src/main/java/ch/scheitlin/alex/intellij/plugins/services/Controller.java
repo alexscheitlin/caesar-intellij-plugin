@@ -174,13 +174,13 @@ public class Controller {
     }
 
     public String getBuildStatus() {
-        return this.helper.mavenBuild.status.toString();
+        return this.helper.mavenBuild.getStatus().toString();
     }
 
     public String getFailedGoal() {
-        if (this.helper.mavenBuild.failedGoal != null) {
-            MavenGoal failedGoal = this.helper.mavenBuild.failedGoal;
-            return failedGoal.plugin + ":" + failedGoal.version + ":" + failedGoal.name;
+        if (this.helper.mavenBuild.getFailedGoal() != null) {
+            MavenGoal failedGoal = this.helper.mavenBuild.getFailedGoal();
+            return failedGoal.getPlugin() + ":" + failedGoal.getVersion() + ":" + failedGoal.getName();
         } else {
             return "No failed goal detected!";
         }
