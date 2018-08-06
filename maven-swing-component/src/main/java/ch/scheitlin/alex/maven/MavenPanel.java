@@ -1,6 +1,7 @@
 package ch.scheitlin.alex.maven;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
@@ -11,6 +12,10 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
 
 public class MavenPanel extends JPanel {
+    private JLabel labelSuccessModule;
+    private JLabel labelFailureModule;
+    private JLabel labelSkippedModule;
+    private JLabel labelGoal;
     private JTree treeMavenBuild;
     private JTextPane labelSelectedGoal;
 
@@ -67,22 +72,67 @@ public class MavenPanel extends JPanel {
             }
         });
 
+        // load legend icons
+        ImageIcon moduleSuccessIcon = new ImageIcon(MavenPanel.class.getResource("/module_success.png"));
+        ImageIcon moduleFailureIcon = new ImageIcon(MavenPanel.class.getResource("/module_failure.png"));
+        ImageIcon moduleSkippedIcon = new ImageIcon(MavenPanel.class.getResource("/module_skipped.png"));
+        ImageIcon goalIcon = new ImageIcon(MavenPanel.class.getResource("/goal.png"));
+
+        // create legend labels
+        this.labelSuccessModule = new JLabel("Successful Module");
+        this.labelSuccessModule.setForeground(MODULE_SUCCESS_COLOR);
+        this.labelSuccessModule.setIcon(moduleSuccessIcon);
+
+        this.labelFailureModule = new JLabel("Failed Module");
+        this.labelFailureModule.setForeground(MODULE_FAILURE_COLOR);
+        this.labelFailureModule.setIcon(moduleFailureIcon);
+
+        this.labelSkippedModule = new JLabel("Skipped Module");
+        this.labelSkippedModule.setForeground(MODULE_SKIPPED_COLOR);
+        this.labelSkippedModule.setIcon(moduleSkippedIcon);
+
+        this.labelGoal = new JLabel("Executed Goal");
+        this.labelGoal.setIcon(goalIcon);
+
         // set layout
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        // add tree
-        c.fill = GridBagConstraints.BOTH;
+        // add legend labels
+        c.fill = GridBagConstraints.NONE;
+        c.gridwidth = 1;
+        c.insets = new Insets(0, 0, 20, 10);
+        c.weightx = 0.0;
+        c.weighty = 0.0;
+
         c.gridx = 0;
         c.gridy = 0;
+        this.add(this.labelSuccessModule, c);
+        c.gridx = 1;
+        c.gridy = 0;
+        this.add(this.labelFailureModule, c);
+        c.gridx = 2;
+        c.gridy = 0;
+        this.add(this.labelSkippedModule, c);
+        c.gridx = 3;
+        c.gridy = 0;
+        this.add(this.labelGoal, c);
+
+        // add tree
+        c.fill = GridBagConstraints.BOTH;
+        c.gridwidth = 5;
+        c.gridx = 0;
+        c.gridy = 1;
         c.weightx = 1.0;
         c.weighty = 1.0;
         this.add(this.treeMavenBuild, c);
 
         // add label
         c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridwidth = 5;
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 2;
+        c.insets = new Insets(0, 0, 0, 0);
         c.weightx = 1.0;
         c.weighty = 0.0;
         this.add(this.labelSelectedGoal, c);
@@ -111,19 +161,28 @@ public class MavenPanel extends JPanel {
                 return this;
             }
 
+            // set module icon
+            ImageIcon moduleIcon = new ImageIcon(MavenPanel.class.getResource("/module.png"));
+            ImageIcon moduleSuccessIcon = new ImageIcon(MavenPanel.class.getResource("/module_success.png"));
+            ImageIcon moduleFailureIcon = new ImageIcon(MavenPanel.class.getResource("/module_failure.png"));
+            ImageIcon moduleSkippedIcon = new ImageIcon(MavenPanel.class.getResource("/module_skipped.png"));
+            setIcon(moduleIcon);
+
             // set module colors depending on module status
             MavenModuleStatus status = module.getStatus();
             if (status == MavenModuleStatus.SUCCESS) {
                 setForeground(MODULE_SUCCESS_COLOR);
+                setIcon(moduleSuccessIcon);
             } else if (status == MavenModuleStatus.FAILURE) {
                 setForeground(MODULE_FAILURE_COLOR);
+                setIcon(moduleFailureIcon);
             } else if (status == MavenModuleStatus.SKIPPED) {
                 setForeground(MODULE_SKIPPED_COLOR);
+                setIcon(moduleSkippedIcon);
             }
 
-            // set module icon
-            ImageIcon moduleIcon = new ImageIcon(MavenPanel.class.getResource("/module.png"));
-            setIcon(moduleIcon);
+            // set font bold
+            setFont(new Font(getFont().getName(), Font.BOLD, getFont().getSize()));
 
             return this;
         }
@@ -151,12 +210,12 @@ public class MavenPanel extends JPanel {
         return null;
     }
 
-    private void expandAllNodes(JTree tree, int startingIndex, int rowCount){
-        for(int i=startingIndex;i<rowCount;++i){
+    private void expandAllNodes(JTree tree, int startingIndex, int rowCount) {
+        for (int i = startingIndex; i < rowCount; ++i) {
             tree.expandRow(i);
         }
 
-        if(tree.getRowCount()!=rowCount){
+        if (tree.getRowCount() != rowCount) {
             expandAllNodes(tree, rowCount, tree.getRowCount());
         }
     }
