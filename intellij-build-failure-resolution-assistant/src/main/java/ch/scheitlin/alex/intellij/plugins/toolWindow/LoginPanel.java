@@ -14,6 +14,7 @@ public class LoginPanel extends JPanel {
     private JPanel panelContent;
     private JLabel labelInformation;
     private JButton buttonLogin;
+    private JLabel labelIcon;
 
     Project project;
 
@@ -40,10 +41,17 @@ public class LoginPanel extends JPanel {
         c.insets = JBUI.insets(20, 0, 0, 0);
         this.panelContent.add(buttonLogin, c);
 
+        // configure and add label with icon
+        initIconLabel();
+        c.gridx = 0;
+        c.gridy = 2;
+        c.insets = JBUI.insets(50, 0, 0, 0);
+        this.panelContent.add(this.labelIcon, c);
+
         // add panel to move content to the top
         // (at least one component needs to have weighty greater than 0.0)
         c.gridx = 0;
-        c.gridy = 2;
+        c.gridy = 3;
         c.fill = GridBagConstraints.BOTH;
         c.insets = JBUI.insets(0);
         c.weightx = 1.0;
@@ -81,5 +89,11 @@ public class LoginPanel extends JPanel {
                 controller.login(LoginPanel.this.project);
             }
         });
+    }
+
+    private void initIconLabel() {
+        this.labelIcon = new JLabel();
+        ImageIcon icon = new ImageIcon(LoginPanel.class.getResource("/icons/icon_large.png"));
+        this.labelIcon.setIcon(icon);
     }
 }
