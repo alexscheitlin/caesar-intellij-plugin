@@ -210,14 +210,6 @@ public class Controller {
         this.storage.project.getBaseDir().refresh(true,true);
     }
 
-    public void setSelectedTeamCityProject(Object project) {
-        this.storage.selectedTeamCityProject = project;
-    }
-
-    public Object getSelectedTeamCityProject() {
-        return this.storage.selectedTeamCityProject;
-    }
-
     public MavenBuild getMavenBuild() {
         return this.assistant.mavenBuild;
     }

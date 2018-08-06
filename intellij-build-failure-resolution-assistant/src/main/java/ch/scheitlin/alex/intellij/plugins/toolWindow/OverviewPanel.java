@@ -189,10 +189,10 @@ public class OverviewPanel extends JPanel {
         String selectedProject = null;
         if (selectedItem != null) {
             selectedProject = selectedItem.toString();
-            Controller.getInstance().setSelectedTeamCityProject(selectedProject);
-        } else if (Controller.getInstance().getSelectedTeamCityProject() != null) {
-            selectedProject = Controller.getInstance().getSelectedTeamCityProject().toString();
+        } else if (Controller.getInstance().getTeamCityProjectName() != null) {
+            selectedProject = Controller.getInstance().getTeamCityProjectName();
         }
+
         int selectedIndex = -1;
 
         // get project names
