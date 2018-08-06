@@ -17,11 +17,11 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="ch.scheitlin.alex.intellij.plugins.services.Controller"/>
         <applicationService serviceImplementation="ch.scheitlin.alex.intellij.plugins.services.Storage"/>
-        <toolWindow id="Build Fixer" secondary="true" anchor="right" factoryClass="ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow" />
+        <toolWindow id="Build Fixer" secondary="true" anchor="right" factoryClass="ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow"  icon="/icons/icon.png"/>
     </extensions>
 
     <actions>
-        <group id="IntelliJPlugin.Menu" text="Build _Fixer" description="">
+        <group id="IntelliJPlugin.Menu" text="Build _Fixer" description="" icon="/icons/icon.png">
             <add-to-group group-id="MainMenu" anchor="last" />
             <action id="IntelliJPlugin.Login" class="ch.scheitlin.alex.intellij.plugins.actions.LoginAction" text="Log _in..." description="" />
             <action id="TeamCityAPI.Logout" class="ch.scheitlin.alex.intellij.plugins.actions.LogoutAction" text="Log _out..." description="" />
