@@ -4,6 +4,7 @@ import ch.scheitlin.alex.intellij.plugins.services.Controller;
 import com.intellij.openapi.ui.Messages;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class LoginDialog extends JDialog {
@@ -25,6 +26,10 @@ public class LoginDialog extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+
+        // set icon
+        Image icon = new ImageIcon(LoginDialog.class.getResource("/icons/icon.png")).getImage();
+        setIconImage(icon);
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
