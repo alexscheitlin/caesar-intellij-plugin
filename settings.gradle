@@ -1,4 +1,4 @@
-include 'build-swing-component'
+include 'build-server-swing-component'
 include 'maven-swing-component'
 include 'error-swing-component'
 include 'intellij-build-failure-resolution-assistant'

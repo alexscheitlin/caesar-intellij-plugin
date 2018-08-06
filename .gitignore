@@ -1,9 +1,12 @@
 # intellij idea
+.idea/libraries/*
+.idea/modules/*
+.idea/.name
+.idea/compiler.xml
 .idea/gradle.xml
+.idea/uiDesigner.xml
 .idea/vcs.xml
 .idea/workspace.xml
-.idea/libraries/*
-.idea/uiDesigner.xml
 
 # gradle
 .gradle/*
