@@ -1,8 +1,8 @@
 package ch.scheitlin.alex.maven;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -12,12 +12,12 @@ import java.awt.*;
 
 public class MavenPanel extends JPanel {
     private JTree treeMavenBuild;
-    private JLabel labelSelectedGoal;
+    private JTextPane labelSelectedGoal;
 
     private MavenBuild mavenBuild;
 
-    private final Color MODULE_SUCCESS_COLOR = new Color(156, 0, 6);
-    private final Color MODULE_FAILURE_COLOR = new Color(0, 97, 0);
+    private final Color MODULE_SUCCESS_COLOR = new Color(0, 97, 0);
+    private final Color MODULE_FAILURE_COLOR = new Color(156, 0, 6);
     private final Color MODULE_SKIPPED_COLOR = new Color(156, 87, 0);
 
     public MavenPanel(MavenBuild mavenBuild) {
@@ -37,21 +37,20 @@ public class MavenPanel extends JPanel {
             }
         }
         this.treeMavenBuild = new JTree(root);
-        this.treeMavenBuild.setFont(new Font("Courier", Font.BOLD, 20));
-
-        // set goal icon
-        DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
-        ImageIcon goalIcon = new ImageIcon(MavenPanel.class.getResource("/goal.png"));
-        renderer.setLeafIcon(goalIcon);
-        this.treeMavenBuild.setCellRenderer(renderer);
+        //this.treeMavenBuild.setFont(new Font("Courier", Font.BOLD, 20));
 
         //this.add(new JScrollPane(this.treeMavenBuild));
-        this.treeMavenBuild.setShowsRootHandles(true);
-        this.treeMavenBuild.setRootVisible(false);
+        this.treeMavenBuild.setShowsRootHandles(false);     // hide handles before modules
+        this.treeMavenBuild.setRootVisible(false);          // hide root (maven modules are the highest level to be shown)
         this.treeMavenBuild.setCellRenderer(new TreeCellRenderer());
+        expandAllNodes(this.treeMavenBuild, 0, this.treeMavenBuild.getRowCount());
 
         // show selected goal in label
-        this.labelSelectedGoal = new JLabel();
+        this.labelSelectedGoal = new JTextPane();
+        this.labelSelectedGoal.setEditable(false);
+        this.labelSelectedGoal.setCursor(null);
+        this.labelSelectedGoal.setOpaque(false);
+        this.labelSelectedGoal.setFocusable(false);
         this.treeMavenBuild.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -96,8 +95,15 @@ public class MavenPanel extends JPanel {
                                                       boolean sel, boolean exp, boolean leaf, int row, boolean hasFocus) {
             super.getTreeCellRendererComponent(tree, value, sel, exp, leaf, row, hasFocus);
 
+            // set goal icon
+            ImageIcon goalIcon = new ImageIcon(MavenPanel.class.getResource("/goal.png"));
+            this.setLeafIcon(goalIcon);
+
+            // tree node
+            DefaultMutableTreeNode treeNode = ((DefaultMutableTreeNode) value);
+
             // get name of node (module or goal name)
-            String name = (String) ((DefaultMutableTreeNode) value).getUserObject();
+            String name = (String) treeNode.getUserObject();
 
             // get module
             MavenModule module = getModule(name);
@@ -105,14 +111,19 @@ public class MavenPanel extends JPanel {
                 return this;
             }
 
+            // set module colors depending on module status
             MavenModuleStatus status = module.getStatus();
             if (status == MavenModuleStatus.SUCCESS) {
-                setForeground(Color.green);
+                setForeground(MODULE_SUCCESS_COLOR);
             } else if (status == MavenModuleStatus.FAILURE) {
-                setForeground(Color.red);
+                setForeground(MODULE_FAILURE_COLOR);
             } else if (status == MavenModuleStatus.SKIPPED) {
-                setForeground(Color.yellow);
+                setForeground(MODULE_SKIPPED_COLOR);
             }
+
+            // set module icon
+            ImageIcon moduleIcon = new ImageIcon(MavenPanel.class.getResource("/module.png"));
+            setIcon(moduleIcon);
 
             return this;
         }
@@ -138,5 +149,15 @@ public class MavenPanel extends JPanel {
         }
 
         return null;
+    }
+
+    private void expandAllNodes(JTree tree, int startingIndex, int rowCount){
+        for(int i=startingIndex;i<rowCount;++i){
+            tree.expandRow(i);
+        }
+
+        if(tree.getRowCount()!=rowCount){
+            expandAllNodes(tree, rowCount, tree.getRowCount());
+        }
     }
 }
