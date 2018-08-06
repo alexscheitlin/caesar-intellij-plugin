@@ -89,8 +89,8 @@ public class Controller {
         return this.assistant.getBuildServerInformation().getProjectNames();
     }
 
-    public List<BuildConfiguration> getBuildConfigurationsToShow(String projectName) {
-        return this.assistant.getBuildServerInformation().getProject(projectName).getBuildConfigurations();
+    public ch.scheitlin.alex.build.model.Project getTeamCityProject(String projectName) {
+        return this.assistant.getBuildServerInformation().getProject(projectName);
     }
 
     public String getGitRepositoryOriginUrl() {

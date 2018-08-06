@@ -21,6 +21,7 @@ public class BuildConfigurationPanel extends JPanel {
     public BranchPanel[] branchPanels;
 
     private boolean showAllBuilds;
+    private String buildConfigurationName;
     private List<Branch> branches;
 
     private String showMoreFontColor = "#1E90FF";
@@ -30,7 +31,7 @@ public class BuildConfigurationPanel extends JPanel {
         this.showAllBuilds = false;
 
         // get configuration information
-        String buildConfigurationName = buildConfiguration.getName();
+        this.buildConfigurationName = buildConfiguration.getName();
         this.branches = buildConfiguration.getBranches();
 
         // set layout for build configuration panel
@@ -42,7 +43,7 @@ public class BuildConfigurationPanel extends JPanel {
         this.row1.setLayout(new GridBagLayout());
 
         // configure and add label with configuration name to first row
-        initConfigurationNameLabel(buildConfigurationName);
+        initConfigurationNameLabel(this.buildConfigurationName);
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.LINE_START;
@@ -183,5 +184,9 @@ public class BuildConfigurationPanel extends JPanel {
         for (BranchPanel branchPanel : this.branchPanels) {
             branchPanel.setBranchFontColor(color);
         }
+    }
+
+    public String getBuildConfigurationName() {
+        return this.buildConfigurationName;
     }
 }

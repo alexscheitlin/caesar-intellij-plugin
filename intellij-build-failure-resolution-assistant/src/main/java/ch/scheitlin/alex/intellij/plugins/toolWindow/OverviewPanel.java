@@ -1,6 +1,8 @@
 package ch.scheitlin.alex.intellij.plugins.toolWindow;
 
 import ch.scheitlin.alex.build.model.BuildConfiguration;
+import ch.scheitlin.alex.build.model.Project;
+import ch.scheitlin.alex.build.swing.ProjectPanel;
 import ch.scheitlin.alex.intellij.plugins.services.Controller;
 import ch.scheitlin.alex.build.swing.BranchPanel;
 import ch.scheitlin.alex.build.swing.BuildConfigurationPanel;
@@ -25,7 +27,7 @@ public class OverviewPanel extends JPanel {
     private JBScrollPane scrollPane;
     private JPanel panelWrapper;
     private JPanel panelConfigurations;
-    private BuildConfigurationPanel[] buildConfigurationPanels;
+    private ProjectPanel projectPanel;
 
     private List<String> projectNames;
 
@@ -108,7 +110,7 @@ public class OverviewPanel extends JPanel {
         });
     }
 
-    private void initPanelWithBuildConfigurationPanels(ArrayList<BuildConfiguration> buildConfigurations) {
+    private void initPanelWithBuildConfigurationPanels(Project project) {
         try {
             // remove second row if it already exists
             this.panelContent.remove(this.scrollPane);
@@ -123,26 +125,19 @@ public class OverviewPanel extends JPanel {
 
         // create and place build configurations panel
         // but only if there is some data available, if not, show error message
-        if (buildConfigurations != null) {
+        if (project != null) {
+
             // check whether there are build configurations configured in team city or not
-            if (buildConfigurations.size() > 0) {
-                this.buildConfigurationPanels = new BuildConfigurationPanel[buildConfigurations.size()];
+            if (project.getBuildConfigurations().size() > 0) {
+                this.projectPanel = new ProjectPanel(project, "View");
+                this.projectPanel.setBranchPanelBranchFontColor(JBColor.blue);
 
-                for (int i = 0; i < buildConfigurations.size(); i++) {
-                    c.gridx = 0;
-                    c.gridy = i;
-                    c.anchor = GridBagConstraints.NORTH;
-                    c.fill = GridBagConstraints.HORIZONTAL;
-                    c.weightx = 1.0;
-                    c.insets = JBUI.insets(0, 0, 40, 0);
-                    this.buildConfigurationPanels[i] = new BuildConfigurationPanel(buildConfigurations.get(i), "View");
-                    this.buildConfigurationPanels[i].setBranchFontColor(JBColor.blue);
-
-                    // add actions listeners to build panels
-                    for (BranchPanel branchPanel : this.buildConfigurationPanels[i].branchPanels) {
+                // add actions listeners to build panels
+                for (BuildConfigurationPanel buildConfigurationPanel : projectPanel.buildConfigurationPanels) {
+                    for (BranchPanel branchPanel : buildConfigurationPanel.branchPanels) {
                         for (BuildPanel buildPanel : branchPanel.buildPanels) {
                             BuildPanel that = buildPanel;
-                            String buildConfigurationName = buildConfigurations.get(i).getName();
+                            String buildConfigurationName = buildConfigurationPanel.getBuildConfigurationName();
 
                             ActionListener actionListener = new ActionListener() {
                                 @Override
@@ -157,9 +152,12 @@ public class OverviewPanel extends JPanel {
                             System.out.println("\t" + that.build.getId() + ": " + that.build.getRepository() + " | " + that.build.getBranch());
                         }
                     }
-
-                    this.panelConfigurations.add(this.buildConfigurationPanels[i], c);
                 }
+
+                c.anchor = GridBagConstraints.NORTH;
+                c.fill = GridBagConstraints.HORIZONTAL;
+                c.weightx = 1.0;
+                this.panelConfigurations.add(this.projectPanel, c);
             } else {
                 c.insets = JBUI.insets(20);
 
@@ -234,20 +232,20 @@ public class OverviewPanel extends JPanel {
         // get index of selected project
         int index = comboBoxProject.getSelectedIndex();
 
-        // get build configurations if a project is selected
+        // get build configurations of a project if a one is selected
         // (at index 0 there is no project but the message to select one)
-        ArrayList<BuildConfiguration> buildConfigurations = null;
+        Project project = null;
         if (index > 0) {
             // get name of selected project
             String projectName = this.projectNames.get(index - 1);
             Controller.getInstance().setTeamCityProjectName(projectName);
 
-            // get build configurations of the project
-            buildConfigurations = (ArrayList) Controller.getInstance().getBuildConfigurationsToShow(projectName);
+            // get the project
+            project = Controller.getInstance().getTeamCityProject(projectName);
         }
 
         // show the builds
-        initPanelWithBuildConfigurationPanels(buildConfigurations);
+        initPanelWithBuildConfigurationPanels(project);
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
