@@ -160,27 +160,29 @@ public class InformationPanel extends JPanel {
         c.weightx = 0.5;
         this.panelContent.add(labelFailureCategoryValue, c);
 
-        // configure and add label with errors title
-        initErrorsKeyLabel();
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 0;
-        c.gridy = 5;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = JBUI.insets(20, 0, 0, 0);
-        c.weightx = 0.5;
-        this.panelContent.add(labelErrorsKey, c);
+        if (errors != null) {
+            // configure and add label with errors title
+            initErrorsKeyLabel();
+            c.anchor = GridBagConstraints.LINE_START;
+            c.gridx = 0;
+            c.gridy = 5;
+            c.gridwidth = 1;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.insets = JBUI.insets(20, 0, 0, 0);
+            c.weightx = 0.5;
+            this.panelContent.add(labelErrorsKey, c);
 
-        // configure and add panel with errors
-        initErrorsValuePanel(errors, project);
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 0;
-        c.gridy = 6;
-        c.gridwidth = 2;
-        c.fill = GridBagConstraints.NONE;
-        c.insets = JBUI.insets(0);
-        c.weightx = 0.0;
-        this.panelContent.add(panelErrorsValue, c);
+            // configure and add panel with errors
+            initErrorsValuePanel(errors, project);
+            c.anchor = GridBagConstraints.LINE_START;
+            c.gridx = 0;
+            c.gridy = 6;
+            c.gridwidth = 2;
+            c.fill = GridBagConstraints.NONE;
+            c.insets = JBUI.insets(0);
+            c.weightx = 0.0;
+            this.panelContent.add(panelErrorsValue, c);
+        }
 
         // configure and add label with information message
         initInformationLabel();
