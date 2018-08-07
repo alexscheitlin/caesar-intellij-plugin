@@ -7,6 +7,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -72,6 +73,12 @@ public class MavenPanel extends JPanel {
                     MavenGoal goal = getGoal(selectedNode.getUserObject().toString());
                     if (goal != null) {
                         labelSelectedGoal.setText(goal.getLinesAsMultiLineString());
+
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                linesScrollPane.getVerticalScrollBar().setValue(0);
+                            }
+                        });
                     }
                 } else {
                     labelSelectedGoal.setText("");
