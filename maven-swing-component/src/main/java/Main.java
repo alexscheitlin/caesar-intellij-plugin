@@ -22,7 +22,7 @@ public class Main {
         c.gridy = 0;
         c.weightx = 1.0;
         c.weighty = 1.0;
-        frame.add(new JScrollPane(mavenPanel), c);
+        frame.add(mavenPanel, c);
         frame.setSize(new Dimension(800, 800));
 
         // set look and feel of frame

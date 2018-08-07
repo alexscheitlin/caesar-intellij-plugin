@@ -3,13 +3,17 @@ package ch.scheitlin.alex.maven;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 public class MavenPanel extends JPanel {
     private JLabel labelSuccessModule;
@@ -18,6 +22,8 @@ public class MavenPanel extends JPanel {
     private JLabel labelGoal;
     private JTree treeMavenBuild;
     private JTextPane labelSelectedGoal;
+    private JScrollPane treeScrollPane;
+    private JScrollPane linesScrollPane;
 
     private MavenBuild mavenBuild;
 
@@ -56,6 +62,7 @@ public class MavenPanel extends JPanel {
         this.labelSelectedGoal.setCursor(null);
         this.labelSelectedGoal.setOpaque(false);
         this.labelSelectedGoal.setFocusable(false);
+
         this.treeMavenBuild.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -119,15 +126,24 @@ public class MavenPanel extends JPanel {
         this.add(this.labelGoal, c);
 
         // add tree
+        this.treeScrollPane = new JScrollPane(this.treeMavenBuild);
+        this.treeScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         c.fill = GridBagConstraints.BOTH;
         c.gridwidth = 5;
         c.gridx = 0;
         c.gridy = 1;
+        c.insets = new Insets(0, 0, 0, 0);
         c.weightx = 1.0;
         c.weighty = 1.0;
-        this.add(this.treeMavenBuild, c);
+        this.add(this.treeScrollPane, c);
 
         // add label
+        this.linesScrollPane = new JScrollPane(this.labelSelectedGoal);
+        this.linesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        Dimension linesDimension = new Dimension(new Dimension(100, 200));
+        this.linesScrollPane.setMaximumSize(linesDimension);
+        this.linesScrollPane.setPreferredSize(linesDimension);
+        this.linesScrollPane.setMinimumSize(linesDimension);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridwidth = 5;
         c.gridx = 0;
@@ -135,7 +151,39 @@ public class MavenPanel extends JPanel {
         c.insets = new Insets(0, 0, 0, 0);
         c.weightx = 1.0;
         c.weighty = 0.0;
-        this.add(this.labelSelectedGoal, c);
+        this.add(this.linesScrollPane, c);
+
+        this.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                double linesSize = 0.25;
+                Dimension treeDimension = new Dimension(new Dimension(100, (int) (getHeight() * (1.0 - linesSize))));
+                Dimension linesDimension = new Dimension(new Dimension(100, (int) (getHeight() * linesSize)));
+
+                treeScrollPane.setMaximumSize(treeDimension);
+                treeScrollPane.setPreferredSize(treeDimension);
+                treeScrollPane.setMinimumSize(treeDimension);
+
+                linesScrollPane.setMaximumSize(linesDimension);
+                linesScrollPane.setPreferredSize(linesDimension);
+                linesScrollPane.setMinimumSize(linesDimension);
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
+        });
     }
 
     class TreeCellRenderer extends DefaultTreeCellRenderer {
