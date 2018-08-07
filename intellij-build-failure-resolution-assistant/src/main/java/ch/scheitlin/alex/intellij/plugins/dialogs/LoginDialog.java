@@ -77,6 +77,7 @@ public class LoginDialog extends JDialog {
             this.textFieldUsername.setText(username);
             this.passwordField.setText(password);
             this.checkBoxRememberMe.setSelected(true);
+            onRememberMe();
         }
 
         // show dialog

@@ -47,7 +47,16 @@ public class Controller {
         if (openDialog) {
             // show login dialog to get TeamCity host, username, and password
             LoginDialog dialog = new LoginDialog();
+
+            // set TeamCity host, username, and password if data was entered in login dialog
             String[] result = dialog.showDialog(host, username, password);
+
+            // if result is null the cancel button was clicked
+            if (result == null) {
+                return false;
+            }
+
+            // use the just entered credentials
             host = result[0];
             username = result[1];
             password = result[2];
@@ -82,7 +91,9 @@ public class Controller {
     }
 
     public void showToolWindow() {
-        ToolWindowManager.getInstance(this.storage.project).getToolWindow("Build Fixer").show(null);
+        ToolWindowManager manager = ToolWindowManager.getInstance(this.storage.project);
+        com.intellij.openapi.wm.ToolWindow toolWindow = manager.getToolWindow("BFR Assistant");
+        toolWindow.show(null);
     }
 
     public List<String> getTeamCityProjectNames() {
@@ -123,7 +134,7 @@ public class Controller {
 
     public void deleteTeamCityCredentials() {
         this.storage.deleteTeamCityCredentials();
-}
+    }
 
     public boolean testTeamCityConnection(String host, String username, String password) {
         return this.assistant.testTeamCityConnection(host, username, password);
@@ -207,7 +218,7 @@ public class Controller {
     }
 
     private void reloadProjectFiles() {
-        this.storage.project.getBaseDir().refresh(true,true);
+        this.storage.project.getBaseDir().refresh(true, true);
     }
 
     public MavenBuild getMavenBuild() {
