@@ -10,8 +10,8 @@ public class Main {
         MavenBuild mavenBuild = getDummyData();
 
         // create new maven swing component
-        MavenPanel errorComponent = new MavenPanel(mavenBuild);
-        errorComponent.setFont(new Font("Courier", Font.BOLD,20));
+        MavenPanel mavenPanel = new MavenPanel(mavenBuild);
+        mavenPanel.setFont(new Font("Courier", Font.BOLD, 20));
 
         // create frame and add error components
         JFrame frame = new JFrame();
@@ -22,8 +22,8 @@ public class Main {
         c.gridy = 0;
         c.weightx = 1.0;
         c.weighty = 1.0;
-        frame.add(errorComponent, c);
-        frame.setSize(new Dimension(800,800));
+        frame.add(new JScrollPane(mavenPanel), c);
+        frame.setSize(new Dimension(800, 800));
 
         // set look and feel of frame
         try {
@@ -33,52 +33,63 @@ public class Main {
                     break;
                 }
             }
-        } catch (Exception ex) {}
+        } catch (Exception ex) {
+        }
 
         // show frame
         frame.setVisible(true);
     }
 
     private static MavenBuild getDummyData() {
-        MavenModule mavenModule1 = new MavenModule("Module 1");
-        mavenModule1.setStatus(MavenModuleStatus.SUCCESS);
-        mavenModule1.setVersion("v1");
+        MavenModuleStatus[] moduleStatus = {
+                MavenModuleStatus.SUCCESS,
+                MavenModuleStatus.SUCCESS,
+                MavenModuleStatus.SUCCESS,
+                MavenModuleStatus.SUCCESS,
+                MavenModuleStatus.FAILURE,
+                MavenModuleStatus.SKIPPED,
+                MavenModuleStatus.SKIPPED,
+        };
 
-        MavenGoal mavenGoal1 = new MavenGoal();
-        mavenGoal1.setName("Goal 1");
-        mavenGoal1.addLine("1: Goal 1");
-        mavenGoal1.addLine("2: Goal 1");
-        mavenModule1.addGoal(mavenGoal1);
+        int[] goalsPerModule = {
+                6, 3, 3, 7, 12, 0, 0,
+        };
 
-        MavenGoal mavenGoal2 = new MavenGoal();
-        mavenGoal2.setName("Goal 2");
-        mavenGoal2.addLine("1: Goal 2");
-        mavenGoal2.addLine("2: Goal 2");
-        mavenModule1.addGoal(mavenGoal2);
+        return getDummyMavenBuild(MavenBuildStatus.FAILURE, moduleStatus, goalsPerModule);
+    }
 
-        MavenModule mavenModule2 = new MavenModule("Module 2");
-        mavenModule2.setStatus(MavenModuleStatus.FAILURE);
-        mavenModule2.setVersion("v1");
+    private static MavenBuild getDummyMavenBuild(MavenBuildStatus buildStatus, MavenModuleStatus[] moduleStatus, int[] goalsPerModule) {
+        MavenBuild mavenBuild = new MavenBuild(buildStatus, null);
 
-        MavenGoal mavenGoal3 = new MavenGoal();
-        mavenGoal3.setName("Goal 3");
-        mavenGoal3.addLine("1: Goal 3");
-        mavenGoal3.addLine("2: Goal 3");
-        mavenGoal3.addLine("3: Goal 3");
-        mavenModule2.addGoal(mavenGoal3);
+        List<MavenModule> mavenModules = new ArrayList<>();
 
-        MavenModule mavenModule3 = new MavenModule("Module 3");
-        mavenModule3.setStatus(MavenModuleStatus.SKIPPED);
-        mavenModule3.setVersion("v1");
+        for (int i = 0; i < moduleStatus.length; i++) {
+            mavenModules.add(getDummyMavenModule(i + 1, moduleStatus[i], goalsPerModule[i]));
+        }
 
-        List<MavenModule> modules = new ArrayList<MavenModule>();
-        modules.add(mavenModule1);
-        modules.add(mavenModule2);
-        modules.add(mavenModule3);
-
-        MavenBuild mavenBuild = new MavenBuild(MavenBuildStatus.FAILURE, null);
-        mavenBuild.setModules(modules);
+        mavenBuild.setModules(mavenModules);
 
         return mavenBuild;
+    }
+
+    private static MavenModule getDummyMavenModule(int moduleNumber, MavenModuleStatus moduleStatus, int numberOfGoals) {
+        MavenModule mavenModule = new MavenModule("Module " + moduleNumber);
+        mavenModule.setStatus(moduleStatus);
+
+        for (int i = 0; i < numberOfGoals; i++) {
+            mavenModule.addGoal(getDummyMavenGoal(i + 1, 5 + i * 2));
+        }
+
+        return mavenModule;
+    }
+
+    private static MavenGoal getDummyMavenGoal(int goalNumber, int numberOfLogLines) {
+        MavenGoal mavenGoal = new MavenGoal();
+        mavenGoal.setName("Goal " + goalNumber);
+        for (int i = 0; i < numberOfLogLines; i++) {
+            mavenGoal.addLine(i + 1 + ": Goal " + goalNumber);
+        }
+
+        return mavenGoal;
     }
 }
