@@ -22,10 +22,6 @@ dependencies {
     compile name: 'maven-model-1.0-SNAPSHOT'
     compile name: 'error-model-1.0-SNAPSHOT'
 
-    // is included as local jar as part of teamcity-api of build-failure-resolution-assistant
-    // (thus it is not included in the build-failure-resolution-assistant-1.0-SNAPSHOT-jar-with-dependencies.jar)
-    compile name: 'teamcity-rest-client-SNAPSHOT'
-
     compile name: 'build-failure-resolution-assistant-1.0-SNAPSHOT-jar-with-dependencies'
 
     compile project(':build-server-swing-component')
