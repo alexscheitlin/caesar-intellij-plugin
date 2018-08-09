@@ -3,7 +3,6 @@ package ch.scheitlin.alex.intellij.plugins.toolWindow;
 import ch.scheitlin.alex.intellij.plugins.services.Controller;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ui.configuration.ContentEntryTreeEditor;
 import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
@@ -12,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.image.BufferedImage;
 import java.net.URL;
 
 public class LoginPanel extends JPanel {
@@ -122,7 +120,7 @@ public class LoginPanel extends JPanel {
         this.labelIcon.setHorizontalAlignment(JLabel.CENTER);
         this.labelIcon.setVerticalAlignment(JLabel.TOP);
 
-        String iconPath = "/icons/icon_large.png";
+        String iconPath = "/icons/icon_613x810.png";
         URL iconURL = LoginPanel.class.getResource(iconPath);
         ImageIcon iconImage = new ImageIcon(iconURL);
 
