@@ -8,10 +8,10 @@ This is the IntelliJ Plugin of the [Build Failure Resolution Assistant](https://
 
 This project contains the following sub projects:
 
-- [Build Sever Swing Component](build-server-swing-component/README.md)
-- [Maven Swing Component](maven-swing-component/README.md)
-- [Error Swing Component](error-swing-component/README.md)
-- [IntelliJ Plugin](intellij-build-failure-resolution-assistant/README.md)
+- [Build Sever Swing Component](build-server-swing-component)
+- [Maven Swing Component](maven-swing-component)
+- [Error Swing Component](error-swing-component)
+- [IntelliJ Plugin](intellij-build-failure-resolution-assistant)
 
 ## Architecture
 
