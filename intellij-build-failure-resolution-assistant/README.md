@@ -1,3 +1,9 @@
+<div align="center">
+
+![Icon](assets/icon.png)
+
+</div>
+
 # IntelliJ Build Failure Resolution Assistant
 
 ## Workflow
