@@ -3,12 +3,17 @@ package ch.scheitlin.alex.intellij.plugins.toolWindow;
 import ch.scheitlin.alex.intellij.plugins.services.Controller;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ui.configuration.ContentEntryTreeEditor;
 import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 
 public class LoginPanel extends JPanel {
     private JPanel panelContent;
@@ -53,11 +58,15 @@ public class LoginPanel extends JPanel {
         initIconLabel();
         c.gridx = 0;
         c.gridy = 3;
+        c.fill = GridBagConstraints.BOTH;
         c.insets = JBUI.insets(50, 0, 0, 0);
+        c.weightx = 1.0;
+        c.weighty = 1.0;
         this.panelContent.add(this.labelIcon, c);
 
         // add panel to move content to the top
         // (at least one component needs to have weighty greater than 0.0)
+        c.anchor = GridBagConstraints.CENTER;
         c.gridx = 0;
         c.gridy = 4;
         c.fill = GridBagConstraints.BOTH;
@@ -110,7 +119,76 @@ public class LoginPanel extends JPanel {
 
     private void initIconLabel() {
         this.labelIcon = new JLabel();
-        ImageIcon icon = new ImageIcon(LoginPanel.class.getResource("/icons/icon_large.png"));
-        this.labelIcon.setIcon(icon);
+        this.labelIcon.setHorizontalAlignment(JLabel.CENTER);
+        this.labelIcon.setVerticalAlignment(JLabel.TOP);
+
+        String iconPath = "/icons/icon_large.png";
+        URL iconURL = LoginPanel.class.getResource(iconPath);
+        ImageIcon iconImage = new ImageIcon(iconURL);
+
+        Dimension maxSize = new Dimension(200, 200);
+
+        this.labelIcon.setIcon(iconImage);
+
+        this.labelIcon.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // set boundary size (image may not be larger than this)
+                int boundaryWidth = labelIcon.getWidth();
+                int boundaryHeight = labelIcon.getHeight();
+                Dimension boundarySize = new Dimension(boundaryWidth, boundaryHeight);
+
+                // lower boundary size if max size is exceeded
+                if (boundarySize.width > maxSize.width) {
+                    boundarySize.width = maxSize.width;
+                }
+                if (boundarySize.height > maxSize.height) {
+                    boundarySize.height = maxSize.height;
+                }
+
+                // resize image
+                ImageIcon scaledIconImage = new ImageIcon(scaleImage(iconImage.getImage(), boundarySize));
+                labelIcon.setIcon(scaledIconImage);
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
+        });
+    }
+
+    private Image scaleImage(Image image, Dimension boundarySize) {
+        int currentWidth = image.getWidth(null);
+        int currentHeight = image.getHeight(null);
+        int boundWidth = boundarySize.width;
+        int boundHeight = boundarySize.height;
+        int newWidth = currentWidth;
+        int newHeight = currentHeight;
+
+        // scale to bound width
+        if (currentWidth > boundWidth) {
+            newWidth = boundWidth;
+            newHeight = (newWidth * currentHeight) / currentWidth;
+        }
+
+        // scale new height
+        if (newHeight >boundHeight) {
+            newHeight = boundHeight;
+            newWidth = (newHeight * currentWidth) / currentHeight;
+        }
+
+        // scale image
+        return image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
     }
 }
