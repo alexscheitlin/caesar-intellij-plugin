@@ -28,7 +28,7 @@ public class LoginDialog extends JDialog {
         getRootPane().setDefaultButton(buttonOK);
 
         // set icon
-        Image icon = new ImageIcon(LoginDialog.class.getResource("/icons/icon.png")).getImage();
+        Image icon = new ImageIcon(LoginDialog.class.getResource("/icons/icon_16x16.png")).getImage();
         setIconImage(icon);
 
         buttonOK.addActionListener(new ActionListener() {
