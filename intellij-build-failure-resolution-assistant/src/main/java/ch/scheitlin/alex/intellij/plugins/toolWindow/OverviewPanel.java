@@ -134,22 +134,25 @@ public class OverviewPanel extends JPanel {
 
                 // add actions listeners to build panels
                 for (BuildConfigurationPanel buildConfigurationPanel : projectPanel.buildConfigurationPanels) {
-                    for (BranchPanel branchPanel : buildConfigurationPanel.branchPanels) {
-                        for (BuildPanel buildPanel : branchPanel.buildPanels) {
-                            BuildPanel that = buildPanel;
-                            String buildConfigurationName = buildConfigurationPanel.getBuildConfigurationName();
+                    // only proceed if there is at least one build run with this build configuration
+                    if (buildConfigurationPanel.branchPanels != null) {
+                        for (BranchPanel branchPanel : buildConfigurationPanel.branchPanels) {
+                            for (BuildPanel buildPanel : branchPanel.buildPanels) {
+                                BuildPanel that = buildPanel;
+                                String buildConfigurationName = buildConfigurationPanel.getBuildConfigurationName();
 
-                            ActionListener actionListener = new ActionListener() {
-                                @Override
-                                public void actionPerformed(ActionEvent e) {
-                                    Controller controller = ServiceManager.getService(Controller.class);
-                                    controller.getBuildInformation(buildConfigurationName, that.build);
-                                }
-                            };
+                                ActionListener actionListener = new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        Controller controller = ServiceManager.getService(Controller.class);
+                                        controller.getBuildInformation(buildConfigurationName, that.build);
+                                    }
+                                };
 
-                            that.addActionListener(actionListener);
+                                that.addActionListener(actionListener);
 
-                            System.out.println("\t" + that.build.getId() + ": " + that.build.getRepository() + " | " + that.build.getBranch());
+                                System.out.println("\t" + that.build.getId() + ": " + that.build.getRepository() + " | " + that.build.getBranch());
+                            }
                         }
                     }
                 }

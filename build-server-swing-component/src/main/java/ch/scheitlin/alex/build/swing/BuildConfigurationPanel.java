@@ -1,179 +1,256 @@
 package ch.scheitlin.alex.build.swing;
 
-// TODO: import com.intellij.util.ui.JBUI;
-
 import ch.scheitlin.alex.build.model.Branch;
 import ch.scheitlin.alex.build.model.BuildConfiguration;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class BuildConfigurationPanel extends JPanel {
+    // data
+    private BuildConfiguration buildConfiguration;
 
-    private JPanel row1;
-    private JPanel row2;
-
+    // components
+    private JPanel panelTitleRow;
+    private JPanel panelContentRow;
     private JLabel labelConfigurationName;
-    private JLabel labelShowMoreBuilds;
+    private JLabel labelShowAllBuilds;
     public BranchPanel[] branchPanels;
 
-    private boolean showAllBuilds;
-    private String buildConfigurationName;
-    private List<Branch> branches;
+    // appearance settings
+    private boolean showAllBuilds = false;
 
-    private String showMoreFontColor = "#1E90FF";
-    private String showMoreFontColorDisabled = "#C0C0C0";
+    // appearance constants
+    private final int BUILD_CONFIGURATION_NAME_LABEL_FONT_STYLE = Font.BOLD;
+    private final int BUILD_CONFIGURATION_NAME_LABEL_FONT_SIZE = 15; // label default is 12
+    private final String SHOW_ONE_BUILD_TEXT = "show one";
+    private final String SHOW_ALL_BUILDS_TEXT = "show all";
+    private final String SHOW_ALL_BUILDS_ENABLED_COLOR = "1E90FF";
+    private final String SHOW_ALL_BUILDS_DISABLED_COLOR = "C0C0C0";
+    private final String NO_BUILD_CONFIGURATIONS_AVAILABLE_MESSAGE = "No builds found!";
 
     public BuildConfigurationPanel(BuildConfiguration buildConfiguration, String buildPanelActionButtonText) {
-        this.showAllBuilds = false;
+        // set data variables
+        this.buildConfiguration = buildConfiguration;
 
         // get configuration information
-        this.buildConfigurationName = buildConfiguration.getName();
-        this.branches = buildConfiguration.getBranches();
+        String buildConfigurationName = this.buildConfiguration.getName();
+        List<Branch> buildConfigurationBranches = this.buildConfiguration.getBranches();
 
-        // set layout for build configuration panel
+        // set layout for the BuildConfigurationPanel
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        // set first row with build configuration name and label to show more builds
-        this.row1 = new JPanel();
-        this.row1.setLayout(new GridBagLayout());
-
-        // configure and add label with configuration name to first row
-        initConfigurationNameLabel(this.buildConfigurationName);
-        c.gridx = 0;
-        c.gridy = 0;
+        // initialize title panel
+        // with build configuration name and label to show just one or all builds per branch
+        this.panelTitleRow = initTitleRowPanel(
+                buildConfigurationName,
+                this.BUILD_CONFIGURATION_NAME_LABEL_FONT_STYLE, this.BUILD_CONFIGURATION_NAME_LABEL_FONT_SIZE,
+                buildConfigurationBranches,
+                this.SHOW_ONE_BUILD_TEXT, this.SHOW_ALL_BUILDS_TEXT,
+                this.SHOW_ALL_BUILDS_ENABLED_COLOR, this.SHOW_ALL_BUILDS_DISABLED_COLOR
+        );
         c.anchor = GridBagConstraints.LINE_START;
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 1.0;
-        this.row1.add(this.labelConfigurationName, c);
-
-        // configure and add label to show more builds to first row
-        initShowMoreBuildsLabel();
-        c.gridx = 1;
-        c.gridy = 0;
-        c.anchor = GridBagConstraints.LINE_END;
-        c.fill = GridBagConstraints.NONE;
-        c.weightx = 0.0;
-        this.row1.add(this.labelShowMoreBuilds, c);
-
-        // add first row to panel
         c.gridx = 0;
         c.gridy = 0;
+        c.weightx = 1.0;
+        this.add(this.panelTitleRow, c);
+
+        // initialize content panel with branch panels
+        this.panelContentRow = initContentRowPanel(
+                buildConfigurationBranches,
+                this.NO_BUILD_CONFIGURATIONS_AVAILABLE_MESSAGE,
+                this.showAllBuilds,
+                buildPanelActionButtonText
+        );
         c.anchor = GridBagConstraints.LINE_START;
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 1.0;
-        this.add(row1, c);
-
-        // set second row with all branch panels
-        this.row2 = new JPanel();
-        this.row2.setLayout(new GridBagLayout());
-
-        // configure and add branch panels to second row
-        initBranchPanels(this.branches, buildPanelActionButtonText);
-        for (int i = 0; i < this.branches.size(); i++) {
-            c.gridx = 0;
-            c.gridy = i;
-            c.anchor = GridBagConstraints.LINE_START;
-            c.fill = GridBagConstraints.HORIZONTAL;
-            c.weightx = 1.0;
-            this.row2.add(this.branchPanels[i], c);
-        }
-
-        // show message if no branches (= build configurations) available for this project
-        if (this.branches.size() == 0) {
-            // TODO: c.insets = JBUI.insets(20);
-            c.insets = new Insets(20, 20, 20, 20);
-            this.row2.add(new JLabel("No builds found!"), c);
-        }
-
-        // add second row to panel
         c.gridx = 0;
         c.gridy = 1;
-        c.anchor = GridBagConstraints.LINE_START;
-        c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
-        this.add(row2, c);
+        this.add(this.panelContentRow, c);
 
         // show the specified amount of builds
         showBuilds();
     }
 
-    private void initConfigurationNameLabel(String configurationName) {
-        this.labelConfigurationName = new JLabel();
-        this.labelConfigurationName.setText(configurationName);
+    private JPanel initTitleRowPanel(
+            String buildConfigurationName,
+            int buildConfigurationNameLabelFontStyle, int buildConfigurationNameLabelFontSize,
+            List<Branch> buildConfigurationBranches,
+            String showOneBuildText, String showAllBuildsText,
+            String showAllBuildsEnabledColor, String showAllBuildsDisabledColor) {
+        JPanel panel = new JPanel();
 
-        // set font: bold and larger
-        // standard label font size: 12
-        Font font = this.labelConfigurationName.getFont();
-        Font boldFont = new Font(font.getFontName(), Font.BOLD, 15);
-        this.labelConfigurationName.setFont(boldFont);
+        // set layout for panel
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
+        // initialize label with the name of the build configuration
+        this.labelConfigurationName = initConfigurationNameLabel(
+                buildConfigurationName,
+                buildConfigurationNameLabelFontStyle,
+                buildConfigurationNameLabelFontSize
+        );
+        c.anchor = GridBagConstraints.LINE_START;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1.0;
+        panel.add(this.labelConfigurationName, c);
+
+        // initialize label to show just one or all builds per branch
+        this.labelShowAllBuilds = initShowAllBuildsLabel(
+                buildConfigurationBranches,
+                showAllBuilds,
+                showOneBuildText, showAllBuildsText,
+                showAllBuildsEnabledColor, showAllBuildsDisabledColor
+        );
+        c.anchor = GridBagConstraints.LINE_END;
+        c.fill = GridBagConstraints.NONE;
+        c.gridx = 1;
+        c.gridy = 0;
+        c.weightx = 0.0;
+        panel.add(this.labelShowAllBuilds, c);
+
+        return panel;
     }
 
-    private void initShowMoreBuildsLabel() {
-        this.labelShowMoreBuilds = new JLabel();
+    private JLabel initConfigurationNameLabel(String name, int fontStyle, int fontSize) {
+        JLabel label = new JLabel();
+        label.setText(name);
 
-        // get the maximal amount of builds per branch
-        int counter = 0;
-        for (Branch branch : this.branches) {
-            if (branch.getBuilds().size() == 1 && counter == 0) {
-                counter = 1;
-            } else if (branch.getBuilds().size() > 1 && counter < branch.getBuilds().size()) {
-                counter = branch.getBuilds().size();
+        // set font style and font size
+        String fontName = label.getFont().getFontName();
+        Font newFont = new Font(fontName, fontStyle, fontSize);
+        label.setFont(newFont);
+
+        return label;
+    }
+
+    private JLabel initShowAllBuildsLabel(
+            List<Branch> branches,
+            boolean allBuilds,
+            String showOneBuildText, String showAllBuildsText,
+            String showAllBuildsEnabled, String showAllBuildsDisabled) {
+        JLabel label = new JLabel();
+
+        // get the max amount of builds per branch
+        int maxBuildsPerBranch = 0;
+        for (Branch branch : branches) {
+            if (branch.getBuilds().size() == 1 && maxBuildsPerBranch == 0) {
+                maxBuildsPerBranch = 1;
+            } else if (branch.getBuilds().size() > 1 && maxBuildsPerBranch < branch.getBuilds().size()) {
+                maxBuildsPerBranch = branch.getBuilds().size();
             }
         }
 
-        // only enable "show more" label if there are branches with more than just one build
-        if (counter > 1) {
-            this.labelShowMoreBuilds.setText("<html><u style='color: " + showMoreFontColor + ";'>show more</u></html>");
+        String labelText = allBuilds ? showOneBuildText : showAllBuildsText;
+        String labelColor = maxBuildsPerBranch > 1 ? showAllBuildsEnabled : showAllBuildsDisabled;
 
+        String labelContent = "<html><u style='color: " + labelColor + ";'>" + labelText + "</u></html>";
+        label.setText(labelContent);
+
+        // only enable "show all" label if there are branches with more than just one build
+        if (maxBuildsPerBranch > 1) {
             // add click handler to show more builds
-            this.labelShowMoreBuilds.addMouseListener(new MouseAdapter() {
+            label.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
 
-                    String labelText = showAllBuilds ? "show more"  : "show less";
+                    String labelText = showAllBuilds ? showAllBuildsText : showOneBuildText;
 
                     // toggle boolean
                     showAllBuilds = !showAllBuilds;
 
                     // update ui
                     showBuilds();
-                    labelShowMoreBuilds.setText(
-                            "<html><u style='color: " + showMoreFontColor + ";'>" + labelText + "</u></html>"
+                    labelShowAllBuilds.setText(
+                            "<html><u style='color: " + showAllBuildsEnabled + ";'>" + labelText + "</u></html>"
                     );
                 }
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     super.mouseEntered(e);
-                    labelShowMoreBuilds.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    labelShowAllBuilds.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
                     super.mouseExited(e);
-                    labelShowMoreBuilds.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    labelShowAllBuilds.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
             });
-        } else {
-            this.labelShowMoreBuilds.setText("<html><u style='color: " + showMoreFontColorDisabled + ";'>show more</u></html>");
         }
+
+        return label;
     }
 
-    private void initBranchPanels(List<Branch> branches, String buildPanelActionButtonText) {
-        this.branchPanels = new BranchPanel[branches.size()];
+    private JPanel initContentRowPanel(
+            List<Branch> buildConfigurationBranches,
+            String noBuildConfigurationsAvailableMessage,
+            boolean showAllBuilds,
+            String buildPanelActionButtonText) {
+        JPanel panel = new JPanel();
 
-        for (int i = 0; i < this.branchPanels.length; i++) {
-            this.branchPanels[i] = new BranchPanel(branches.get(i), this.showAllBuilds, buildPanelActionButtonText);
+        // set layout for panel
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
+        // show message if no branches (= build configurations) available
+        // most likely no build was run for this build configuration
+        if (buildConfigurationBranches.size() == 0) {
+            c.insets = new Insets(20, 20, 20, 20);
+            panel.add(new JLabel(noBuildConfigurationsAvailableMessage), c);
+            return panel;
         }
+
+        // initialize branch panels
+        this.branchPanels = initBranchPanels(buildConfigurationBranches, showAllBuilds, buildPanelActionButtonText);
+        for (int i = 0; i < buildConfigurationBranches.size(); i++) {
+            c.anchor = GridBagConstraints.LINE_START;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = i;
+            c.weightx = 1.0;
+            panel.add(this.branchPanels[i], c);
+        }
+
+        return panel;
+    }
+
+    private BranchPanel[] initBranchPanels(
+            List<Branch> branches,
+            boolean showAllBuilds,
+            String buildPanelActionButtonText)
+    {
+        BranchPanel[] panels = new BranchPanel[branches.size()];
+
+        for (int i = 0; i < panels.length; i++) {
+            panels[i] = new BranchPanel(branches.get(i), showAllBuilds, buildPanelActionButtonText);
+        }
+
+        return panels;
     }
 
     private void showBuilds() {
+        // return if no build was run for this build configuration
+        if (this.branchPanels == null) {
+            return;
+        }
+
         // update branch panels (either display just the last build or all)
         for (BranchPanel branchPanel : this.branchPanels) {
             branchPanel.showBuilds(this.showAllBuilds);
@@ -181,12 +258,17 @@ public class BuildConfigurationPanel extends JPanel {
     }
 
     public void setBranchFontColor(Color color) {
+        // return if no build was run for this build configuration
+        if (this.branchPanels == null) {
+            return;
+        }
+
         for (BranchPanel branchPanel : this.branchPanels) {
             branchPanel.setBranchFontColor(color);
         }
     }
 
     public String getBuildConfigurationName() {
-        return this.buildConfigurationName;
+        return this.buildConfiguration.getName();
     }
 }

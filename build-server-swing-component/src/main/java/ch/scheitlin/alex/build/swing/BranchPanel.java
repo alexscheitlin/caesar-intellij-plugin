@@ -3,47 +3,69 @@ package ch.scheitlin.alex.build.swing;
 import ch.scheitlin.alex.build.model.Branch;
 import ch.scheitlin.alex.build.model.Build;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class BranchPanel extends JPanel {
+    // data
+    private Branch branch;
+    private boolean showAllBuilds;
 
+    // components
     private JLabel labelBranchName;
     public BuildPanel[] buildPanels;
 
-    private boolean showAllBuilds;
-
+    // appearance settings
     private Color branchFontColor = Color.BLUE;
 
+    // appearance constants
+    private final String DEFAULT_BRANCH_NAME = "default";
+    private final int BRANCH_NAME_LABEL_WIDTH = 50;
+    private final int BRANCH_NAME_FONT_STYLE = Font.BOLD + Font.ITALIC;
+
     public BranchPanel(Branch branch, boolean showAllBuilds, String buildPanelActionButtonText) {
+        // set data variables
+        this.branch = branch;
         this.showAllBuilds = showAllBuilds;
 
         // get branch information
-        String branchName = branch.getName();
-        List<Build> builds = branch.getBuilds();
+        String branchName = this.branch.getName();
+        List<Build> builds = this.branch.getBuilds();
 
-        // set layout for branch panel
+        // set layout for the BranchPanel
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        // configure and add label with branch name
-        initBranchNameLabel(branchName);
-        c.gridx = 0;
-        c.gridy = 0;
+        // initialize label with branch name
+        this.labelBranchName = initBranchNameLabel(
+                branchName,
+                this.branchFontColor,
+                this.DEFAULT_BRANCH_NAME,
+                this.BRANCH_NAME_LABEL_WIDTH,
+                this.BRANCH_NAME_FONT_STYLE
+        );
         c.anchor = GridBagConstraints.LINE_START;
         c.fill = GridBagConstraints.NONE;
+        c.gridx = 0;
+        c.gridy = 0;
         c.weightx = 0.0;
         c.insets = new Insets(0, 0, 0, 10);
         this.add(this.labelBranchName, c);
 
-        // configure and add panels with builds
-        initBuildPanels(builds, buildPanelActionButtonText);
-        for (int i = 0; i < builds.size(); i++) {
-            c.gridx = 1;
-            c.gridy = i;
+        // initialize build panels
+        this.buildPanels = initBuildPanels(builds, buildPanelActionButtonText);
+        for (int i = 0; i <  this.buildPanels.length; i++) {
             c.anchor = GridBagConstraints.LINE_START;
             c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 1;
+            c.gridy = i;
             c.weightx = 1.0;
             c.insets = new Insets(0, 0, 0, 0);
             this.add(this.buildPanels[i], c);
@@ -53,28 +75,39 @@ public class BranchPanel extends JPanel {
         showBuilds(this.showAllBuilds);
     }
 
-    private void initBranchNameLabel(String branchName) {
-        Dimension dimension = new Dimension(50, 20);
+    private JLabel initBranchNameLabel(
+            String branchName,
+            Color fontColor,
+            String defaultBranchName,
+            int labelWidth,
+            int fontStyle) {
+        JLabel label = new JLabel();
+        label.setText(branchName == null ? defaultBranchName : branchName);
+        label.setForeground(fontColor);
 
-        this.labelBranchName = new JLabel();
-        this.labelBranchName.setText(branchName == null ? "default" : branchName);
-        this.labelBranchName.setMinimumSize(dimension);
-        this.labelBranchName.setPreferredSize(dimension);
-        this.labelBranchName.setMaximumSize(dimension);
-        this.labelBranchName.setOpaque(true);
-        //this.labelBranchName.setBackground(JBColor.blue);
-        //this.labelBranchName.setForeground(JBColor.white);
-        //this.labelBranchName.setBorder(new LineBorder(JBColor.BLUE, 3, true));
-        this.labelBranchName.setForeground(branchFontColor);
-        this.labelBranchName.setFont(new Font("Verdana", Font.BOLD + Font.ITALIC, 12));
+        // set font
+        String fontName = label.getFont().getFontName();
+        int fontSize = label.getFont().getSize();
+        Font newFont = new Font(fontName, fontStyle, fontSize);
+        label.setFont(newFont);
+
+        // set size
+        Dimension dimension = new Dimension(labelWidth, 20); // 20 is default label height
+        label.setMinimumSize(dimension);
+        label.setPreferredSize(dimension);
+        label.setMaximumSize(dimension);
+
+        return label;
     }
 
-    private void initBuildPanels(List<Build> builds, String buildPanelActionButtonText) {
-        this.buildPanels = new BuildPanel[builds.size()];
+    private BuildPanel[] initBuildPanels(List<Build> builds, String buildPanelActionButtonText) {
+        BuildPanel[] panels = new BuildPanel[builds.size()];
 
-        for (int i = 0; i < this.buildPanels.length; i++) {
-            this.buildPanels[i] = new BuildPanel(builds.get(i), buildPanelActionButtonText);
+        for (int i = 0; i < panels.length; i++) {
+            panels[i] = new BuildPanel(builds.get(i), buildPanelActionButtonText);
         }
+
+        return panels;
     }
 
     public void showBuilds(boolean showAllBuilds) {

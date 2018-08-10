@@ -39,24 +39,25 @@ public class Main {
 
         // create content panel
         JPanel content = new JPanel();
+        content.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
         c.gridy = 0;
-        c.anchor = GridBagConstraints.NORTH;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 1.0;
         c.insets = new Insets(0, 0, 0, 0);
+        c.weightx = 1.0;
+        c.weighty = 1.0;
         content.add(projectPanel, c);
 
         // create and show frame
         JFrame frame = new JFrame();
         frame.setLayout(new GridBagLayout());
+        c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
         c.gridy = 0;
-        c.fill = GridBagConstraints.BOTH;
+        c.insets = new Insets(20, 20, 20, 20);
         c.weightx = 1.0;
         c.weighty = 1.0;
-        c.insets = new Insets(20, 20, 20, 20);
         frame.add(content, c);
         frame.setSize(new Dimension(800, 800));
 
