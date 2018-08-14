@@ -1,6 +1,14 @@
-# Build Failure Resolution Assistant IntelliJ Plugin
+<div align="center">
 
-> _Helps fixing broken builds by downloading and summarizing build logs._
+![Icon](assets/icon.png)
+
+**IntelliJ Plugin**
+
+# Build Failure Resolution Assistant
+
+_Helps fixing broken builds by downloading and summarizing build logs._
+
+</div>
 
 This is the IntelliJ Plugin of the [Build Failure Resolution Assistant](https://github.com/alexscheitlin/build-failure-resolution-assistant).
 
