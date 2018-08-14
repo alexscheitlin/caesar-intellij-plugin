@@ -84,7 +84,7 @@ public class ToolWindow implements ToolWindowFactory {
                     project
             );
 
-            this.panelRawData = new RawDataPanel(controller.getMavenBuild());
+            this.panelRawData = new RawDataPanel(controller.getRawTeamCityBuildLog(), controller.getMavenBuild());
 
             setToolWindowContent(this.panelInformation, "Summary", this.panelRawData, "Raw Data");
 

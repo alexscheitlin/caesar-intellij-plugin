@@ -224,4 +224,8 @@ public class Controller {
     public MavenBuild getMavenBuild() {
         return this.assistant.mavenBuild;
     }
+
+    public String getRawTeamCityBuildLog() {
+        return this.assistant.getRawTeamCityBuildLog();
+    }
 }
