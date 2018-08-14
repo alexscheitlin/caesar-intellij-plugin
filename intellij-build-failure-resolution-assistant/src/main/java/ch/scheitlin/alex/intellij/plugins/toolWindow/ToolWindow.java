@@ -17,7 +17,7 @@ public class ToolWindow implements ToolWindowFactory {
     private LoginPanel panelLogin;
     private OverviewPanel panelOverview;
     private InformationPanel panelInformation;
-    private TreeViewPanel panelTreeView;
+    private RawDataPanel panelRawData;
     private FixPanel panelFix;
 
     private Project project;
@@ -84,9 +84,9 @@ public class ToolWindow implements ToolWindowFactory {
                     project
             );
 
-            this.panelTreeView = new TreeViewPanel(controller.getMavenBuild());
+            this.panelRawData = new RawDataPanel(controller.getMavenBuild());
 
-            setToolWindowContent(this.panelInformation, "Summary", this.panelTreeView, "Tree View");
+            setToolWindowContent(this.panelInformation, "Summary", this.panelRawData, "Raw Data");
 
         } else if (controller.isFixing()) {
             // show build fix panel if user is fixing a broken build

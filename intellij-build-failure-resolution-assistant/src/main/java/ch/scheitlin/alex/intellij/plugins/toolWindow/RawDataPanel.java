@@ -6,10 +6,10 @@ import ch.scheitlin.alex.maven.MavenPanel;
 import javax.swing.*;
 import java.awt.*;
 
-public class TreeViewPanel extends JPanel {
+public class RawDataPanel extends JPanel {
     private MavenPanel mavenPanel;
 
-    public TreeViewPanel (MavenBuild mavenBuild) {
+    public RawDataPanel(MavenBuild mavenBuild) {
         this.mavenPanel = new MavenPanel(mavenBuild);
 
         // set layout
