@@ -2,9 +2,12 @@ package ch.scheitlin.alex.intellij.plugins.dialogs;
 
 import ch.scheitlin.alex.intellij.plugins.services.Controller;
 import com.intellij.openapi.ui.Messages;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -74,15 +77,6 @@ public class LoginDialog extends JDialog {
         // set content panel as content pane of LoginDialog
         this.setContentPane(this.panelContent);
 
-        // set icon
-        Image icon = new ImageIcon(LoginDialog.class.getResource("/icons/icon_16x16.png")).getImage();
-        setIconImage(icon);
-
-        this.setTitle("Log in to Build Server");
-        this.setModal(true);
-        this.getRootPane().setDefaultButton(this.buttonOK);
-        this.setLocationRelativeTo(null);    // center on screen
-
         // call onCancel() when cross is clicked
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
@@ -97,6 +91,15 @@ public class LoginDialog extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        // set icon
+        Image icon = new ImageIcon(LoginDialog.class.getResource("/icons/icon_16x16.png")).getImage();
+        setIconImage(icon);
+
+        this.setTitle("Log in to Build Server");
+        this.setModal(true);
+        this.getRootPane().setDefaultButton(this.buttonOK);
+        this.setLocationRelativeTo(null);    // center on screen
     }
 
     private JPanel initInputPanel(
@@ -276,7 +279,6 @@ public class LoginDialog extends JDialog {
     private JButton initCancelButton(String text, int width) {
         JButton button = new JButton();
         button.setText(text);
-        button.setSize(width, 28);
 
         // set size
         Dimension newSize = new Dimension(width, 24);
