@@ -1,6 +1,6 @@
 package ch.scheitlin.alex.build.swing;
 
-import ch.scheitlin.alex.build.model.Build;
+import ch.scheitlin.alex.build.model.BuildServerBuild;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,7 +14,7 @@ import javax.swing.SwingConstants;
 
 public class BuildPanel extends JPanel {
     // data
-    public Build build;
+    public BuildServerBuild build;
 
     // components
     private JLabel labelBuildNumber;
@@ -31,7 +31,7 @@ public class BuildPanel extends JPanel {
     private final Color BUILD_STATUS_COLOR_SUCCESSFUL = Color.GREEN;
     private final Color BUILD_STATUS_COLOR_FAILURE = Color.RED;
 
-    public BuildPanel(Build build, String actionButtonText) {
+    public BuildPanel(BuildServerBuild build, String actionButtonText) {
         // set data variables
         this.build = build;
 

@@ -41,14 +41,14 @@ public class Main {
     }
 
     private static MavenBuild getDummyData() {
-        MavenModuleStatus[] moduleStatus = {
-                MavenModuleStatus.SUCCESS,
-                MavenModuleStatus.SUCCESS,
-                MavenModuleStatus.SUCCESS,
-                MavenModuleStatus.SUCCESS,
-                MavenModuleStatus.FAILURE,
-                MavenModuleStatus.SKIPPED,
-                MavenModuleStatus.SKIPPED,
+        MavenModuleBuildStatus[] moduleStatus = {
+                MavenModuleBuildStatus.SUCCESS,
+                MavenModuleBuildStatus.SUCCESS,
+                MavenModuleBuildStatus.SUCCESS,
+                MavenModuleBuildStatus.SUCCESS,
+                MavenModuleBuildStatus.FAILURE,
+                MavenModuleBuildStatus.SKIPPED,
+                MavenModuleBuildStatus.SKIPPED,
         };
 
         int[] goalsPerModule = {
@@ -58,8 +58,8 @@ public class Main {
         return getDummyMavenBuild(MavenBuildStatus.FAILURE, moduleStatus, goalsPerModule);
     }
 
-    private static MavenBuild getDummyMavenBuild(MavenBuildStatus buildStatus, MavenModuleStatus[] moduleStatus, int[] goalsPerModule) {
-        MavenBuild mavenBuild = new MavenBuild(buildStatus, null);
+    private static MavenBuild getDummyMavenBuild(MavenBuildStatus buildStatus, MavenModuleBuildStatus[] moduleStatus, int[] goalsPerModule) {
+        MavenBuild mavenBuild = new MavenBuild(buildStatus, null, null, null);
 
         List<MavenModule> mavenModules = new ArrayList<>();
 
@@ -72,7 +72,7 @@ public class Main {
         return mavenBuild;
     }
 
-    private static MavenModule getDummyMavenModule(int moduleNumber, MavenModuleStatus moduleStatus, int numberOfGoals) {
+    private static MavenModule getDummyMavenModule(int moduleNumber, MavenModuleBuildStatus moduleStatus, int numberOfGoals) {
         MavenModule mavenModule = new MavenModule("Module " + moduleNumber);
         mavenModule.setStatus(moduleStatus);
 

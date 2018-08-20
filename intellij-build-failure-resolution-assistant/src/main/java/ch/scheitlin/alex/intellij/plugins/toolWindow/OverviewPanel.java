@@ -1,7 +1,7 @@
 package ch.scheitlin.alex.intellij.plugins.toolWindow;
 
-import ch.scheitlin.alex.build.model.BuildConfiguration;
-import ch.scheitlin.alex.build.model.Project;
+import ch.scheitlin.alex.build.model.BuildServerBuildConfiguration;
+import ch.scheitlin.alex.build.model.BuildServerProject;
 import ch.scheitlin.alex.build.swing.ProjectPanel;
 import ch.scheitlin.alex.intellij.plugins.services.Controller;
 import ch.scheitlin.alex.build.swing.BranchPanel;
@@ -110,7 +110,7 @@ public class OverviewPanel extends JPanel {
         });
     }
 
-    private void initPanelWithBuildConfigurationPanels(Project project) {
+    private void initPanelWithBuildConfigurationPanels(BuildServerProject project) {
         try {
             // remove second row if it already exists
             this.panelContent.remove(this.scrollPane);
@@ -237,7 +237,7 @@ public class OverviewPanel extends JPanel {
 
         // get build configurations of a project if a one is selected
         // (at index 0 there is no project but the message to select one)
-        Project project = null;
+        BuildServerProject project = null;
         if (index > 0) {
             // get name of selected project
             String projectName = this.projectNames.get(index - 1);

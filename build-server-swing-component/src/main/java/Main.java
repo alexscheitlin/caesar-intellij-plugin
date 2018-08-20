@@ -1,7 +1,7 @@
-import ch.scheitlin.alex.build.model.Branch;
-import ch.scheitlin.alex.build.model.Build;
-import ch.scheitlin.alex.build.model.BuildConfiguration;
-import ch.scheitlin.alex.build.model.Project;
+import ch.scheitlin.alex.build.model.BuildServerBranch;
+import ch.scheitlin.alex.build.model.BuildServerBuild;
+import ch.scheitlin.alex.build.model.BuildServerBuildConfiguration;
+import ch.scheitlin.alex.build.model.BuildServerProject;
 import ch.scheitlin.alex.build.swing.BranchPanel;
 import ch.scheitlin.alex.build.swing.BuildConfigurationPanel;
 import ch.scheitlin.alex.build.swing.BuildPanel;
@@ -16,8 +16,8 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Project project = getDummyData();
-        List<BuildConfiguration> configs = project.getBuildConfigurations();
+        BuildServerProject project = getDummyData();
+        List<BuildServerBuildConfiguration> configs = project.getBuildConfigurations();
         ProjectPanel projectPanel = new ProjectPanel(project, "Action");
 
         // add actions listeners to build panels
@@ -76,63 +76,63 @@ public class Main {
     }
 
 
-    private static Project getDummyData() {
+    private static BuildServerProject getDummyData() {
         // build configuration 1
-        List<Build> builds1 = new ArrayList<Build>();
-        builds1.add(new Build("5", false, "Status"));
-        builds1.add(new Build("4", true, "Status"));
-        builds1.add(new Build("3", true, "Status"));
-        builds1.add(new Build("2", false, "Status"));
-        builds1.add(new Build("1", true, "Status"));
-        Branch branch1 = new Branch("master", builds1);
+        List<BuildServerBuild> builds1 = new ArrayList<BuildServerBuild>();
+        builds1.add(new BuildServerBuild("5", false, "Status"));
+        builds1.add(new BuildServerBuild("4", true, "Status"));
+        builds1.add(new BuildServerBuild("3", true, "Status"));
+        builds1.add(new BuildServerBuild("2", false, "Status"));
+        builds1.add(new BuildServerBuild("1", true, "Status"));
+        BuildServerBranch branch1 = new BuildServerBranch("master", builds1);
 
-        List<Build> builds2 = new ArrayList<Build>();
-        builds2.add(new Build("5", false, "Status"));
-        builds2.add(new Build("4", false, "Status"));
-        builds2.add(new Build("3", false, "Status"));
-        builds2.add(new Build("2", false, "Status"));
-        builds2.add(new Build("1", false, "Status"));
-        Branch branch2 = new Branch("test", builds2);
+        List<BuildServerBuild> builds2 = new ArrayList<BuildServerBuild>();
+        builds2.add(new BuildServerBuild("5", false, "Status"));
+        builds2.add(new BuildServerBuild("4", false, "Status"));
+        builds2.add(new BuildServerBuild("3", false, "Status"));
+        builds2.add(new BuildServerBuild("2", false, "Status"));
+        builds2.add(new BuildServerBuild("1", false, "Status"));
+        BuildServerBranch branch2 = new BuildServerBranch("test", builds2);
 
-        List<Branch> branches1 = new ArrayList<Branch>();
+        List<BuildServerBranch> branches1 = new ArrayList<BuildServerBranch>();
         branches1.add(branch1);
         branches1.add(branch2);
 
-        BuildConfiguration config1 = new BuildConfiguration("Config1", branches1);
+        BuildServerBuildConfiguration config1 = new BuildServerBuildConfiguration("Config1", branches1);
         // build configuration 1
 
         // build configuration 2
-        List<Build> builds3 = new ArrayList<Build>();
-        builds3.add(new Build("3", true, "Status"));
-        builds3.add(new Build("2", false, "Status"));
-        builds3.add(new Build("1", false, "Status"));
-        Branch branch3 = new Branch("master", builds3);
+        List<BuildServerBuild> builds3 = new ArrayList<BuildServerBuild>();
+        builds3.add(new BuildServerBuild("3", true, "Status"));
+        builds3.add(new BuildServerBuild("2", false, "Status"));
+        builds3.add(new BuildServerBuild("1", false, "Status"));
+        BuildServerBranch branch3 = new BuildServerBranch("master", builds3);
 
-        List<Build> builds4 = new ArrayList<Build>();
-        builds4.add(new Build("3", false, "Status"));
-        builds4.add(new Build("2", false, "Status"));
-        builds4.add(new Build("1", false, "Status"));
-        Branch branch4 = new Branch("test", builds4);
+        List<BuildServerBuild> builds4 = new ArrayList<BuildServerBuild>();
+        builds4.add(new BuildServerBuild("3", false, "Status"));
+        builds4.add(new BuildServerBuild("2", false, "Status"));
+        builds4.add(new BuildServerBuild("1", false, "Status"));
+        BuildServerBranch branch4 = new BuildServerBranch("test", builds4);
 
-        List<Build> builds5 = new ArrayList<Build>();
-        builds5.add(new Build("3", true, "Status"));
-        builds5.add(new Build("2", true, "Status"));
-        builds5.add(new Build("1", true, "Status"));
-        Branch branch5 = new Branch("TRUE", builds5);
+        List<BuildServerBuild> builds5 = new ArrayList<BuildServerBuild>();
+        builds5.add(new BuildServerBuild("3", true, "Status"));
+        builds5.add(new BuildServerBuild("2", true, "Status"));
+        builds5.add(new BuildServerBuild("1", true, "Status"));
+        BuildServerBranch branch5 = new BuildServerBranch("TRUE", builds5);
 
-        List<Branch> branches2 = new ArrayList<Branch>();
+        List<BuildServerBranch> branches2 = new ArrayList<BuildServerBranch>();
         branches2.add(branch3);
         branches2.add(branch4);
         branches2.add(branch5);
 
-        BuildConfiguration config2 = new BuildConfiguration("Config2", branches2);
+        BuildServerBuildConfiguration config2 = new BuildServerBuildConfiguration("Config2", branches2);
         // build configuration 2
 
-        List<BuildConfiguration> configs = new ArrayList<BuildConfiguration>();
+        List<BuildServerBuildConfiguration> configs = new ArrayList<BuildServerBuildConfiguration>();
         configs.add(config1);
         configs.add(config2);
 
-        Project project1 = new Project("Project 1", configs);
+        BuildServerProject project1 = new BuildServerProject("Project 1", configs);
 
 
         return project1;

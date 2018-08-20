@@ -1,9 +1,9 @@
 package ch.scheitlin.alex.intellij.plugins.services;
 
 import ch.scheitlin.alex.build.Assistant;
-import ch.scheitlin.alex.build.model.Build;
+import ch.scheitlin.alex.build.model.BuildServerBuild;
+import ch.scheitlin.alex.build.model.BuildServerType;
 import ch.scheitlin.alex.build.model.Error;
-import ch.scheitlin.alex.build.model.BuildConfiguration;
 import ch.scheitlin.alex.intellij.plugins.dialogs.LoginDialog;
 import ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow;
 import ch.scheitlin.alex.maven.MavenBuild;
@@ -21,7 +21,7 @@ public class Controller {
 
     public Controller() {
         this.storage = ServiceManager.getService(Storage.class);
-        this.assistant = new Assistant();
+        this.assistant = new Assistant(BuildServerType.TEAM_CITY);
     }
 
     public static Controller getInstance() {
@@ -100,7 +100,7 @@ public class Controller {
         return this.assistant.getBuildServerInformation().getProjectNames();
     }
 
-    public ch.scheitlin.alex.build.model.Project getTeamCityProject(String projectName) {
+    public ch.scheitlin.alex.build.model.BuildServerProject getTeamCityProject(String projectName) {
         return this.assistant.getBuildServerInformation().getProject(projectName);
     }
 
@@ -140,7 +140,7 @@ public class Controller {
         return this.assistant.testTeamCityConnection(host, username, password);
     }
 
-    public void getBuildInformation(String buildConfigurationName, Build build) {
+    public void getBuildInformation(String buildConfigurationName, BuildServerBuild build) {
         this.storage.teamCityBuildConfigurationName = buildConfigurationName;
 
         if (!this.assistant.download(build)) {
