@@ -1,5 +1,7 @@
 # IntelliJ Build Failure Resolution Assistant
 
+> _Assists in fixing build failures by downloading a build log, parsing and summarizing it, reporting its status and possible errors, stashing open local changes, checking out the failed version, providing hints on where possible errors happened, and let the user fix the error._
+
 ## Workflow
 
 To access the plugin within IntelliJ either use the main menu entry **Build Fixer** on the top right or the tool window bar entry **Build Fixer** on the bottom right.

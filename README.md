@@ -15,14 +15,18 @@ The Build Failure Resolution Assistant connects to a build server and shows all 
 
 Currently the BFRA supports projects developed with Git and Maven using TeamCity as a build server. Although the classification of build failures works for numerous types of errors, the error detection and localization is only implemented for basic errors concerning dependency issues, compilation errors, and failing tests.
 
+To better understand how the IntelliJ Plugin of the Build Failure Resolution Assistant is built, take a look at the sub project table and the architecture image below and explore the different sub projects in the order they are listed in the table below.
+
 ## Sub Projects
 
 This project contains the following sub projects:
 
-- [Build Sever Swing Component](build-server-swing-component)
-- [Maven Swing Component](maven-swing-component)
-- [Error Swing Component](error-swing-component)
-- [IntelliJ Plugin](intellij-build-failure-resolution-assistant)
+| Module | Purpose |
+| --- | --- |
+| [Build Server Swing Component](build-server-swing-component) | Represents data of a build server model graphically using `javax.swing` components. |
+| [Maven Swing Component](maven-swing-component) | Represents data of a maven model graphically using `javax.swing` components. |
+| [Error Swing Component](error-swing-component) | Represents data of a error model graphically using `javax.swing` components. |
+| [IntelliJ Plugin](intellij-build-failure-resolution-assistant) | Assists in fixing build failures by downloading a build log, parsing and summarizing it, reporting its status and possible errors, stashing open local changes, checking out the failed version, providing hints on where possible errors happened, and let the user fix the error. |
 
 ## Architecture
 
