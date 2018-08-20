@@ -15,7 +15,9 @@ The Build Failure Resolution Assistant connects to a build server and shows all 
 
 Currently the BFRA supports projects developed with Git and Maven using TeamCity as a build server. Although the classification of build failures works for numerous types of errors, the error detection and localization is only implemented for basic errors concerning dependency issues, compilation errors, and failing tests.
 
-To better understand how the IntelliJ Plugin of the Build Failure Resolution Assistant is built, take a look at the sub project table and the architecture image below and explore the different sub projects in the order they are listed in the table below.
+_To better understand how the IntelliJ Plugin of the Build Failure Resolution Assistant is built, take a look at the sub project table and the architecture image below and explore the different sub projects in the order they are listed in the table below._
+
+_This project is based on the [Command Line Interface](https://github.com/alexscheitlin/build-failure-resolution-assistant) version of the Build Failure Resolution Assistant._
 
 ## Sub Projects
 
