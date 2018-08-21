@@ -70,7 +70,17 @@ public class ErrorPanel extends JPanel {
 
     private JLabel initPathLabel(String path, String file, int line, int column) {
         JLabel label = new JLabel();
-        label.setText(path + "/" + file + " - [" + line + ":" + column + "]");
+
+        StringBuilder textBuilder = new StringBuilder();
+
+        // ignore path if it is null
+        if (path != null) {
+            textBuilder.append(path + "/");
+        }
+        textBuilder.append(file);
+        textBuilder.append(" - [" + line + ":" + column + "]");
+
+        label.setText(textBuilder.toString());
 
         return label;
     }

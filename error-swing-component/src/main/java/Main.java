@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<Error> errors = getDummyErrors();
+        List<Error> errors = getDummyErrors_no_path();
 
         // create new error swing component
         ErrorPanel errorComponent = new ErrorPanel(errors.get(0), "Show");
@@ -49,6 +49,20 @@ public class Main {
 
     public static List<Error> getDummyErrors() {
         String path1 = "C:/users/alex/desktop";
+        String file1 = "Test.java";
+        int line1 = 1;
+        int column1 = 2;
+        String message1 = "Error message";
+        Error error1 = new Error(path1, file1, line1, column1, message1);
+
+        ArrayList errors = new ArrayList<Error>();
+        errors.add(error1);
+
+        return errors;
+    }
+
+    public static List<Error> getDummyErrors_no_path() {
+        String path1 = null;
         String file1 = "Test.java";
         int line1 = 1;
         int column1 = 2;
