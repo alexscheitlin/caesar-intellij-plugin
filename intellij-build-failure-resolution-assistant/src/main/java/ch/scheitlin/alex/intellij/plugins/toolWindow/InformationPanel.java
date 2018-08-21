@@ -318,7 +318,17 @@ public class InformationPanel extends JPanel {
                     System.out.println(project.getBasePath().toString());
                     System.out.println("Opening " + that.getError().getPath() + "/" + that.getError().getFile() + "...");
 
-                    String filePath = that.getError().getPath() + "/" + that.getError().getFile(); // path to file within project (no leading '/')
+                    // path to file within project (no leading '/')
+                    StringBuilder filePathBuilder = new StringBuilder();
+                    // ignore path if it is null
+                    if (that.getError().getPath() != null) {
+                        filePathBuilder.append(that.getError().getPath() + "/");
+                    }
+                    filePathBuilder.append(that.getError().getFile());
+
+                    String filePath = filePathBuilder.toString();
+
+
                     int lineNumber = that.getError().getLine() - 1;
                     int columnNumber = that.getError().getColumn() - 1;
                     VirtualFile file = LocalFileSystem.getInstance().findFileByIoFile(new File(project.getBasePath().toString() + "/" + filePath));
