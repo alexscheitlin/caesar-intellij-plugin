@@ -57,9 +57,9 @@ public class InformationPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 0.0;
         this.panelContent.add(labelProjectKey, c);
 
         // configure and add label with project name
@@ -70,7 +70,7 @@ public class InformationPanel extends JPanel {
         c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 1.0;
         this.panelContent.add(labelProjectValue, c);
 
         // configure and add label with build configuration title
@@ -79,9 +79,9 @@ public class InformationPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 0.0;
         this.panelContent.add(labelBuildConfigurationKey, c);
 
         // configure and add label with build configuration name
@@ -92,7 +92,7 @@ public class InformationPanel extends JPanel {
         c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 1.0;
         this.panelContent.add(labelBuildConfigurationValue, c);
 
         // configure and add label with build status title
@@ -101,9 +101,9 @@ public class InformationPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 2;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 0.0;
         this.panelContent.add(labelBuildStatusKey, c);
 
         // configure and add label with build status
@@ -114,7 +114,7 @@ public class InformationPanel extends JPanel {
         c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 1.0;
         this.panelContent.add(labelBuildStatusValue, c);
 
         // configure and add label with failed goal title
@@ -123,9 +123,9 @@ public class InformationPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 3;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 0.0;
         this.panelContent.add(labelFailedGoalKey, c);
 
         // configure and add label with failed goal
@@ -136,7 +136,7 @@ public class InformationPanel extends JPanel {
         c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 1.0;
         this.panelContent.add(labelFailedGoalValue, c);
 
         // configure and add label with failure category title
@@ -145,9 +145,9 @@ public class InformationPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 4;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 0.0;
         this.panelContent.add(labelFailureCategoryKey, c);
 
         // configure and add label with failure category
@@ -158,7 +158,7 @@ public class InformationPanel extends JPanel {
         c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 1.0;
         this.panelContent.add(labelFailureCategoryValue, c);
 
         if (errors != null) {
