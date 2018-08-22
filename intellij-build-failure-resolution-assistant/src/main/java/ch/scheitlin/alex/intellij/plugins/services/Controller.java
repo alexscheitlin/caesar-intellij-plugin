@@ -196,7 +196,7 @@ public class Controller {
     public String getFailedGoal() {
         if (this.assistant.mavenBuild.getFailedGoal() != null) {
             MavenGoal failedGoal = this.assistant.mavenBuild.getFailedGoal();
-            return failedGoal.getPlugin() + ":" + failedGoal.getPlugin().getVersion() + ":" + failedGoal.getName();
+            return failedGoal.getPlugin().getName() + ":" + failedGoal.getPlugin().getVersion() + ":" + failedGoal.getName();
         } else {
             return "No failed goal detected!";
         }
