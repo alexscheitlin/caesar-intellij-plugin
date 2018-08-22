@@ -238,8 +238,18 @@ public class BuildConfigurationPanel extends JPanel {
     {
         BranchPanel[] panels = new BranchPanel[branches.size()];
 
+        // set width of all branch name label panels to equal size
+        int maxBranchNameLabelWidth = 0;
         for (int i = 0; i < panels.length; i++) {
             panels[i] = new BranchPanel(branches.get(i), showAllBuilds, buildPanelActionButtonText);
+
+            if (panels[i].getBranchNameLabelWidth() > maxBranchNameLabelWidth) {
+                maxBranchNameLabelWidth = panels[i].getBranchNameLabelWidth();
+            }
+        }
+
+        for (BranchPanel panel : panels) {
+            panel.setBranchNameLabelWidth(maxBranchNameLabelWidth);
         }
 
         return panels;

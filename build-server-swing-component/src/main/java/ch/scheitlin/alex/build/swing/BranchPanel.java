@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,7 +29,7 @@ public class BranchPanel extends JPanel {
 
     // appearance constants
     private final String DEFAULT_BRANCH_NAME = "default";
-    private final int BRANCH_NAME_LABEL_WIDTH = 50;
+    private final int MAX_BRANCH_NAME_LABEL_WIDTH = 100;
     private final int BRANCH_NAME_FONT_STYLE = Font.BOLD + Font.ITALIC;
 
     public BranchPanel(BuildServerBranch branch, boolean showAllBuilds, String buildPanelActionButtonText) {
@@ -48,7 +50,6 @@ public class BranchPanel extends JPanel {
                 branchName,
                 this.branchFontColor,
                 this.DEFAULT_BRANCH_NAME,
-                this.BRANCH_NAME_LABEL_WIDTH,
                 this.BRANCH_NAME_FONT_STYLE
         );
         c.anchor = GridBagConstraints.LINE_START;
@@ -79,7 +80,6 @@ public class BranchPanel extends JPanel {
             String branchName,
             Color fontColor,
             String defaultBranchName,
-            int labelWidth,
             int fontStyle) {
         JLabel label = new JLabel();
         label.setText(branchName == null ? defaultBranchName : branchName);
@@ -91,7 +91,17 @@ public class BranchPanel extends JPanel {
         Font newFont = new Font(fontName, fontStyle, fontSize);
         label.setFont(newFont);
 
+        // get size of text
+        // needs to be calculated in advanced to later resize all branch labels of a build configuration with the same
+        // width
+        AffineTransform affinetransform = new AffineTransform();
+        FontRenderContext frc = new FontRenderContext(affinetransform,true,true);
+        int labelWidth = (int)(label.getFont().getStringBounds(label.getText(), frc).getWidth()) + 1;
+
         // set size
+        if (labelWidth > this.MAX_BRANCH_NAME_LABEL_WIDTH) {
+            labelWidth = this.MAX_BRANCH_NAME_LABEL_WIDTH;
+        }
         Dimension dimension = new Dimension(labelWidth, 20); // 20 is default label height
         label.setMinimumSize(dimension);
         label.setPreferredSize(dimension);
@@ -122,5 +132,23 @@ public class BranchPanel extends JPanel {
     public void setBranchFontColor(Color color) {
         this.branchFontColor = color;
         this.labelBranchName.setForeground(color);
+    }
+
+    public int getBranchNameLabelWidth() {
+        // the width isn't set at the very beginning
+        // as min, max, and preferred size are all equal this is the same as width
+        return this.labelBranchName.getPreferredSize().width;
+    }
+
+    public void setBranchNameLabelWidth(int width) {
+        if (width > this.MAX_BRANCH_NAME_LABEL_WIDTH) {
+            width = this.MAX_BRANCH_NAME_LABEL_WIDTH;
+        }
+
+        // set size
+        Dimension dimension = new Dimension(width, 20); // 20 is default label height
+        labelBranchName.setMinimumSize(dimension);
+        labelBranchName.setPreferredSize(dimension);
+        labelBranchName.setMaximumSize(dimension);
     }
 }
