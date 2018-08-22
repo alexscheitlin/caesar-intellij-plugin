@@ -9,15 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JTextPane;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 public class MultiLineStringDialog extends JDialog {
     // data
@@ -95,6 +87,7 @@ public class MultiLineStringDialog extends JDialog {
         JTextPane label = new JTextPane();
         label.setEditable(false);
         label.setOpaque(false);
+        label.setContentType("text/html");
 
         // set size
         Dimension newSize = new Dimension(width, height);
@@ -125,9 +118,51 @@ public class MultiLineStringDialog extends JDialog {
         return button;
     }
 
+    private void setText(String text) {
+        StringBuilder htmlBuilder = new StringBuilder();
+
+        String fontFamily = "Courier New";
+        int fontSize = this.labelMultiLineString.getFont().getSize();
+
+        int tabSize = 3;
+        String tabReplacement = new String(new char[tabSize]).replace("\0", "&nbsp;");
+
+        htmlBuilder.append("<div style='font-family: " + fontFamily + "; font-size: " + fontSize + "pt;'>");
+        for (String line : text.split("\n")) {
+            boolean bold;
+            String color;
+            if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]E:.*")) {
+                bold = true;
+                color = "red";
+            } else if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]F:.*")) {
+                bold = true;
+                color = "red";
+            } else if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]W:.*")) {
+                bold = true;
+                color = "#ff8c00"; // dark orange
+            } else if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]i:.*")) {
+                bold = true;
+                color = "green";
+            } else {
+                bold = false;
+                color = "black";
+            }
+
+            String newLine = line.replaceAll("\t", tabReplacement);
+            if (bold) {
+                htmlBuilder.append("<div style='color: " + color + ";'><b>" + newLine + "</b></div>");
+            } else {
+                htmlBuilder.append("<div style='color: " + color + ";'>" + newLine + "</div>");
+            }
+        }
+        htmlBuilder.append("</div>");
+
+        this.labelMultiLineString.setText(htmlBuilder.toString());
+    }
+
     public void showDialog(String multiLineString) {
         this.multiLineString = multiLineString;
-        this.labelMultiLineString.setText(this.multiLineString);
+        this.setText(multiLineString);
 
         this.pack();
 
