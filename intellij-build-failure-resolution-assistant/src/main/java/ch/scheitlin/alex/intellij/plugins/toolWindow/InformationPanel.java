@@ -11,6 +11,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -56,9 +57,9 @@ public class InformationPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 0.0;
         this.panelContent.add(labelProjectKey, c);
 
         // configure and add label with project name
@@ -69,7 +70,7 @@ public class InformationPanel extends JPanel {
         c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 1.0;
         this.panelContent.add(labelProjectValue, c);
 
         // configure and add label with build configuration title
@@ -78,9 +79,9 @@ public class InformationPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 0.0;
         this.panelContent.add(labelBuildConfigurationKey, c);
 
         // configure and add label with build configuration name
@@ -91,7 +92,7 @@ public class InformationPanel extends JPanel {
         c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 1.0;
         this.panelContent.add(labelBuildConfigurationValue, c);
 
         // configure and add label with build status title
@@ -100,9 +101,9 @@ public class InformationPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 2;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 0.0;
         this.panelContent.add(labelBuildStatusKey, c);
 
         // configure and add label with build status
@@ -113,7 +114,7 @@ public class InformationPanel extends JPanel {
         c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 1.0;
         this.panelContent.add(labelBuildStatusValue, c);
 
         // configure and add label with failed goal title
@@ -122,9 +123,9 @@ public class InformationPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 3;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 0.0;
         this.panelContent.add(labelFailedGoalKey, c);
 
         // configure and add label with failed goal
@@ -135,7 +136,7 @@ public class InformationPanel extends JPanel {
         c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 1.0;
         this.panelContent.add(labelFailedGoalValue, c);
 
         // configure and add label with failure category title
@@ -144,9 +145,9 @@ public class InformationPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 4;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 0.0;
         this.panelContent.add(labelFailureCategoryKey, c);
 
         // configure and add label with failure category
@@ -157,7 +158,7 @@ public class InformationPanel extends JPanel {
         c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
-        c.weightx = 0.5;
+        c.weightx = 1.0;
         this.panelContent.add(labelFailureCategoryValue, c);
 
         if (errors != null) {
@@ -167,9 +168,9 @@ public class InformationPanel extends JPanel {
             c.gridx = 0;
             c.gridy = 5;
             c.gridwidth = 1;
-            c.fill = GridBagConstraints.HORIZONTAL;
+            c.fill = GridBagConstraints.NONE;
             c.insets = JBUI.insets(20, 0, 0, 0);
-            c.weightx = 0.5;
+            c.weightx = 0.0;
             this.panelContent.add(labelErrorsKey, c);
 
             // configure and add panel with errors
@@ -178,9 +179,9 @@ public class InformationPanel extends JPanel {
             c.gridx = 0;
             c.gridy = 6;
             c.gridwidth = 2;
-            c.fill = GridBagConstraints.NONE;
+            c.fill = GridBagConstraints.HORIZONTAL;
             c.insets = JBUI.insets(0);
-            c.weightx = 0.0;
+            c.weightx = 1.0;
             this.panelContent.add(panelErrorsValue, c);
         }
 
@@ -315,20 +316,62 @@ public class InformationPanel extends JPanel {
             final ErrorPanel that = errorComponent;
             ActionListener actionListener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println(project.getBasePath().toString());
-                    System.out.println("Opening " + that.getError().getPath() + "/" + that.getError().getFile() + "...");
+                    // path to file within project (no leading '/')
+                    StringBuilder filePathBuilder = new StringBuilder();
 
-                    String filePath = that.getError().getPath() + "/" + that.getError().getFile(); // path to file within project (no leading '/')
+                    // ignore path if it is null
+                    if (that.getError().getPath() != null) {
+                        filePathBuilder.append(that.getError().getPath() + "/");
+                    }
+
+                    // ignore file if it is null
+                    if (that.getError().getFile() != null) {
+                        filePathBuilder.append(that.getError().getFile());
+                    }
+
+                    String filePath = filePathBuilder.toString();
+
                     int lineNumber = that.getError().getLine() - 1;
                     int columnNumber = that.getError().getColumn() - 1;
-                    VirtualFile file = LocalFileSystem.getInstance().findFileByIoFile(new File(project.getBasePath().toString() + "/" + filePath));
+
+                    System.out.println("Opening " + project.getBasePath() + "/" + filePath);
+
+                    VirtualFile file = LocalFileSystem.getInstance().findFileByIoFile(new File(project.getBasePath() + "/" + filePath));
                     new OpenFileDescriptor(project, file, lineNumber, columnNumber).navigate(true);
                 }
             };
             errorComponent.addButtonAction(actionListener);
 
+            // add bottom border if there is at least one more error panel
+            if (i < errors.size() - 1) {
+                errorComponent.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+            }
+
+            // add top padding if there was at least one error panel before
+            // add bottom padding if there is at least one more error panel
+            int padding = 5;
+
+            int paddingTop = 0;
+            if (i != 0) {
+                // not first panel
+                paddingTop = padding;
+            }
+
+            int paddingBottom = 0;
+            if (i < errors.size() - 1) {
+                // not last panel
+                paddingBottom = padding;
+            }
+
+            Border border = errorComponent.getBorder();
+            Border margin = BorderFactory.createEmptyBorder(paddingTop, 0, paddingBottom, 0);
+            errorComponent.setBorder(BorderFactory.createCompoundBorder(border, margin));
+
+            c.anchor = GridBagConstraints.LINE_START;
+            c.fill = GridBagConstraints.HORIZONTAL;
             c.gridx = 0;
             c.gridy = i;
+            c.weightx = 1.0;
             this.panelErrorsValue.add(errorComponent, c);
         }
     }

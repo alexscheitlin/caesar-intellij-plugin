@@ -1,7 +1,6 @@
 package ch.scheitlin.alex.intellij.plugins.toolWindow;
 
-import ch.scheitlin.alex.build.model.BuildConfiguration;
-import ch.scheitlin.alex.build.model.Project;
+import ch.scheitlin.alex.build.model.BuildServerProject;
 import ch.scheitlin.alex.build.swing.ProjectPanel;
 import ch.scheitlin.alex.intellij.plugins.services.Controller;
 import ch.scheitlin.alex.build.swing.BranchPanel;
@@ -17,7 +16,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public class OverviewPanel extends JPanel {
@@ -39,8 +37,8 @@ public class OverviewPanel extends JPanel {
         // configure panel to add padding to the content
         initAndAddContentPanel(20);
 
-        // configure and add button to load projects and build information from team city
-        initLoadProjectsButton();
+        // configure and add button to refresh the team city information with projects and builds
+        initRefreshButton();
         c.gridx = 0;
         c.gridy = 0;
         c.fill = GridBagConstraints.NONE;
@@ -72,6 +70,8 @@ public class OverviewPanel extends JPanel {
         c.gridwidth = 2;
         c.insets = JBUI.insets(0, 0, 0, 0);
         this.panelContent.add(this.scrollPane, c);
+
+        onRefresh();
     }
 
     private void initAndAddContentPanel(int padding) {
@@ -87,14 +87,14 @@ public class OverviewPanel extends JPanel {
         this.add(this.panelContent, c);
     }
 
-    private void initLoadProjectsButton() {
+    private void initRefreshButton() {
         this.buttonRefresh = new JButton();
         this.buttonRefresh.setText("Refresh");
 
         this.buttonRefresh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadProjects();
+                onRefresh();
             }
         });
     }
@@ -110,7 +110,7 @@ public class OverviewPanel extends JPanel {
         });
     }
 
-    private void initPanelWithBuildConfigurationPanels(Project project) {
+    private void initPanelWithBuildConfigurationPanels(BuildServerProject project) {
         try {
             // remove second row if it already exists
             this.panelContent.remove(this.scrollPane);
@@ -179,7 +179,10 @@ public class OverviewPanel extends JPanel {
         this.scrollPane.setBorder(null);
     }
 
-    public void loadProjects() {
+    private void onRefresh() {
+        // fetch data
+        Controller.getInstance().fetchBuildServerInformation();
+
         // get all projects in TeamCity
         this.projectNames = Controller.getInstance().getTeamCityProjectNames();
 
@@ -237,7 +240,7 @@ public class OverviewPanel extends JPanel {
 
         // get build configurations of a project if a one is selected
         // (at index 0 there is no project but the message to select one)
-        Project project = null;
+        BuildServerProject project = null;
         if (index > 0) {
             // get name of selected project
             String projectName = this.projectNames.get(index - 1);

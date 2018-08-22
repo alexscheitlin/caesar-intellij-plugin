@@ -329,14 +329,14 @@ public class MavenPanel extends JPanel {
             ImageIcon moduleSkippedIcon = loadResourceIcon(MODULE_SKIPPED_ICON_RESOURCE_PATH);
 
             // set module icons and colors depending on module status
-            MavenModuleStatus status = module.getStatus();
-            if (status == MavenModuleStatus.SUCCESS) {
+            MavenModuleBuildStatus status = module.getStatus();
+            if (status == MavenModuleBuildStatus.SUCCESS) {
                 setForeground(MODULE_SUCCESS_COLOR);
                 setIcon(moduleSuccessIcon);
-            } else if (status == MavenModuleStatus.FAILURE) {
+            } else if (status == MavenModuleBuildStatus.FAILURE) {
                 setForeground(MODULE_FAILURE_COLOR);
                 setIcon(moduleFailureIcon);
-            } else if (status == MavenModuleStatus.SKIPPED) {
+            } else if (status == MavenModuleBuildStatus.SKIPPED) {
                 setForeground(MODULE_SKIPPED_COLOR);
                 setIcon(moduleSkippedIcon);
             }

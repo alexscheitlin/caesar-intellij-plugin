@@ -1,7 +1,7 @@
 package ch.scheitlin.alex.build.swing;
 
-import ch.scheitlin.alex.build.model.Branch;
-import ch.scheitlin.alex.build.model.BuildConfiguration;
+import ch.scheitlin.alex.build.model.BuildServerBranch;
+import ch.scheitlin.alex.build.model.BuildServerBuildConfiguration;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 public class BuildConfigurationPanel extends JPanel {
     // data
-    private BuildConfiguration buildConfiguration;
+    private BuildServerBuildConfiguration buildConfiguration;
 
     // components
     private JPanel panelTitleRow;
@@ -38,13 +38,13 @@ public class BuildConfigurationPanel extends JPanel {
     private final String SHOW_ALL_BUILDS_DISABLED_COLOR = "C0C0C0";
     private final String NO_BUILD_CONFIGURATIONS_AVAILABLE_MESSAGE = "No builds found!";
 
-    public BuildConfigurationPanel(BuildConfiguration buildConfiguration, String buildPanelActionButtonText) {
+    public BuildConfigurationPanel(BuildServerBuildConfiguration buildConfiguration, String buildPanelActionButtonText) {
         // set data variables
         this.buildConfiguration = buildConfiguration;
 
         // get configuration information
         String buildConfigurationName = this.buildConfiguration.getName();
-        List<Branch> buildConfigurationBranches = this.buildConfiguration.getBranches();
+        List<BuildServerBranch> buildConfigurationBranches = this.buildConfiguration.getBranches();
 
         // set layout for the BuildConfigurationPanel
         this.setLayout(new GridBagLayout());
@@ -87,7 +87,7 @@ public class BuildConfigurationPanel extends JPanel {
     private JPanel initTitleRowPanel(
             String buildConfigurationName,
             int buildConfigurationNameLabelFontStyle, int buildConfigurationNameLabelFontSize,
-            List<Branch> buildConfigurationBranches,
+            List<BuildServerBranch> buildConfigurationBranches,
             String showOneBuildText, String showAllBuildsText,
             String showAllBuildsEnabledColor, String showAllBuildsDisabledColor) {
         JPanel panel = new JPanel();
@@ -139,7 +139,7 @@ public class BuildConfigurationPanel extends JPanel {
     }
 
     private JLabel initShowAllBuildsLabel(
-            List<Branch> branches,
+            List<BuildServerBranch> branches,
             boolean allBuilds,
             String showOneBuildText, String showAllBuildsText,
             String showAllBuildsEnabled, String showAllBuildsDisabled) {
@@ -147,7 +147,7 @@ public class BuildConfigurationPanel extends JPanel {
 
         // get the max amount of builds per branch
         int maxBuildsPerBranch = 0;
-        for (Branch branch : branches) {
+        for (BuildServerBranch branch : branches) {
             if (branch.getBuilds().size() == 1 && maxBuildsPerBranch == 0) {
                 maxBuildsPerBranch = 1;
             } else if (branch.getBuilds().size() > 1 && maxBuildsPerBranch < branch.getBuilds().size()) {
@@ -199,7 +199,7 @@ public class BuildConfigurationPanel extends JPanel {
     }
 
     private JPanel initContentRowPanel(
-            List<Branch> buildConfigurationBranches,
+            List<BuildServerBranch> buildConfigurationBranches,
             String noBuildConfigurationsAvailableMessage,
             boolean showAllBuilds,
             String buildPanelActionButtonText) {
@@ -232,7 +232,7 @@ public class BuildConfigurationPanel extends JPanel {
     }
 
     private BranchPanel[] initBranchPanels(
-            List<Branch> branches,
+            List<BuildServerBranch> branches,
             boolean showAllBuilds,
             String buildPanelActionButtonText)
     {

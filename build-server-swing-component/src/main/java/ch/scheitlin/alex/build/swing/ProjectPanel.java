@@ -1,7 +1,7 @@
 package ch.scheitlin.alex.build.swing;
 
-import ch.scheitlin.alex.build.model.BuildConfiguration;
-import ch.scheitlin.alex.build.model.Project;
+import ch.scheitlin.alex.build.model.BuildServerBuildConfiguration;
+import ch.scheitlin.alex.build.model.BuildServerProject;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 
 public class ProjectPanel extends JPanel {
     // data
-    private Project project;
+    private BuildServerProject project;
 
     // components
     public BuildConfigurationPanel[] buildConfigurationPanels;
@@ -25,12 +25,12 @@ public class ProjectPanel extends JPanel {
     private final String NO_BUILD_CONFIGURATIONS_AVAILABLE_MESSAGE = "No builds found!";
     private final int BUILD_CONFIGURATION_PANEL_SPACE = 20;
 
-    public ProjectPanel(Project project, String buildPanelActionButtonText) {
+    public ProjectPanel(BuildServerProject project, String buildPanelActionButtonText) {
         // set data variables
         this.project = project;
 
         // get project information
-        List<BuildConfiguration> buildConfigurations = this.project.getBuildConfigurations();
+        List<BuildServerBuildConfiguration> buildConfigurations = this.project.getBuildConfigurations();
 
         // set layout for the ProjectPanel
         this.setLayout(new GridBagLayout());
@@ -74,7 +74,7 @@ public class ProjectPanel extends JPanel {
     }
 
     private BuildConfigurationPanel[] initBuildConfigurationPanels(
-            List<BuildConfiguration> buildConfigurations,
+            List<BuildServerBuildConfiguration> buildConfigurations,
             Color branchPanelBranchFontColor,
             String buildPanelActionButtonText)
     {

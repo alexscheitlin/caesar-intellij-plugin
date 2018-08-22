@@ -1,7 +1,7 @@
 package ch.scheitlin.alex.build.swing;
 
-import ch.scheitlin.alex.build.model.Branch;
-import ch.scheitlin.alex.build.model.Build;
+import ch.scheitlin.alex.build.model.BuildServerBranch;
+import ch.scheitlin.alex.build.model.BuildServerBuild;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 public class BranchPanel extends JPanel {
     // data
-    private Branch branch;
+    private BuildServerBranch branch;
     private boolean showAllBuilds;
 
     // components
@@ -30,14 +30,14 @@ public class BranchPanel extends JPanel {
     private final int BRANCH_NAME_LABEL_WIDTH = 50;
     private final int BRANCH_NAME_FONT_STYLE = Font.BOLD + Font.ITALIC;
 
-    public BranchPanel(Branch branch, boolean showAllBuilds, String buildPanelActionButtonText) {
+    public BranchPanel(BuildServerBranch branch, boolean showAllBuilds, String buildPanelActionButtonText) {
         // set data variables
         this.branch = branch;
         this.showAllBuilds = showAllBuilds;
 
         // get branch information
         String branchName = this.branch.getName();
-        List<Build> builds = this.branch.getBuilds();
+        List<BuildServerBuild> builds = this.branch.getBuilds();
 
         // set layout for the BranchPanel
         this.setLayout(new GridBagLayout());
@@ -100,7 +100,7 @@ public class BranchPanel extends JPanel {
         return label;
     }
 
-    private BuildPanel[] initBuildPanels(List<Build> builds, String buildPanelActionButtonText) {
+    private BuildPanel[] initBuildPanels(List<BuildServerBuild> builds, String buildPanelActionButtonText) {
         BuildPanel[] panels = new BuildPanel[builds.size()];
 
         for (int i = 0; i < panels.length; i++) {
