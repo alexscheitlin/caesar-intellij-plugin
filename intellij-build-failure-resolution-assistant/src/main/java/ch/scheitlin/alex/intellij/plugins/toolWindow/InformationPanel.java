@@ -338,6 +338,31 @@ public class InformationPanel extends JPanel {
             };
             errorComponent.addButtonAction(actionListener);
 
+            // add bottom border if there is at least one more error panel
+            if (i < errors.size() - 1) {
+                errorComponent.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+            }
+
+            // add top padding if there was at least one error panel before
+            // add bottom padding if there is at least one more error panel
+            int padding = 5;
+
+            int paddingTop = 0;
+            if (i != 0) {
+                // not first panel
+                paddingTop = padding;
+            }
+
+            int paddingBottom = 0;
+            if (i < errors.size() - 1) {
+                // not last panel
+                paddingBottom = padding;
+            }
+
+            Border border = errorComponent.getBorder();
+            Border margin = BorderFactory.createEmptyBorder(paddingTop, 0, paddingBottom, 0);
+            errorComponent.setBorder(BorderFactory.createCompoundBorder(border, margin));
+
             c.anchor = GridBagConstraints.LINE_START;
             c.gridx = 0;
             c.gridy = i;
