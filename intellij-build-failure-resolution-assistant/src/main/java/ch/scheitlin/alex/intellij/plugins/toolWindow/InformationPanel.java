@@ -316,23 +316,27 @@ public class InformationPanel extends JPanel {
             final ErrorPanel that = errorComponent;
             ActionListener actionListener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println(project.getBasePath().toString());
-                    System.out.println("Opening " + that.getError().getPath() + "/" + that.getError().getFile() + "...");
-
                     // path to file within project (no leading '/')
                     StringBuilder filePathBuilder = new StringBuilder();
+
                     // ignore path if it is null
                     if (that.getError().getPath() != null) {
                         filePathBuilder.append(that.getError().getPath() + "/");
                     }
-                    filePathBuilder.append(that.getError().getFile());
+
+                    // ignore file if it is null
+                    if (that.getError().getFile() != null) {
+                        filePathBuilder.append(that.getError().getFile());
+                    }
 
                     String filePath = filePathBuilder.toString();
 
-
                     int lineNumber = that.getError().getLine() - 1;
                     int columnNumber = that.getError().getColumn() - 1;
-                    VirtualFile file = LocalFileSystem.getInstance().findFileByIoFile(new File(project.getBasePath().toString() + "/" + filePath));
+
+                    System.out.println("Opening " + project.getBasePath() + "/" + filePath);
+
+                    VirtualFile file = LocalFileSystem.getInstance().findFileByIoFile(new File(project.getBasePath() + "/" + filePath));
                     new OpenFileDescriptor(project, file, lineNumber, columnNumber).navigate(true);
                 }
             };
