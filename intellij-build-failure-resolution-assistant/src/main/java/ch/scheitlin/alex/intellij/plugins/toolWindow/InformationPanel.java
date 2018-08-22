@@ -11,6 +11,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -337,6 +338,7 @@ public class InformationPanel extends JPanel {
             };
             errorComponent.addButtonAction(actionListener);
 
+            c.anchor = GridBagConstraints.LINE_START;
             c.gridx = 0;
             c.gridy = i;
             this.panelErrorsValue.add(errorComponent, c);
