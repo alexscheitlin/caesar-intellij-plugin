@@ -120,7 +120,7 @@ public class LoginPanel extends JPanel {
         this.labelIcon.setHorizontalAlignment(JLabel.CENTER);
         this.labelIcon.setVerticalAlignment(JLabel.TOP);
 
-        String iconPath = "/icons/icon_613x810.png";
+        String iconPath = "/icons/icon_610x908.png";
         URL iconURL = LoginPanel.class.getResource(iconPath);
         ImageIcon iconImage = new ImageIcon(iconURL);
 
