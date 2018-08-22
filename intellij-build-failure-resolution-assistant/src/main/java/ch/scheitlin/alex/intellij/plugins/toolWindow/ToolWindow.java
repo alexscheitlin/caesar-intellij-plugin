@@ -62,7 +62,6 @@ public class ToolWindow implements ToolWindowFactory {
             this.panelOverview = new OverviewPanel();
 
             setToolWindowContent(panelOverview);
-            this.panelOverview.loadProjects();
 
         } else if (controller.hasDownloaded() || controller.hasProcessed()) {
             String projectName = controller.getTeamCityProjectName();

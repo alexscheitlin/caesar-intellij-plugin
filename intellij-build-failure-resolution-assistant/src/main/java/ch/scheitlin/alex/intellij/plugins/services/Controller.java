@@ -1,6 +1,7 @@
 package ch.scheitlin.alex.intellij.plugins.services;
 
 import ch.scheitlin.alex.build.Assistant;
+import ch.scheitlin.alex.build.model.BuildServer;
 import ch.scheitlin.alex.build.model.BuildServerBuild;
 import ch.scheitlin.alex.build.model.BuildServerType;
 import ch.scheitlin.alex.build.model.Error;
@@ -94,6 +95,10 @@ public class Controller {
         ToolWindowManager manager = ToolWindowManager.getInstance(this.storage.project);
         com.intellij.openapi.wm.ToolWindow toolWindow = manager.getToolWindow("BFR Assistant");
         toolWindow.show(null);
+    }
+
+    public BuildServer fetchBuildServerInformation() {
+        return this.assistant.fetchBuildServerInformation();
     }
 
     public List<String> getTeamCityProjectNames() {
