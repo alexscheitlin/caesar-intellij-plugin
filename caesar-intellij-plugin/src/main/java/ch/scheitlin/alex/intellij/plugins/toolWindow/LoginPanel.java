@@ -91,7 +91,7 @@ public class LoginPanel extends JPanel {
 
     private void initTitleLabel() {
         this.labelTitle = new JLabel();
-        this.labelTitle.setText("Build Failure Resolution Assistant");
+        this.labelTitle.setText("Ci Assistant for Efficient (Build) Summarization And Resolution");
 
         Font labelFont = this.labelTitle.getFont();
         Font newFont = new Font(labelFont.getName(), Font.BOLD, 15);

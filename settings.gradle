@@ -1,5 +1,5 @@
 include 'build-server-swing-component'
 include 'maven-swing-component'
 include 'error-swing-component'
-include 'intellij-build-failure-resolution-assistant'
+include 'caesar-intellij-plugin'
 

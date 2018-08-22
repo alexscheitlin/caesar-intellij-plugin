@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/build-server-swing-component/build-server-swing-component.iml" filepath="$PROJECT_DIR$/.idea/modules/build-server-swing-component/build-server-swing-component.iml" group="build-server-swing-component" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/build-server-swing-component/build-server-swing-component_main.iml" filepath="$PROJECT_DIR$/.idea/modules/build-server-swing-component/build-server-swing-component_main.iml" group="build-server-swing-component" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/build-server-swing-component/build-server-swing-component_test.iml" filepath="$PROJECT_DIR$/.idea/modules/build-server-swing-component/build-server-swing-component_test.iml" group="build-server-swing-component" />
+      <module fileurl="file://$PROJECT_DIR$/caesar-intellij-plugin.iml" filepath="$PROJECT_DIR$/caesar-intellij-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/caesar-intellij-plugin/caesar-intellij-plugin-caesar-intellij-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/caesar-intellij-plugin/caesar-intellij-plugin-caesar-intellij-plugin.iml" group="caesar-intellij-plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/caesar-intellij-plugin/caesar-intellij-plugin-caesar-intellij-plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/caesar-intellij-plugin/caesar-intellij-plugin-caesar-intellij-plugin_main.iml" group="caesar-intellij-plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/caesar-intellij-plugin/caesar-intellij-plugin-caesar-intellij-plugin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/caesar-intellij-plugin/caesar-intellij-plugin-caesar-intellij-plugin_test.iml" group="caesar-intellij-plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/error-swing-component/error-swing-component.iml" filepath="$PROJECT_DIR$/.idea/modules/error-swing-component/error-swing-component.iml" group="error-swing-component" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/error-swing-component/error-swing-component_main.iml" filepath="$PROJECT_DIR$/.idea/modules/error-swing-component/error-swing-component_main.iml" group="error-swing-component" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/error-swing-component/error-swing-component_test.iml" filepath="$PROJECT_DIR$/.idea/modules/error-swing-component/error-swing-component_test.iml" group="error-swing-component" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/maven-swing-component/maven-swing-component.iml" filepath="$PROJECT_DIR$/.idea/modules/maven-swing-component/maven-swing-component.iml" group="maven-swing-component" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/maven-swing-component/maven-swing-component_main.iml" filepath="$PROJECT_DIR$/.idea/modules/maven-swing-component/maven-swing-component_main.iml" group="maven-swing-component" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/maven-swing-component/maven-swing-component_test.iml" filepath="$PROJECT_DIR$/.idea/modules/maven-swing-component/maven-swing-component_test.iml" group="maven-swing-component" />
+    </modules>
+  </component>
+</project>

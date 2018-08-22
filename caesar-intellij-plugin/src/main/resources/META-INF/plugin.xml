@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>ch.scheitlin.alex.intellij.plugins.intellij-build-failure-resolution-assistant</id>
-    <name>Build Failure Resolution Assistant</name>
+    <name>CAESAR</name>
     <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
     <description><![CDATA[
@@ -17,11 +17,11 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="ch.scheitlin.alex.intellij.plugins.services.Controller"/>
         <applicationService serviceImplementation="ch.scheitlin.alex.intellij.plugins.services.Storage"/>
-        <toolWindow id="BFR Assistant" secondary="true" anchor="right" factoryClass="ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow"  icon="/icons/icon_13x13.png"/>
+        <toolWindow id="CAESAR" secondary="true" anchor="right" factoryClass="ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow"  icon="/icons/icon_13x13.png"/>
     </extensions>
 
     <actions>
-        <group id="IntelliJPlugin.Menu" text="BFR _Assistant" description="" icon="/icons/icon_16x16.png">
+        <group id="IntelliJPlugin.Menu" text="C_AESAR" description="" icon="/icons/icon_16x16.png">
             <add-to-group group-id="MainMenu" anchor="last" />
             <action id="IntelliJPlugin.Login" class="ch.scheitlin.alex.intellij.plugins.actions.LoginAction" text="Log _in..." description="" />
             <action id="TeamCityAPI.Logout" class="ch.scheitlin.alex.intellij.plugins.actions.LogoutAction" text="Log _out..." description="" />
