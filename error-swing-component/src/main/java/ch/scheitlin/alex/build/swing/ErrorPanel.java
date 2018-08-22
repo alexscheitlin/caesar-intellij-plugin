@@ -40,27 +40,33 @@ public class ErrorPanel extends JPanel {
         this.labelPath = initPathLabel(errorPath, errorFile, errorLine, errorColumn);
         c.anchor = GridBagConstraints.LINE_START;
         c.insets = new Insets(0, 0, 0, 0);
+        c.fill = GridBagConstraints.HORIZONTAL;
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 0;
+        c.weightx = 1.0;
         this.add(this.labelPath, c);
 
         // initialize label showing the error message
         this.labelMessage = initMessageLabel(errorMessage);
         c.anchor = GridBagConstraints.LINE_START;
         c.insets = new Insets(0, 0, 0, 0);
+        c.fill = GridBagConstraints.HORIZONTAL;
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 1;
+        c.weightx = 1.0;
         this.add(this.labelMessage, c);
 
         // initialize button to start action
         this.buttonAction = initActionButton(this.actionButtonText);
         c.anchor = GridBagConstraints.LINE_START;
         c.insets = new Insets(0, 20, 0, 0);
+        c.fill = GridBagConstraints.NONE;
         c.gridheight = 2;
         c.gridx = 1;
         c.gridy = 0;
+        c.weightx = 0.0;
         this.add(this.buttonAction, c);
     }
 
