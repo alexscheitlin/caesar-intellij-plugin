@@ -11,6 +11,8 @@ _[Command Line Interface](https://github.com/alexscheitlin/caesar)_ |
 
 _Helps fixing broken builds by downloading and summarizing build logs._
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 </div>
 
 CAESAR connects to a build server and shows all executed builds to the user. By selecting one of the builds the corresponding build log is downloaded, parsed, and summarized. The user then gets a summary of the build's execution like information about it's status (successful or not) or possible errors. Every failed build gets classified (e.g. dependency, compilation, or test issues) and occurred errors are listed with information about their location (file and line/column). If the user decides to fix the build failure, uncommitted changes get saved automatically and the code base causing the build failure is downloaded and checked out. The user may now debug and fix the errors, merge the applied changes to whatever branch he wants, push the changes to the remote repository the build server monitors, reapply the previously saved changes, and continue working where he stopped.
@@ -37,3 +39,7 @@ This project contains the following sub projects:
 The following visualization shows how the different sub projects interact.
 
 ![Architecture](assets/architecture.png)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
