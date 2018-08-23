@@ -16,11 +16,16 @@ import java.net.URL;
 public class LoginPanel extends JPanel {
     private JPanel panelContent;
     private JLabel labelTitle;
+    private JLabel labelSubtitle;
     private JLabel labelInformation;
     private JButton buttonLogin;
     private JLabel labelIcon;
 
     Project project;
+
+    private final String TITLE = "CAESAR";
+    private final String SUBTITLE = "Ci Assistant for Efficient (Build Failure)<br>Summarization And Resolution";
+    private final String ICON = "/icons/icon_610x908.png";
 
     public LoginPanel(Project project) {
         this.project = project;
@@ -33,29 +38,41 @@ public class LoginPanel extends JPanel {
         initAndAddContentPanel(20);
 
         // configure and add label with title
-        initTitleLabel();
+        initTitleLabel(this.TITLE);
+        c.anchor = GridBagConstraints.CENTER;
         c.gridx = 0;
         c.gridy = 0;
         this.panelContent.add(labelTitle, c);
 
-        // configure and add label with information message
-        initInformationLabel();
+        // configure and add label with subtitle
+        initSubtitleLabel(this.SUBTITLE);
+        c.anchor = GridBagConstraints.CENTER;
         c.gridx = 0;
         c.gridy = 1;
         c.insets = JBUI.insets(20, 0, 0, 0);
+        this.panelContent.add(labelSubtitle, c);
+
+        // configure and add label with information message
+        initInformationLabel();
+        c.anchor = GridBagConstraints.CENTER;
+        c.gridx = 0;
+        c.gridy = 2;
+        c.insets = JBUI.insets(40, 0, 0, 0);
         this.panelContent.add(labelInformation, c);
 
         // configure and add button to login
         initLoginButton();
+        c.anchor = GridBagConstraints.CENTER;
         c.gridx = 0;
-        c.gridy = 2;
+        c.gridy = 3;
         c.insets = JBUI.insets(20, 0, 0, 0);
         this.panelContent.add(buttonLogin, c);
 
         // configure and add label with icon
-        initIconLabel();
+        initIconLabel(this.ICON);
+        c.anchor = GridBagConstraints.CENTER;
         c.gridx = 0;
-        c.gridy = 3;
+        c.gridy = 4;
         c.fill = GridBagConstraints.BOTH;
         c.insets = JBUI.insets(50, 0, 0, 0);
         c.weightx = 1.0;
@@ -66,7 +83,7 @@ public class LoginPanel extends JPanel {
         // (at least one component needs to have weighty greater than 0.0)
         c.anchor = GridBagConstraints.CENTER;
         c.gridx = 0;
-        c.gridy = 4;
+        c.gridy = 5;
         c.fill = GridBagConstraints.BOTH;
         c.insets = JBUI.insets(0);
         c.weightx = 1.0;
@@ -89,13 +106,18 @@ public class LoginPanel extends JPanel {
         this.add(this.panelContent, c);
     }
 
-    private void initTitleLabel() {
+    private void initTitleLabel(String text) {
         this.labelTitle = new JLabel();
-        this.labelTitle.setText("Ci Assistant for Efficient (Build) Summarization And Resolution");
+        this.labelTitle.setText(text);
 
         Font labelFont = this.labelTitle.getFont();
-        Font newFont = new Font(labelFont.getName(), Font.BOLD, 15);
+        Font newFont = new Font(labelFont.getName(), Font.BOLD, 20);
         this.labelTitle.setFont(newFont);
+    }
+
+    private void initSubtitleLabel(String text) {
+        this.labelSubtitle = new JLabel();
+        this.labelSubtitle.setText("<html><div style='text-align:center;'>" + text + "</div></html>");
     }
 
     private void initInformationLabel() {
@@ -115,13 +137,12 @@ public class LoginPanel extends JPanel {
         });
     }
 
-    private void initIconLabel() {
+    private void initIconLabel(String icon) {
         this.labelIcon = new JLabel();
         this.labelIcon.setHorizontalAlignment(JLabel.CENTER);
         this.labelIcon.setVerticalAlignment(JLabel.TOP);
 
-        String iconPath = "/icons/icon_610x908.png";
-        URL iconURL = LoginPanel.class.getResource(iconPath);
+        URL iconURL = LoginPanel.class.getResource(icon);
         ImageIcon iconImage = new ImageIcon(iconURL);
 
         Dimension maxSize = new Dimension(200, 200);
