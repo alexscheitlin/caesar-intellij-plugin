@@ -40,6 +40,10 @@ The following visualization shows how the different sub projects interact.
 
 ![Architecture](assets/architecture.png)
 
+## Authors
+
+- **Alex Scheitlin** - *Initial work* - [alexscheitlin](https://github.com/alexscheitlin)
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
