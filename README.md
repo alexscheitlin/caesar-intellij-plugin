@@ -7,7 +7,7 @@ _[Command Line Interface](https://github.com/alexscheitlin/caesar)_ |
 
 # CAESAR
 
-**Ci Assistant for Efficient (Build) Summarization And Resolution**
+**Ci Assistant for Efficient (Build Failure) Summarization And Resolution**
 
 _Helps fixing broken builds by downloading and summarizing build logs._
 
