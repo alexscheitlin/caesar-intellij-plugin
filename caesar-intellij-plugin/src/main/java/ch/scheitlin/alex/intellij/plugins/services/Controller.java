@@ -7,6 +7,7 @@ import ch.scheitlin.alex.build.model.BuildServerType;
 import ch.scheitlin.alex.build.model.Error;
 import ch.scheitlin.alex.intellij.plugins.dialogs.LoginDialog;
 import ch.scheitlin.alex.intellij.plugins.services.helpers.DebugHelper;
+import ch.scheitlin.alex.intellij.plugins.services.helpers.IntelliJHelper;
 import ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow;
 import ch.scheitlin.alex.maven.MavenBuild;
 import ch.scheitlin.alex.maven.MavenGoal;
@@ -17,7 +18,6 @@ import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.ToolWindowManager;
 import javafx.util.Pair;
 
 import java.io.File;
@@ -101,9 +101,7 @@ public class Controller {
     }
 
     public void showToolWindow() {
-        ToolWindowManager manager = ToolWindowManager.getInstance(this.storage.project);
-        com.intellij.openapi.wm.ToolWindow toolWindow = manager.getToolWindow("BFR Assistant");
-        toolWindow.show(null);
+        IntelliJHelper.showToolWindow(this.storage.project, "BFR Assistant");
     }
 
     public BuildServer fetchBuildServerInformation() {
@@ -119,7 +117,7 @@ public class Controller {
     }
 
     public String getGitRepositoryOriginUrl() {
-        return this.storage.project.getBaseDir().getPath();
+        return IntelliJHelper.getProjectPath(this.storage.project);
     }
 
     public boolean isInNoStage() {
@@ -232,7 +230,7 @@ public class Controller {
     }
 
     private void reloadProjectFiles() {
-        this.storage.project.getBaseDir().refresh(true, true);
+        IntelliJHelper.getProjectDirectoryFile(this.storage.project).refresh(true, true);
     }
 
     public MavenBuild getMavenBuild() {
@@ -244,17 +242,17 @@ public class Controller {
     }
 
     public void openErrorInFile(Error error) {
-        String filePath = this.storage.project.getBasePath() + "/" + error.getFullPath();
+        String filePath = IntelliJHelper.getProjectPath(this.storage.project) + "/" + error.getFullPath();
 
         int lineNumber = error.getLine() - 1;
         int columnNumber = error.getColumn() - 1;
 
         // open file
-        Controller.getInstance().openFile(filePath, lineNumber, columnNumber);
+        openFile(filePath, lineNumber, columnNumber);
     }
 
     public void debugError(Error error) {
-        String filePath = this.storage.project.getBasePath() + "/" + error.getFullPath();
+        String filePath = IntelliJHelper.getProjectPath(this.storage.project) + "/" + error.getFullPath();
 
         int lineNumber = error.getLine() - 1;
 
@@ -285,6 +283,6 @@ public class Controller {
         OpenFileDescriptor openFileDescriptor = new OpenFileDescriptor(this.storage.project, virtualFile, lineNumber, columnNumber);
         openFileDescriptor.navigate(true);
 
-        System.out.println("Opening " + this.storage.project.getBasePath() + "/" + filePath);
+        System.out.println("Opening " + IntelliJHelper.getProjectPath(this.storage.project) + "/" + filePath);
     }
 }
