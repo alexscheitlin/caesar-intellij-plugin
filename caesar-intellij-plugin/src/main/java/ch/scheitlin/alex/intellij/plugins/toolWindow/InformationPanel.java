@@ -328,13 +328,15 @@ public class InformationPanel extends JPanel {
             };
             errorComponent.addButton1Action(actionListener);
 
-            // debug error action
-            ActionListener actionListener2 = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    Controller.getInstance().debugError(that.getError());
-                }
-            };
-            errorComponent.addButton2Action(actionListener2);
+            if (actionButton2Text != null) {
+                // debug error action
+                ActionListener actionListener2 = new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        Controller.getInstance().debugError(that.getError());
+                    }
+                };
+                errorComponent.addButton2Action(actionListener2);
+            }
 
             // add bottom border if there is at least one more error panel
             if (i < errors.size() - 1) {
