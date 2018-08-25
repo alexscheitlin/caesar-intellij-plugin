@@ -272,7 +272,7 @@ public class Controller {
 
         // select run configuration
         // the run configuration for this file needs to exist
-        String configurationName = error.getFile().split("/")[error.getFile().split("/").length - 1].split("\\.")[0];
+        String configurationName = error.getFile().split("\\.")[0];     // remove file ending
         RunConfiguration runConfiguration = null;
         for (RunConfiguration config : getRunConfigurations(this.storage.project)) {
             if (config.getName().equals(configurationName)) {
