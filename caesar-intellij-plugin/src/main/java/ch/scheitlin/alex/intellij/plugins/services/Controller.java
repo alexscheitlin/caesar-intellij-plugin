@@ -10,10 +10,14 @@ import ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow;
 import ch.scheitlin.alex.maven.MavenBuild;
 import ch.scheitlin.alex.maven.MavenGoal;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindowManager;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.util.List;
 
 public class Controller {
@@ -234,5 +238,36 @@ public class Controller {
 
     public String getRawTeamCityBuildLog() {
         return this.caesar.getBuildServerBuildLog();
+    }
+
+    public void openErrorInFile(Error error) {
+        // path to file within project (no leading '/')
+        StringBuilder filePathBuilder = new StringBuilder();
+
+        // ignore path if it is null
+        if (error.getPath() != null) {
+            filePathBuilder.append(error.getPath() + "/");
+        }
+
+        // ignore file if it is null
+        if (error.getFile() != null) {
+            filePathBuilder.append(error.getFile());
+        }
+
+        int lineNumber = error.getLine() - 1;
+        int columnNumber = error.getColumn() - 1;
+
+        // open file
+        Controller.getInstance().openFile(filePathBuilder.toString(), lineNumber, columnNumber);
+    }
+
+    private void openFile(String filePath, int lineNumber, int columnNumber) {
+        String pathName = this.storage.project.getBasePath() + "/" + filePath;
+        File file = new File(pathName);
+        VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(file);
+        OpenFileDescriptor openFileDescriptor = new OpenFileDescriptor(this.storage.project, virtualFile, lineNumber, columnNumber);
+        openFileDescriptor.navigate(true);
+
+        System.out.println("Opening " + this.storage.project.getBasePath() + "/" + filePath);
     }
 }
