@@ -1,6 +1,6 @@
 package ch.scheitlin.alex.intellij.plugins.services;
 
-import ch.scheitlin.alex.build.Assistant;
+import ch.scheitlin.alex.build.Caesar;
 import ch.scheitlin.alex.build.model.BuildServer;
 import ch.scheitlin.alex.build.model.BuildServerBuild;
 import ch.scheitlin.alex.build.model.BuildServerType;
@@ -18,11 +18,13 @@ import java.util.List;
 
 public class Controller {
     private Storage storage;
-    private Assistant assistant;
+    private Caesar caesar;
+
+    private final BuildServerType BUILD_SERVER_TYPE = BuildServerType.TEAM_CITY;
 
     public Controller() {
         this.storage = ServiceManager.getService(Storage.class);
-        this.assistant = new Assistant(BuildServerType.TEAM_CITY);
+        this.caesar = new Caesar(this.BUILD_SERVER_TYPE);
     }
 
     public static Controller getInstance() {
@@ -64,7 +66,7 @@ public class Controller {
         }
 
         // check whether the login was successful or not
-        if (this.assistant.connect(host, username, password)) {
+        if (this.caesar.connect(host, username, password)) {
             // update tool window
             if (this.getToolWindow() != null) {
                 this.getToolWindow().update();
@@ -77,7 +79,7 @@ public class Controller {
     }
 
     public void logout() {
-        this.assistant.disconnect();
+        this.caesar.disconnect();
 
         // update tool window
         this.getToolWindow().update();
@@ -98,15 +100,15 @@ public class Controller {
     }
 
     public BuildServer fetchBuildServerInformation() {
-        return this.assistant.fetchBuildServerInformation();
+        return this.caesar.fetchBuildServerInformation();
     }
 
     public List<String> getTeamCityProjectNames() {
-        return this.assistant.getBuildServerInformation().getProjectNames();
+        return this.caesar.getBuildServerInformation().getProjectNames();
     }
 
     public ch.scheitlin.alex.build.model.BuildServerProject getTeamCityProject(String projectName) {
-        return this.assistant.getBuildServerInformation().getProject(projectName);
+        return this.caesar.getBuildServerInformation().getProject(projectName);
     }
 
     public String getGitRepositoryOriginUrl() {
@@ -114,23 +116,23 @@ public class Controller {
     }
 
     public boolean isInNoStage() {
-        return this.assistant.isInNoStage();
+        return this.caesar.isInNoStage();
     }
 
     public boolean isConnected() {
-        return this.assistant.isConnected();
+        return this.caesar.isConnected();
     }
 
     public boolean hasDownloaded() {
-        return this.assistant.hasDownloaded();
+        return this.caesar.hasDownloaded();
     }
 
     public boolean hasProcessed() {
-        return this.assistant.hasProcessed();
+        return this.caesar.hasProcessed();
     }
 
     public boolean isFixing() {
-        return this.assistant.isFixing();
+        return this.caesar.isFixing();
     }
 
     public void saveTeamCityCredentials(String host, String username, String password) {
@@ -142,17 +144,17 @@ public class Controller {
     }
 
     public boolean testTeamCityConnection(String host, String username, String password) {
-        return this.assistant.testTeamCityConnection(host, username, password);
+        return this.caesar.testBuildServerConnection(this.BUILD_SERVER_TYPE, host, username, password);
     }
 
     public void getBuildInformation(String buildConfigurationName, BuildServerBuild build) {
         this.storage.teamCityBuildConfigurationName = buildConfigurationName;
 
-        if (!this.assistant.download(build)) {
+        if (!this.caesar.download(build)) {
             System.out.println("Could not download build log from build server!");
         }
 
-        if (!this.assistant.process()) {
+        if (!this.caesar.process()) {
             System.out.println("Could not process build log!");
         }
 
@@ -160,19 +162,19 @@ public class Controller {
     }
 
     public void startFixingBrokenBuild() {
-        this.assistant.fix(this.getGitRepositoryOriginUrl());
+        this.caesar.fix(this.getGitRepositoryOriginUrl());
         reloadProjectFiles();
         updateToolWindow();
     }
 
     public void stopFixingBrokenBuild() {
-        this.assistant.finish();
+        this.caesar.finish();
         reloadProjectFiles();
         updateToolWindow();
     }
 
     public void abortBuildFix() {
-        this.assistant.abort();
+        this.caesar.abort();
 
         updateToolWindow();
     }
@@ -190,12 +192,12 @@ public class Controller {
     }
 
     public String getBuildStatus() {
-        return this.assistant.mavenBuild.getStatus().toString();
+        return this.caesar.getMavenBuild().getStatus().toString();
     }
 
     public String getFailedGoal() {
-        if (this.assistant.mavenBuild.getFailedGoal() != null) {
-            MavenGoal failedGoal = this.assistant.mavenBuild.getFailedGoal();
+        if (this.caesar.getMavenBuild().getFailedGoal() != null) {
+            MavenGoal failedGoal = this.caesar.getMavenBuild().getFailedGoal();
             return failedGoal.getPlugin().getName() + ":" + failedGoal.getPlugin().getVersion() + ":" + failedGoal.getName();
         } else {
             return "No failed goal detected!";
@@ -203,15 +205,15 @@ public class Controller {
     }
 
     public String getFailureCategory() {
-        if (this.assistant.failureCategory != null) {
-            return this.assistant.failureCategory;
+        if (this.caesar.getFailureCategory() != null) {
+            return this.caesar.getFailureCategory();
         } else {
             return "No category found!";
         }
     }
 
     public List<Error> getErrors() {
-        return this.assistant.errors;
+        return this.caesar.getErrors();
     }
 
     public Project getIntelliJProject() {
@@ -227,10 +229,10 @@ public class Controller {
     }
 
     public MavenBuild getMavenBuild() {
-        return this.assistant.mavenBuild;
+        return this.caesar.getMavenBuild();
     }
 
     public String getRawTeamCityBuildLog() {
-        return this.assistant.getRawTeamCityBuildLog();
+        return this.caesar.getBuildServerBuildLog();
     }
 }

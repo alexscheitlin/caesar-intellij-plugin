@@ -22,7 +22,7 @@ dependencies {
     compile name: 'maven-model-1.0-SNAPSHOT'
     compile name: 'error-model-1.0-SNAPSHOT'
 
-    compile name: 'build-failure-resolution-assistant-1.0-SNAPSHOT-jar-with-dependencies'
+    compile name: 'caesar-1.0-SNAPSHOT-jar-with-dependencies'
 
     compile project(':build-server-swing-component')
     compile project(':maven-swing-component')
