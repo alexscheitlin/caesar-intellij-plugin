@@ -11,13 +11,15 @@ import javax.swing.*;
 public class ErrorPanel extends JPanel {
     // data
     private Error error;
-    private String actionButtonText;
+    private String actionButton1Text;
+    private String actionButton2Text;
 
     // components
     private JLabel labelPath;
     private JLabel labelShowMore;
     private JTextPane labelMessage;
-    private JButton buttonAction;
+    private JButton buttonAction1;
+    private JButton buttonAction2;
 
     // appearance settings
     private boolean showMore = false;
@@ -28,10 +30,11 @@ public class ErrorPanel extends JPanel {
     private final String SHOW_MORE_TEXT_ENABLED_COLOR = "1E90FF";
     private final String SHOW_MORE_DISABLED_COLOR = "C0C0C0";
 
-    public ErrorPanel(Error error, String actionButtonText) {
+    public ErrorPanel(Error error, String actionButton1Text, String actionButton2Text) {
         // set data variables
         this.error = error;
-        this.actionButtonText = actionButtonText;
+        this.actionButton1Text = actionButton1Text;
+        this.actionButton2Text = actionButton2Text;
 
         // get error information
         String errorPath = this.error.getPath();
@@ -80,17 +83,31 @@ public class ErrorPanel extends JPanel {
         c.weightx = 1.0;
         this.add(this.labelMessage, c);
 
-        // initialize button to start action
-        this.buttonAction = initActionButton(this.actionButtonText);
+        // initialize button 1 to start action 1
+        this.buttonAction1 = initActionButton(this.actionButton1Text);
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         c.insets = new Insets(0, 5, 0, 0);
         c.fill = GridBagConstraints.NONE;
-        c.gridheight = 2;
+        c.gridheight = 1;
         c.gridwidth = 1;
         c.gridx = 2;
         c.gridy = 0;
         c.weightx = 0.0;
-        this.add(this.buttonAction, c);
+        this.add(this.buttonAction1, c);
+
+        if (actionButton2Text != null) {
+            // initialize button 2 to start action 2
+            this.buttonAction2 = initActionButton(this.actionButton2Text);
+            c.anchor = GridBagConstraints.FIRST_LINE_START;
+            c.insets = new Insets(0, 5, 0, 0);
+            c.fill = GridBagConstraints.NONE;
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            c.gridx = 2;
+            c.gridy = 1;
+            c.weightx = 0.0;
+            this.add(this.buttonAction2, c);
+        }
 
         // resize behaviour
         this.addComponentListener(new ComponentListener() {
@@ -271,7 +288,11 @@ public class ErrorPanel extends JPanel {
         return (int) (font.getStringBounds(text, frc).getWidth());
     }
 
-    public void addButtonAction(ActionListener actionListener) {
-        this.buttonAction.addActionListener(actionListener);
+    public void addButton1Action(ActionListener actionListener) {
+        this.buttonAction1.addActionListener(actionListener);
+    }
+
+    public void addButton2Action(ActionListener actionListener) {
+        this.buttonAction2.addActionListener(actionListener);
     }
 }

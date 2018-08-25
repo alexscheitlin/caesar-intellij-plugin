@@ -174,7 +174,7 @@ public class InformationPanel extends JPanel {
             this.panelContent.add(labelErrorsKey, c);
 
             // configure and add panel with errors
-            initErrorsValuePanel(errors, project);
+            initErrorsValuePanel(errors, failureCategory, project);
             c.anchor = GridBagConstraints.LINE_START;
             c.gridx = 0;
             c.gridy = 6;
@@ -300,7 +300,7 @@ public class InformationPanel extends JPanel {
         this.labelErrorsKey.setText("Errors:");
     }
 
-    private void initErrorsValuePanel(List<Error> errors, Project project) {
+    private void initErrorsValuePanel(List<Error> errors, String failureCategory, Project project) {
         if (errors == null) {
             return;
         }
@@ -310,7 +310,12 @@ public class InformationPanel extends JPanel {
 
         for (int i = 0; i < errors.size(); i++) {
             // create new error swing component
-            ErrorPanel errorComponent = new ErrorPanel(errors.get(i), "Show");
+            String actionButton1Text = "Show";
+            String actionButton2Text = "Debug";
+            if (failureCategory != "TESTING") {
+                actionButton2Text = null;
+            }
+            ErrorPanel errorComponent = new ErrorPanel(errors.get(i), actionButton1Text, actionButton2Text);
 
             // create action for action button of error component
             final ErrorPanel that = errorComponent;
@@ -340,7 +345,7 @@ public class InformationPanel extends JPanel {
                     new OpenFileDescriptor(project, file, lineNumber, columnNumber).navigate(true);
                 }
             };
-            errorComponent.addButtonAction(actionListener);
+            errorComponent.addButton1Action(actionListener);
 
             // add bottom border if there is at least one more error panel
             if (i < errors.size() - 1) {

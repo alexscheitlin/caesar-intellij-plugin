@@ -19,7 +19,7 @@ public class Main {
         List<Error> errors = getDummyErrors();
         ErrorPanel[] errorComponents = new ErrorPanel[getDummyErrors().size()];
         for (int i = 0; i < errors.size(); i++) {
-            errorComponents[i] = new ErrorPanel(errors.get(i), "Show");
+            errorComponents[i] = new ErrorPanel(errors.get(i), "Show", "Debug");
 
             // create action for action button of error component
             final ErrorPanel that = errorComponents[i];
@@ -28,7 +28,7 @@ public class Main {
                     System.out.println("Opening " + that.getError().getPath() + "/" + that.getError().getFile() + "...");
                 }
             };
-            errorComponents[i].addButtonAction(actionListener);
+            errorComponents[i].addButton1Action(actionListener);
 
             // create frame and add error components
             GridBagConstraints c = new GridBagConstraints();
