@@ -26,6 +26,10 @@ import java.util.List;
 public class Controller {
     private Storage storage;
     private Caesar caesar;
+    private Project project;
+    private ToolWindow toolWindow;
+    private String buildServerProjectName;
+    private String buildServerConfigurationName;
 
     private final BuildServerType BUILD_SERVER_TYPE = BuildServerType.TEAM_CITY;
 
@@ -47,18 +51,18 @@ public class Controller {
     }
 
     private boolean login(Project project, boolean openDialog) {
-        this.storage.project = project;
+        this.project = project;
 
-        List<Pair<String, String>> properties = this.storage.getTeamCityCredentials();
+        List<Pair<String, String>> properties = this.storage.getBuildServerCredentials();
         String host = properties.get(0).getValue();
         String username = properties.get(1).getValue();
         String password = properties.get(2).getValue();
 
         if (openDialog) {
-            // show login dialog to get TeamCity host, username, and password
+            // show login dialog to get build server host, username, and password
             LoginDialog dialog = new LoginDialog();
 
-            // set TeamCity host, username, and password if data was entered in login dialog
+            // set build server host, username, and password if data was entered in login dialog
             String[] result = dialog.showDialog(host, username, password);
 
             // if result is null the cancel button was clicked
@@ -93,31 +97,31 @@ public class Controller {
     }
 
     public void setToolWindow(ToolWindow toolWindow) {
-        this.storage.toolWindow = toolWindow;
+        this.toolWindow = toolWindow;
     }
 
     public ToolWindow getToolWindow() {
-        return this.storage.toolWindow;
+        return this.toolWindow;
     }
 
     public void showToolWindow() {
-        IntelliJHelper.showToolWindow(this.storage.project, "BFR Assistant");
+        IntelliJHelper.showToolWindow(this.project, "BFR Assistant");
     }
 
     public BuildServer fetchBuildServerInformation() {
         return this.caesar.fetchBuildServerInformation();
     }
 
-    public List<String> getTeamCityProjectNames() {
+    public List<String> getBuildServerProjectNames() {
         return this.caesar.getBuildServerInformation().getProjectNames();
     }
 
-    public ch.scheitlin.alex.build.model.BuildServerProject getTeamCityProject(String projectName) {
+    public ch.scheitlin.alex.build.model.BuildServerProject getBuildServerProject(String projectName) {
         return this.caesar.getBuildServerInformation().getProject(projectName);
     }
 
     public String getGitRepositoryOriginUrl() {
-        return IntelliJHelper.getProjectPath(this.storage.project);
+        return IntelliJHelper.getProjectPath(this.project);
     }
 
     public boolean isInNoStage() {
@@ -140,20 +144,20 @@ public class Controller {
         return this.caesar.isFixing();
     }
 
-    public void saveTeamCityCredentials(String host, String username, String password) {
-        this.storage.saveTeamCityCredentials(host, username, password);
+    public void saveBuildServerCredentials(String host, String username, String password) {
+        this.storage.saveBuildServerCredentials(host, username, password);
     }
 
-    public void deleteTeamCityCredentials() {
-        this.storage.deleteTeamCityCredentials();
+    public void deleteBuildServerCredentials() {
+        this.storage.deleteBuildServerCredentials();
     }
 
-    public boolean testTeamCityConnection(String host, String username, String password) {
+    public boolean testBuildServerConnection(String host, String username, String password) {
         return this.caesar.testBuildServerConnection(this.BUILD_SERVER_TYPE, host, username, password);
     }
 
     public void getBuildInformation(String buildConfigurationName, BuildServerBuild build) {
-        this.storage.teamCityBuildConfigurationName = buildConfigurationName;
+        this.buildServerConfigurationName = buildConfigurationName;
 
         if (!this.caesar.download(build)) {
             System.out.println("Could not download build log from build server!");
@@ -184,16 +188,16 @@ public class Controller {
         updateToolWindow();
     }
 
-    public String getTeamCityProjectName() {
-        return this.storage.teamCityProjectName;
+    public String getBuildServerProjectName() {
+        return this.buildServerProjectName;
     }
 
-    public void setTeamCityProjectName(String projectName) {
-        this.storage.teamCityProjectName = projectName;
+    public void setBuildServerProjectName(String projectName) {
+        this.buildServerProjectName = projectName;
     }
 
-    public String getTeamCityBuildConfigurationName() {
-        return this.storage.teamCityBuildConfigurationName;
+    public String getBuildServerBuildConfigurationName() {
+        return this.buildServerConfigurationName;
     }
 
     public String getBuildStatus() {
@@ -222,27 +226,27 @@ public class Controller {
     }
 
     public Project getIntelliJProject() {
-        return this.storage.project;
+        return this.project;
     }
 
     private void updateToolWindow() {
-        this.storage.toolWindow.update();
+        this.toolWindow.update();
     }
 
     private void reloadProjectFiles() {
-        IntelliJHelper.getProjectDirectoryFile(this.storage.project).refresh(true, true);
+        IntelliJHelper.getProjectDirectoryFile(this.project).refresh(true, true);
     }
 
     public MavenBuild getMavenBuild() {
         return this.caesar.getMavenBuild();
     }
 
-    public String getRawTeamCityBuildLog() {
+    public String getBuildServerBuildLog() {
         return this.caesar.getBuildServerBuildLog();
     }
 
     public void openErrorInFile(Error error) {
-        String filePath = IntelliJHelper.getProjectPath(this.storage.project) + "/" + error.getFullPath();
+        String filePath = IntelliJHelper.getProjectPath(this.project) + "/" + error.getFullPath();
 
         int lineNumber = error.getLine() - 1;
         int columnNumber = error.getColumn() - 1;
@@ -252,18 +256,18 @@ public class Controller {
     }
 
     public void debugError(Error error) {
-        String filePath = IntelliJHelper.getProjectPath(this.storage.project) + "/" + error.getFullPath();
+        String filePath = IntelliJHelper.getProjectPath(this.project) + "/" + error.getFullPath();
 
         int lineNumber = error.getLine() - 1;
 
         // create and toggle a line break point
-        DebugHelper.addLineBreakpoint(this.storage.project, filePath, lineNumber);
+        DebugHelper.addLineBreakpoint(this.project, filePath, lineNumber);
 
         // select run configuration
         // the run configuration for this file needs to exist
         String configurationName = error.getFile().split("\\.")[0];     // remove file ending
         RunConfiguration runConfiguration = null;
-        for (RunConfiguration config : DebugHelper.getRunConfigurations(this.storage.project)) {
+        for (RunConfiguration config : DebugHelper.getRunConfigurations(this.project)) {
             if (config.getName().equals(configurationName)) {
                 runConfiguration = config;
                 break;
@@ -271,7 +275,7 @@ public class Controller {
         }
 
         try {
-            DebugHelper.startDebugger(this.storage.project, runConfiguration);
+            DebugHelper.startDebugger(this.project, runConfiguration);
         } catch (ExecutionException ex) {
             System.out.print(ex.getMessage());
         }
@@ -280,9 +284,9 @@ public class Controller {
     private void openFile(String filePath, int lineNumber, int columnNumber) {
         File file = new File(filePath);
         VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(file);
-        OpenFileDescriptor openFileDescriptor = new OpenFileDescriptor(this.storage.project, virtualFile, lineNumber, columnNumber);
+        OpenFileDescriptor openFileDescriptor = new OpenFileDescriptor(this.project, virtualFile, lineNumber, columnNumber);
         openFileDescriptor.navigate(true);
 
-        System.out.println("Opening " + IntelliJHelper.getProjectPath(this.storage.project) + "/" + filePath);
+        System.out.println("Opening " + IntelliJHelper.getProjectPath(this.project) + "/" + filePath);
     }
 }

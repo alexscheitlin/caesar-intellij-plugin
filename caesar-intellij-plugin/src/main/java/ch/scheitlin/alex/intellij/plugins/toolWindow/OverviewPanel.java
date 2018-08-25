@@ -184,7 +184,7 @@ public class OverviewPanel extends JPanel {
         Controller.getInstance().fetchBuildServerInformation();
 
         // get all projects in TeamCity
-        this.projectNames = Controller.getInstance().getTeamCityProjectNames();
+        this.projectNames = Controller.getInstance().getBuildServerProjectNames();
 
         // set default message
         String defaultMessage = "-- Please select a project --";
@@ -195,8 +195,8 @@ public class OverviewPanel extends JPanel {
         String selectedProject = null;
         if (selectedItem != null) {
             selectedProject = selectedItem.toString();
-        } else if (Controller.getInstance().getTeamCityProjectName() != null) {
-            selectedProject = Controller.getInstance().getTeamCityProjectName();
+        } else if (Controller.getInstance().getBuildServerProjectName() != null) {
+            selectedProject = Controller.getInstance().getBuildServerProjectName();
         }
 
         int selectedIndex = -1;
@@ -244,10 +244,10 @@ public class OverviewPanel extends JPanel {
         if (index > 0) {
             // get name of selected project
             String projectName = this.projectNames.get(index - 1);
-            Controller.getInstance().setTeamCityProjectName(projectName);
+            Controller.getInstance().setBuildServerProjectName(projectName);
 
             // get the project
-            project = Controller.getInstance().getTeamCityProject(projectName);
+            project = Controller.getInstance().getBuildServerProject(projectName);
         }
 
         // show the builds

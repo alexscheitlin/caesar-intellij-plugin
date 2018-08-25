@@ -10,38 +10,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Storage {
-    public Project project;
-    public ToolWindow toolWindow;
-    public String teamCityProjectName;
-    public String teamCityBuildConfigurationName;
-    public Object selectedTeamCityProject;
-
-    public final String HOST = "TEAM_CITY_HOST";
-    public final String USERNAME = "TEAM_CITY_USERNAME";
-    public final String PASSWORD = "TEAM_CITY_PASSWORD";
+    private final String HOST = "BUILD_SERVER_HOST";
+    private final String USERNAME = "BUILD_SERVER_USERNAME";
+    private final String PASSWORD = "BUILD_SERVER_PASSWORD";
 
     public static Storage getInstance() {
         return ServiceManager.getService(Storage.class);
     }
 
-    public void saveTeamCityCredentials(String host, String username, String password) {
+    public void saveBuildServerCredentials(String host, String username, String password) {
         PropertiesComponent properties = PropertiesComponent.getInstance();
         properties.setValue(HOST, host);
         properties.setValue(USERNAME, username);
         properties.setValue(PASSWORD, password);
     }
 
-    public List<Pair<String, String>> getTeamCityCredentials() {
+    public List<Pair<String, String>> getBuildServerCredentials() {
         PropertiesComponent properties = PropertiesComponent.getInstance();
-        List<Pair<String, String>> teamCityCredentials = new ArrayList<>();
-        teamCityCredentials.add(new Pair<>(HOST, properties.getValue(HOST)));
-        teamCityCredentials.add(new Pair<>(USERNAME, properties.getValue(USERNAME)));
-        teamCityCredentials.add(new Pair<>(PASSWORD, properties.getValue(PASSWORD)));
+        List<Pair<String, String>> credentials = new ArrayList<>();
+        credentials.add(new Pair<>(HOST, properties.getValue(HOST)));
+        credentials.add(new Pair<>(USERNAME, properties.getValue(USERNAME)));
+        credentials.add(new Pair<>(PASSWORD, properties.getValue(PASSWORD)));
 
-        return teamCityCredentials;
+        return credentials;
     }
 
-    public void deleteTeamCityCredentials() {
+    public void deleteBuildServerCredentials() {
         PropertiesComponent properties = PropertiesComponent.getInstance();
         properties.unsetValue(HOST);
         properties.unsetValue(USERNAME);

@@ -64,8 +64,8 @@ public class ToolWindow implements ToolWindowFactory {
             setToolWindowContent(panelOverview);
 
         } else if (controller.hasDownloaded() || controller.hasProcessed()) {
-            String projectName = controller.getTeamCityProjectName();
-            String buildConfigurationName = controller.getTeamCityBuildConfigurationName();
+            String projectName = controller.getBuildServerProjectName();
+            String buildConfigurationName = controller.getBuildServerBuildConfigurationName();
             String buildStatus = controller.getBuildStatus();
             String failedGoal = controller.getFailedGoal();
             String failureCategory = controller.getFailureCategory();
@@ -83,7 +83,7 @@ public class ToolWindow implements ToolWindowFactory {
                     project
             );
 
-            this.panelRawData = new RawDataPanel(controller.getRawTeamCityBuildLog(), controller.getMavenBuild());
+            this.panelRawData = new RawDataPanel(controller.getBuildServerBuildLog(), controller.getMavenBuild());
 
             setToolWindowContent(this.panelInformation, "Summary", this.panelRawData, "Raw Data");
 

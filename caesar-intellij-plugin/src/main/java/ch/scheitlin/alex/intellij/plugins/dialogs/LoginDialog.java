@@ -332,7 +332,7 @@ public class LoginDialog extends JDialog {
         String password = String.valueOf(passwordField.getPassword());
 
         // test team city connection
-        if (!Controller.getInstance().testTeamCityConnection(host, username, password)) {
+        if (!Controller.getInstance().testBuildServerConnection(host, username, password)) {
             // show error message
             Messages.showMessageDialog(
                     "Please make sure to enter your user name and password correctly.\n" +
@@ -348,13 +348,13 @@ public class LoginDialog extends JDialog {
 
         // save or delete credentials
         if (this.rememberMe) {
-            Controller.getInstance().saveTeamCityCredentials(
+            Controller.getInstance().saveBuildServerCredentials(
                     this.textFieldHost.getText(),
                     this.textFieldUsername.getText(),
                     String.valueOf(passwordField.getPassword())
             );
         } else {
-            Controller.getInstance().deleteTeamCityCredentials();
+            Controller.getInstance().deleteBuildServerCredentials();
         }
 
         // dispose login form
