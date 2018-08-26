@@ -365,4 +365,8 @@ public class Controller {
     public boolean hideCaesarToolWindow() {
         return IntelliJHelper.hideToolWindow(this.project, this.TOOL_WINDOW_ID);
     }
+
+    public boolean hasDarkTheme() {
+        return IntelliJHelper.hasDarkTheme();
+    }
 }

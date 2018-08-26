@@ -130,6 +130,8 @@ public class CaesarToolWindow implements ToolWindowFactory {
                     abortAction
             );
 
+            boolean darkTheme = controller.hasDarkTheme();
+
             final String buildServerBuildLog = controller.getBuildServerBuildLog();
             ActionListener buildServerBuildLogAction = new ActionListener() {
                 @Override
@@ -148,7 +150,9 @@ public class CaesarToolWindow implements ToolWindowFactory {
                 }
             };
 
-            this.panelData = new DataPanel(controller.getMavenBuild(), buildServerBuildLogAction, mavenBuildLogAction);
+            this.panelData = new DataPanel(
+                    controller.getMavenBuild(), darkTheme,
+                    buildServerBuildLogAction, mavenBuildLogAction);
 
             setToolWindowContent(this.panelBuildSummary, "Summary", this.panelData, "Data");
         }

@@ -37,24 +37,36 @@ public class MavenPanel extends JPanel {
     private JTextPane labelSelectedGoal;
     private JScrollPane linesScrollPane;
 
+    // appearance settings
+    private boolean darkTheme = false;
+
     // appearance constants
     private final String MODULE_SUCCESS_LEGEND_TEXT = "Successful Module";
     private final String MODULE_FAILURE_LEGEND_TEXT = "Failed Module";
     private final String MODULE_SKIPPED_LEGEND_TEXT = "Skipped Module";
     private final String GOAL_LEGEND_TEXT = "Executed Goal";
     private final Color MODULE_SUCCESS_COLOR = new Color(0, 97, 0);
+    private final Color DARK_MODULE_SUCCESS_COLOR = new Color(0, 177, 0);
     private final Color MODULE_FAILURE_COLOR = new Color(156, 0, 6);
+    private final Color DARK_MODULE_FAILURE_COLOR = new Color(255, 0, 6);
     private final Color MODULE_SKIPPED_COLOR = new Color(156, 87, 0);
+    private final Color DARK_MODULE_SKIPPED_COLOR = new Color(255, 143, 0);
     private final Color GOAL_COLOR = Color.BLACK;
+    private final Color DARK_GOAL_COLOR = Color.WHITE;
     private final String MODULE_SUCCESS_ICON_RESOURCE_PATH = "/module_success.png";
+    private final String DARK_MODULE_SUCCESS_ICON_RESOURCE_PATH = "/module_success_dark.png";
     private final String MODULE_FAILURE_ICON_RESOURCE_PATH = "/module_failure.png";
+    private final String DARK_MODULE_FAILURE_ICON_RESOURCE_PATH = "/module_failure_dark.png";
     private final String MODULE_SKIPPED_ICON_RESOURCE_PATH = "/module_skipped.png";
+    private final String DARK_MODULE_SKIPPED_ICON_RESOURCE_PATH = "/module_skipped_dark.png";
     private final String GOAL_ICON_RESOURCE_PATH = "/goal.png";
+    private final String DARK_GOAL_ICON_RESOURCE_PATH = "/goal_dark.png";
     private final int SELECTED_GOAL_LABEL_HEIGHT = 200;
 
-    public MavenPanel(MavenBuild mavenBuild) {
+    public MavenPanel(MavenBuild mavenBuild, boolean darkTheme) {
         // set data variables
         this.mavenBuild = mavenBuild;
+        this.darkTheme = darkTheme;
 
         // get build information
         List<MavenModule> modules = this.mavenBuild.getModules();
@@ -64,11 +76,19 @@ public class MavenPanel extends JPanel {
         GridBagConstraints c = new GridBagConstraints();
 
         // initialize label with success module legend
-        this.labelSuccessModuleLegend = initLegendLabel(
-                this.MODULE_SUCCESS_LEGEND_TEXT,
-                this.MODULE_SUCCESS_COLOR,
-                this.MODULE_SUCCESS_ICON_RESOURCE_PATH
-        );
+        if (this.darkTheme) {
+            this.labelSuccessModuleLegend = initLegendLabel(
+                    this.MODULE_SUCCESS_LEGEND_TEXT,
+                    this.DARK_MODULE_SUCCESS_COLOR,
+                    this.DARK_MODULE_SUCCESS_ICON_RESOURCE_PATH
+            );
+        } else {
+            this.labelSuccessModuleLegend = initLegendLabel(
+                    this.MODULE_SUCCESS_LEGEND_TEXT,
+                    this.MODULE_SUCCESS_COLOR,
+                    this.MODULE_SUCCESS_ICON_RESOURCE_PATH
+            );
+        }
         c.fill = GridBagConstraints.NONE;
         c.gridwidth = 1;
         c.gridx = 0;
@@ -79,11 +99,19 @@ public class MavenPanel extends JPanel {
         this.add(this.labelSuccessModuleLegend, c);
 
         // initialize label with failed module legend
-        this.labelFailureModuleLegend = initLegendLabel(
-                this.MODULE_FAILURE_LEGEND_TEXT,
-                this.MODULE_FAILURE_COLOR,
-                this.MODULE_FAILURE_ICON_RESOURCE_PATH
-        );
+        if (this.darkTheme) {
+            this.labelFailureModuleLegend = initLegendLabel(
+                    this.MODULE_FAILURE_LEGEND_TEXT,
+                    this.DARK_MODULE_FAILURE_COLOR,
+                    this.DARK_MODULE_FAILURE_ICON_RESOURCE_PATH
+            );
+        } else {
+            this.labelFailureModuleLegend = initLegendLabel(
+                    this.MODULE_FAILURE_LEGEND_TEXT,
+                    this.MODULE_FAILURE_COLOR,
+                    this.MODULE_FAILURE_ICON_RESOURCE_PATH
+            );
+        }
         c.fill = GridBagConstraints.NONE;
         c.gridwidth = 1;
         c.gridx = 1;
@@ -94,11 +122,19 @@ public class MavenPanel extends JPanel {
         this.add(this.labelFailureModuleLegend, c);
 
         // initialize label with skipped module legend
-        this.labelSkippedModuleLegend = initLegendLabel(
-                this.MODULE_SKIPPED_LEGEND_TEXT,
-                this.MODULE_SKIPPED_COLOR,
-                this.MODULE_SKIPPED_ICON_RESOURCE_PATH
-        );
+        if (this.darkTheme) {
+            this.labelSkippedModuleLegend = initLegendLabel(
+                    this.MODULE_SKIPPED_LEGEND_TEXT,
+                    this.DARK_MODULE_SKIPPED_COLOR,
+                    this.DARK_MODULE_SKIPPED_ICON_RESOURCE_PATH
+            );
+        } else {
+            this.labelSkippedModuleLegend = initLegendLabel(
+                    this.MODULE_SKIPPED_LEGEND_TEXT,
+                    this.MODULE_SKIPPED_COLOR,
+                    this.MODULE_SKIPPED_ICON_RESOURCE_PATH
+            );
+        }
         c.fill = GridBagConstraints.NONE;
         c.gridwidth = 1;
         c.gridx = 2;
@@ -109,11 +145,19 @@ public class MavenPanel extends JPanel {
         this.add(this.labelSkippedModuleLegend, c);
 
         // initialize label with goal legend
-        this.labelGoalLegend = initLegendLabel(
-                this.GOAL_LEGEND_TEXT,
-                this.GOAL_COLOR,
-                this.GOAL_ICON_RESOURCE_PATH
-        );
+        if (this.darkTheme) {
+            this.labelGoalLegend = initLegendLabel(
+                    this.GOAL_LEGEND_TEXT,
+                    this.DARK_GOAL_COLOR,
+                    this.DARK_GOAL_ICON_RESOURCE_PATH
+            );
+        } else {
+            this.labelGoalLegend = initLegendLabel(
+                    this.GOAL_LEGEND_TEXT,
+                    this.GOAL_COLOR,
+                    this.GOAL_ICON_RESOURCE_PATH
+            );
+        }
         c.fill = GridBagConstraints.NONE;
         c.gridwidth = 1;
         c.gridx = 3;
@@ -306,7 +350,12 @@ public class MavenPanel extends JPanel {
             super.getTreeCellRendererComponent(tree, value, sel, exp, leaf, row, hasFocus);
 
             // set goal icon for all tree leaves
-            ImageIcon goalIcon = loadResourceIcon(GOAL_ICON_RESOURCE_PATH);
+            ImageIcon goalIcon;
+            if (darkTheme) {
+                goalIcon = loadResourceIcon(DARK_GOAL_ICON_RESOURCE_PATH);
+            } else {
+                goalIcon = loadResourceIcon(GOAL_ICON_RESOURCE_PATH);
+            }
             this.setLeafIcon(goalIcon);
 
             // get the tree node to treat (every node will be treated with the following code)
@@ -323,21 +372,39 @@ public class MavenPanel extends JPanel {
                 return this;
             }
 
-            // load module icons
-            ImageIcon moduleSuccessIcon = loadResourceIcon(MODULE_SUCCESS_ICON_RESOURCE_PATH);
-            ImageIcon moduleFailureIcon = loadResourceIcon(MODULE_FAILURE_ICON_RESOURCE_PATH);
-            ImageIcon moduleSkippedIcon = loadResourceIcon(MODULE_SKIPPED_ICON_RESOURCE_PATH);
+            // load module icons and set colors
+            ImageIcon moduleSuccessIcon;
+            ImageIcon moduleFailureIcon;
+            ImageIcon moduleSkippedIcon;
+            Color successColor;
+            Color failureColor;
+            Color skippedColor;
+            if (darkTheme) {
+                moduleSuccessIcon = loadResourceIcon(DARK_MODULE_SUCCESS_ICON_RESOURCE_PATH);
+                moduleFailureIcon = loadResourceIcon(DARK_MODULE_FAILURE_ICON_RESOURCE_PATH);
+                moduleSkippedIcon = loadResourceIcon(DARK_MODULE_SKIPPED_ICON_RESOURCE_PATH);
+                successColor = DARK_MODULE_SUCCESS_COLOR;
+                failureColor = DARK_MODULE_FAILURE_COLOR;
+                skippedColor = DARK_MODULE_SKIPPED_COLOR;
+            } else {
+                moduleSuccessIcon = loadResourceIcon(MODULE_SUCCESS_ICON_RESOURCE_PATH);
+                moduleFailureIcon = loadResourceIcon(MODULE_FAILURE_ICON_RESOURCE_PATH);
+                moduleSkippedIcon = loadResourceIcon(MODULE_SKIPPED_ICON_RESOURCE_PATH);
+                successColor = MODULE_SUCCESS_COLOR;
+                failureColor = MODULE_FAILURE_COLOR;
+                skippedColor = MODULE_SKIPPED_COLOR;
+            }
 
             // set module icons and colors depending on module status
             MavenModuleBuildStatus status = module.getStatus();
             if (status == MavenModuleBuildStatus.SUCCESS) {
-                setForeground(MODULE_SUCCESS_COLOR);
+                setForeground(successColor);
                 setIcon(moduleSuccessIcon);
             } else if (status == MavenModuleBuildStatus.FAILURE) {
-                setForeground(MODULE_FAILURE_COLOR);
+                setForeground(failureColor);
                 setIcon(moduleFailureIcon);
             } else if (status == MavenModuleBuildStatus.SKIPPED) {
-                setForeground(MODULE_SKIPPED_COLOR);
+                setForeground(skippedColor);
                 setIcon(moduleSkippedIcon);
             }
 

@@ -7,9 +7,14 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 
+import javax.swing.*;
 import java.io.File;
 
 public class IntelliJHelper {
+    public static boolean hasDarkTheme() {
+        return UIManager.getLookAndFeel().getName().contains("Darcula");
+    }
+
     public static VirtualFile getProjectDirectoryFile(Project project) {
         if (project == null) {
             return null;

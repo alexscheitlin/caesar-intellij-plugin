@@ -10,8 +10,9 @@ public class Main {
         MavenBuild mavenBuild = getDummyData();
 
         // create new maven swing component
-        MavenPanel mavenPanel = new MavenPanel(mavenBuild);
+        MavenPanel mavenPanel = new MavenPanel(mavenBuild, true);
         mavenPanel.setFont(new Font("Courier", Font.BOLD, 20));
+        mavenPanel.setBackground(Color.darkGray);
 
         // create frame and add error components
         JFrame frame = new JFrame();
@@ -24,6 +25,7 @@ public class Main {
         c.weighty = 1.0;
         frame.add(mavenPanel, c);
         frame.setSize(new Dimension(800, 800));
+        frame.setBackground(Color.darkGray);
 
         // set look and feel of frame
         try {

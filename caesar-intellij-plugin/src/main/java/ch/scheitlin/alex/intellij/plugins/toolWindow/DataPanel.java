@@ -18,6 +18,7 @@ public class DataPanel extends JPanel {
 
     public DataPanel(
             MavenBuild mavenBuild,
+            boolean darkTheme,
             ActionListener buildServerBuildLogAction,
             ActionListener mavenBuildLogAction) {
         // set layout
@@ -51,7 +52,7 @@ public class DataPanel extends JPanel {
         this.add(this.buttonMavenBuildLog, c);
 
         // add maven panel
-        this.mavenPanel = new MavenPanel(mavenBuild);
+        this.mavenPanel = new MavenPanel(mavenBuild, darkTheme);
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
         c.gridy = 1;
