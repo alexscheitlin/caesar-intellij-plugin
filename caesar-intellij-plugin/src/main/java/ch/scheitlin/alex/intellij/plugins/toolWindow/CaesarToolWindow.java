@@ -4,6 +4,7 @@ import ch.scheitlin.alex.build.model.Error;
 import ch.scheitlin.alex.intellij.plugins.services.Controller;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
@@ -11,9 +12,9 @@ import com.intellij.ui.content.ContentFactory;
 import javax.swing.*;
 import java.util.List;
 
-public class ToolWindow implements ToolWindowFactory {
+public class CaesarToolWindow implements ToolWindowFactory {
 
-    private com.intellij.openapi.wm.ToolWindow overview;
+    private ToolWindow overview;
     private LoginPanel panelLogin;
     private OverviewPanel panelOverview;
     private InformationPanel panelInformation;
@@ -32,7 +33,7 @@ public class ToolWindow implements ToolWindowFactory {
         // save reference to storage
         // this enables to refresh the list of projects after login
         Controller controller = ServiceManager.getService(Controller.class);
-        controller.setToolWindow(this);
+        controller.setCaesarToolWindow(this);
 
         update();
     }

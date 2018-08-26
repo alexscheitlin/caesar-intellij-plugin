@@ -17,7 +17,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="ch.scheitlin.alex.intellij.plugins.services.Controller"/>
         <applicationService serviceImplementation="ch.scheitlin.alex.intellij.plugins.services.Storage"/>
-        <toolWindow id="CAESAR" secondary="true" anchor="right" factoryClass="ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow"  icon="/icons/icon_13x13.png"/>
+        <toolWindow id="CAESAR" secondary="true" anchor="right" factoryClass="ch.scheitlin.alex.intellij.plugins.toolWindow.CaesarToolWindow"  icon="/icons/icon_13x13.png"/>
     </extensions>
 
     <actions>

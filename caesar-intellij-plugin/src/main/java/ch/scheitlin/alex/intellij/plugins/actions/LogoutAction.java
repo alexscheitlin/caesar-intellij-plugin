@@ -10,10 +10,7 @@ public class LogoutAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         // log out via the Controller application service
-        Controller controller = Controller.getInstance();
-        if (controller.logout()) {
-            controller.hideToolWindow();
-        }
+        Controller.getInstance().logout();
     }
 
     // only show menu item if user is logged in

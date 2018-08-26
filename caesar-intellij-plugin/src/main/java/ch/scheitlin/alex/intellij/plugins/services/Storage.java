@@ -1,9 +1,7 @@
 package ch.scheitlin.alex.intellij.plugins.services;
 
-import ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
 import javafx.util.Pair;
 
 import java.util.ArrayList;

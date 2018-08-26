@@ -10,10 +10,7 @@ public class LoginAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         // log in via the Controller application service
-        Controller controller = Controller.getInstance();
-        if (controller.login(e.getProject())) {
-            controller.showToolWindow();
-        }
+        Controller.getInstance().login(e.getProject());
     }
 
     // only show menu item if user is not logged in

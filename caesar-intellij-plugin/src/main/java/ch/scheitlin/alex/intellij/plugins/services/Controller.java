@@ -9,7 +9,7 @@ import ch.scheitlin.alex.build.model.Error;
 import ch.scheitlin.alex.intellij.plugins.dialogs.LoginDialog;
 import ch.scheitlin.alex.intellij.plugins.services.helpers.DebugHelper;
 import ch.scheitlin.alex.intellij.plugins.services.helpers.IntelliJHelper;
-import ch.scheitlin.alex.intellij.plugins.toolWindow.ToolWindow;
+import ch.scheitlin.alex.intellij.plugins.toolWindow.CaesarToolWindow;
 import ch.scheitlin.alex.maven.MavenBuild;
 import ch.scheitlin.alex.maven.MavenGoal;
 import com.intellij.execution.ExecutionException;
@@ -25,7 +25,7 @@ public class Controller {
     private Caesar caesar;
 
     private Project project;
-    private ToolWindow toolWindow;
+    private CaesarToolWindow caesarToolWindow;
     private String buildServerProjectName;
     private String buildServerConfigurationName;
 
@@ -97,16 +97,15 @@ public class Controller {
         }
 
         // check whether the login was successful or not
-        if (this.caesar.connect(host, username, password)) {
-            // update tool window
-            if (this.getToolWindow() != null) {
-                this.getToolWindow().update();
-            }
-
-            return true;
+        if (!this.caesar.connect(host, username, password)) {
+            return false;
         }
 
-        return false;
+        updateCaesarToolWindow();
+        showCaesarToolWindow();
+
+        return true;
+
     }
 
     public BuildServer fetchBuildServerInformation() {
@@ -136,7 +135,7 @@ public class Controller {
             System.out.println("Could not process build log!");
         }
 
-        updateToolWindow();
+        updateCaesarToolWindow();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -146,7 +145,7 @@ public class Controller {
     public void startFixingBrokenBuild() {
         this.caesar.fix(IntelliJHelper.getProjectPath(this.project));
         IntelliJHelper.reloadProjectFiles(this.project);
-        updateToolWindow();
+        updateCaesarToolWindow();
     }
 
     public void debugError(Error error) {
@@ -192,7 +191,7 @@ public class Controller {
     public void stopFixingBrokenBuild() {
         this.caesar.finish();
         IntelliJHelper.reloadProjectFiles(this.project);
-        updateToolWindow();
+        updateCaesarToolWindow();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -204,8 +203,8 @@ public class Controller {
             return false;
         }
 
-        // update tool window
-        this.getToolWindow().update();
+        updateCaesarToolWindow();
+        hideCaesarToolWindow();
 
         return true;
     }
@@ -217,7 +216,7 @@ public class Controller {
     public void abortBuildFix() {
         this.caesar.abort();
 
-        updateToolWindow();
+        updateCaesarToolWindow();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -250,23 +249,25 @@ public class Controller {
         return this.project;
     }
 
-    public ToolWindow getToolWindow() {
-        return this.toolWindow;
+    public CaesarToolWindow getCaesarToolWindow() {
+        return this.caesarToolWindow;
     }
 
-    public void setToolWindow(ToolWindow toolWindow) {
-        this.toolWindow = toolWindow;
+    public void setCaesarToolWindow(CaesarToolWindow caesarToolWindow) {
+        this.caesarToolWindow = caesarToolWindow;
     }
 
-    private void updateToolWindow() {
-        this.toolWindow.update();
+    private void updateCaesarToolWindow() {
+        if (this.getCaesarToolWindow() != null) {
+            this.caesarToolWindow.update();
+        }
     }
 
-    public void showToolWindow() {
+    public void showCaesarToolWindow() {
         IntelliJHelper.showToolWindow(this.project, this.TOOL_WINDOW_ID);
     }
 
-    public void hideToolWindow() {
+    public void hideCaesarToolWindow() {
         IntelliJHelper.hideToolWindow(this.project, this.TOOL_WINDOW_ID);
     }
 
