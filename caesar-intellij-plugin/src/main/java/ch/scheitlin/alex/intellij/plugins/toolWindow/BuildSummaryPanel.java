@@ -209,7 +209,7 @@ public class BuildSummaryPanel extends JPanel {
 
         // configure and add button to continue
         initContinueButton();
-        c.anchor = GridBagConstraints.LINE_START;
+        c.anchor = GridBagConstraints.LINE_END;
         c.gridx = 1;
         c.gridy = 8;
         c.gridwidth = 1;
@@ -386,10 +386,11 @@ public class BuildSummaryPanel extends JPanel {
 
         String fontFamily = UIManager.getFont("Label.font").getFamily();
         int fontSize = UIManager.getFont("Label.font").getSize();
-        String information = "Your local code may be different from the version that failed on the build server!" +
-                " Explore the errors in your local code using the <b><i>View</i></b> buttons above." +
-                " Use the <b><i>Checkout</i></b> button to change to the code that failed on the build server and explore the errors there." +
-                " Uncommitted changes will be stashed automatically.";
+        String information = "<p>Your local code may be different from the one that failed on the build server!" +
+                " Explore the errors in your local code using the <b><i>Show</i></b> buttons above.</p>" +
+                "<p>Use the <b><i>Checkout</i></b> button below to change to the code that caused the build failure " +
+                "and explore the errors there. <i>A new branch will be created and uncommitted changes will be " +
+                "stashed automatically.<i></p>";
 
         this.labelInformation.setText(
                 "<div style='font-family:" + fontFamily + ";font-size:" + fontSize + ";'>" + information + "</div>"
