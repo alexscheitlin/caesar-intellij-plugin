@@ -151,8 +151,6 @@ public class OverviewPanel extends JPanel {
                                 };
 
                                 that.addActionListener(actionListener);
-
-                                System.out.println("\t" + that.build.getId() + ": " + that.build.getRepository() + " | " + that.build.getBranch());
                             }
                         }
                     }

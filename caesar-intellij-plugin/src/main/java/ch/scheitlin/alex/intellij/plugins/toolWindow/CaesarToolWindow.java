@@ -52,8 +52,17 @@ public class CaesarToolWindow implements ToolWindowFactory {
                 return;
             }
 
+            ActionListener loginAction = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!Controller.getInstance().connect(project)) {
+                        System.out.println("Login failed!");
+                    }
+                }
+            };
+
             // show login panel if user is not logged in
-            this.panelLogin = new LoginPanel(this.project);
+            this.panelLogin = new LoginPanel(loginAction);
 
             setToolWindowContent(this.panelLogin);
 

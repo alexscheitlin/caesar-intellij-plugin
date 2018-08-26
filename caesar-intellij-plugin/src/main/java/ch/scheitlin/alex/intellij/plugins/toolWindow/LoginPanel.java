@@ -1,13 +1,10 @@
 package ch.scheitlin.alex.intellij.plugins.toolWindow;
 
-import ch.scheitlin.alex.intellij.plugins.services.Controller;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -21,15 +18,11 @@ public class LoginPanel extends JPanel {
     private JButton buttonLogin;
     private JLabel labelIcon;
 
-    Project project;
-
     private final String TITLE = "CAESAR";
     private final String SUBTITLE = "Ci Assistant for Efficient (Build Failure)<br>Summarization And Resolution";
     private final String ICON = "/icons/icon_610x908.png";
 
-    public LoginPanel(Project project) {
-        this.project = project;
-
+    public LoginPanel(ActionListener loginAction) {
         // set layout
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -61,7 +54,7 @@ public class LoginPanel extends JPanel {
         this.panelContent.add(labelInformation, c);
 
         // configure and add button to login
-        initLoginButton();
+        initLoginButton(loginAction);
         c.anchor = GridBagConstraints.CENTER;
         c.gridx = 0;
         c.gridy = 3;
@@ -125,17 +118,10 @@ public class LoginPanel extends JPanel {
         this.labelInformation.setText("Please login first!");
     }
 
-    private void initLoginButton() {
+    private void initLoginButton(ActionListener loginAction) {
         this.buttonLogin = new JButton();
         this.buttonLogin.setText("Login");
-        this.buttonLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!Controller.getInstance().connect(LoginPanel.this.project)) {
-                    System.out.println("Login failed!");
-                }
-            }
-        });
+        this.buttonLogin.addActionListener(loginAction);
     }
 
     private void initIconLabel(String icon) {
