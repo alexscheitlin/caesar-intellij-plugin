@@ -10,7 +10,7 @@ public class LoginAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         // log in via the Controller application service
-        if (!Controller.getInstance().login(e.getProject())) {
+        if (!Controller.getInstance().connect(e.getProject())) {
             System.out.println("Could not connect to build server!");
         }
     }

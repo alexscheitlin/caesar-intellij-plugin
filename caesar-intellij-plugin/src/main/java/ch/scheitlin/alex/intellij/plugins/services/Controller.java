@@ -54,17 +54,17 @@ public class Controller {
     private BuildServerBuild selectedBuild;
 
     // try to login without asking for credentials
-    public boolean tryAutoLogin(Project project) {
-        return login(project, false);
+    public boolean tryAutoConnect(Project project) {
+        return connect(project, false);
     }
 
     // login with asking for credentials
-    public boolean login(Project project) {
-        return login(project, true);
+    public boolean connect(Project project) {
+        return connect(project, true);
     }
 
     // login with saved or provided credentials
-    private boolean login(Project project, boolean openDialog) {
+    private boolean connect(Project project, boolean openDialog) {
         this.project = project;
 
         // get credentials from storage (if the are available)
@@ -144,7 +144,7 @@ public class Controller {
     // CAESAR: download & process
     // -----------------------------------------------------------------------------------------------------------------
 
-    public boolean getBuildInformation(BuildServerBuild build, String buildConfigurationName) {
+    public boolean downloadAndProcess(BuildServerBuild build, String buildConfigurationName) {
         this.selectedBuildServerConfigurationName = buildConfigurationName;
         this.selectedBuild = build;
 
@@ -201,7 +201,7 @@ public class Controller {
     // CAESAR: fix
     // -----------------------------------------------------------------------------------------------------------------
 
-    public boolean startFixingBrokenBuild() {
+    public boolean fix() {
         if (!this.caesar.fix(IntelliJHelper.getProjectPath(this.project))) {
             return false;
         }
@@ -274,7 +274,7 @@ public class Controller {
     // CAESAR: finish
     // -----------------------------------------------------------------------------------------------------------------
 
-    public boolean stopFixingBrokenBuild() {
+    public boolean finish() {
         if (!this.caesar.finish()) {
             return false;
         }
@@ -289,7 +289,7 @@ public class Controller {
     // CAESAR: disconnect
     // -----------------------------------------------------------------------------------------------------------------
 
-    public boolean logout() {
+    public boolean disconnect() {
         if (!this.caesar.disconnect()) {
             return false;
         }
@@ -304,7 +304,7 @@ public class Controller {
     // CAESAR: abort
     // -----------------------------------------------------------------------------------------------------------------
 
-    public boolean abortBuildFix() {
+    public boolean abort() {
         if (!this.caesar.abort()) {
             return false;
         }

@@ -131,7 +131,7 @@ public class LoginPanel extends JPanel {
         this.buttonLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!Controller.getInstance().login(LoginPanel.this.project)) {
+                if (!Controller.getInstance().connect(LoginPanel.this.project)) {
                     System.out.println("Login failed!");
                 }
             }

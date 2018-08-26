@@ -526,7 +526,7 @@ public class BuildSummaryPanel extends JPanel {
         this.buttonBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!Controller.getInstance().abortBuildFix()) {
+                if (!Controller.getInstance().abort()) {
                     System.out.println("Could not abort!");
                 }
             }
@@ -541,7 +541,7 @@ public class BuildSummaryPanel extends JPanel {
             this.buttonContinue.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (!Controller.getInstance().startFixingBrokenBuild()) {
+                    if (!Controller.getInstance().fix()) {
                         System.out.println("Could not prepare broke code!");
                     }
                 }
@@ -552,7 +552,7 @@ public class BuildSummaryPanel extends JPanel {
             this.buttonContinue.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (!Controller.getInstance().stopFixingBrokenBuild()) {
+                    if (!Controller.getInstance().finish()) {
                         System.out.println("Could not finish build fixing!");
                     }
                 }

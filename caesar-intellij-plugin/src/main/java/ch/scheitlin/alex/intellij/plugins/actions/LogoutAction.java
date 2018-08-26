@@ -10,7 +10,7 @@ public class LogoutAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         // log out via the Controller application service
-        if (!Controller.getInstance().logout()) {
+        if (!Controller.getInstance().disconnect()) {
             System.out.println("Could not disconnect from build server!");
         }
     }

@@ -40,7 +40,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
 
         if (controller.isInNoStage()) {
             // try to auto log in if the tool is at startup
-            if (this.startUp && controller.tryAutoLogin(this.project)) {
+            if (this.startUp && controller.tryAutoConnect(this.project)) {
                 // only auto login at start up
                 // later on one must be able to logout without automatically login again
                 this.startUp = false;
