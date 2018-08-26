@@ -177,6 +177,7 @@ public class OverviewPanel extends JPanel {
 
         // add wrapper panel to scroll pane
         this.scrollPane = new JBScrollPane(this.panelWrapper);
+        this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.scrollPane.setBorder(null);
     }
 
