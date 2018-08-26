@@ -30,6 +30,7 @@ public class Controller {
     private String buildServerConfigurationName;
 
     private final BuildServerType BUILD_SERVER_TYPE = BuildServerType.TEAM_CITY;
+    private final String TOOL_WINDOW_ID = "CAESAR";
 
     public Controller() {
         this.storage = Storage.getInstance();
@@ -198,11 +199,15 @@ public class Controller {
     // CAESAR: disconnect
     // -----------------------------------------------------------------------------------------------------------------
 
-    public void logout() {
-        this.caesar.disconnect();
+    public boolean logout() {
+        if (!this.caesar.disconnect()) {
+            return false;
+        }
 
         // update tool window
         this.getToolWindow().update();
+
+        return true;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -258,7 +263,11 @@ public class Controller {
     }
 
     public void showToolWindow() {
-        IntelliJHelper.showToolWindow(this.project, "BFR Assistant");
+        IntelliJHelper.showToolWindow(this.project, this.TOOL_WINDOW_ID);
+    }
+
+    public void hideToolWindow() {
+        IntelliJHelper.hideToolWindow(this.project, this.TOOL_WINDOW_ID);
     }
 
     public String getBuildServerProjectName() {

@@ -4,6 +4,7 @@ import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 
 import java.io.File;
@@ -22,9 +23,13 @@ public class IntelliJHelper {
     }
 
     public static void showToolWindow(Project project, String toolWindowId) {
-        ToolWindowManager manager = ToolWindowManager.getInstance(project);
-        com.intellij.openapi.wm.ToolWindow toolWindow = manager.getToolWindow(toolWindowId);
+        ToolWindow toolWindow = getToolWindowById(project, toolWindowId);
         toolWindow.show(null);
+    }
+
+    public static void hideToolWindow(Project project, String toolWindowId) {
+        ToolWindow toolWindow = getToolWindowById(project, toolWindowId);
+        toolWindow.hide(null);
     }
 
     public static void openFile(Project project, String filePath, int lineNumber, int columnNumber) {
@@ -32,5 +37,10 @@ public class IntelliJHelper {
         VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(file);
         OpenFileDescriptor openFileDescriptor = new OpenFileDescriptor(project, virtualFile, lineNumber, columnNumber);
         openFileDescriptor.navigate(true);
+    }
+
+    private static ToolWindow getToolWindowById(Project project, String id) {
+        ToolWindowManager manager = ToolWindowManager.getInstance(project);
+        return manager.getToolWindow(id);
     }
 }
