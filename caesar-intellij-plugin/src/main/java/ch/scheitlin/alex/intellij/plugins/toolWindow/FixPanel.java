@@ -89,8 +89,9 @@ public class FixPanel extends JPanel {
         this.buttonContinue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Controller controller = ServiceManager.getService(Controller.class);
-                controller.stopFixingBrokenBuild();
+                if (!Controller.getInstance().stopFixingBrokenBuild()) {
+                    System.out.println("Could not finish build fixing!");
+                }
             }
         });
     }

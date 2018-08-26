@@ -10,7 +10,9 @@ public class LogoutAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         // log out via the Controller application service
-        Controller.getInstance().logout();
+        if (!Controller.getInstance().logout()) {
+            System.out.println("Could not disconnect from build server!");
+        }
     }
 
     // only show menu item if user is logged in

@@ -144,8 +144,9 @@ public class OverviewPanel extends JPanel {
                                 ActionListener actionListener = new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        Controller controller = ServiceManager.getService(Controller.class);
-                                        controller.getBuildInformation(buildConfigurationName, that.build);
+                                        if (!Controller.getInstance().getBuildInformation(buildConfigurationName, that.build)) {
+                                            System.out.println("Could not get build server information!");
+                                        }
                                     }
                                 };
 

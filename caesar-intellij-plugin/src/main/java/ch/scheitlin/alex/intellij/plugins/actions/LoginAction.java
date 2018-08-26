@@ -10,7 +10,9 @@ public class LoginAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         // log in via the Controller application service
-        Controller.getInstance().login(e.getProject());
+        if (!Controller.getInstance().login(e.getProject())) {
+            System.out.println("Could not connect to build server!");
+        }
     }
 
     // only show menu item if user is not logged in

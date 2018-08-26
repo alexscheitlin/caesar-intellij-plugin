@@ -323,7 +323,9 @@ public class InformationPanel extends JPanel {
             // show file action
             ActionListener actionListener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    Controller.getInstance().openErrorInFile(that.getError());
+                    if (!Controller.getInstance().openErrorInFile(that.getError())) {
+                        System.out.println("Could not open file!");
+                    }
                 }
             };
             errorComponent.addButton1Action(actionListener);
@@ -332,7 +334,9 @@ public class InformationPanel extends JPanel {
                 // debug error action
                 ActionListener actionListener2 = new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        Controller.getInstance().debugError(that.getError());
+                        if (!Controller.getInstance().debugError(that.getError())) {
+                            System.out.println("Could not start debugger!");
+                        }
                     }
                 };
                 errorComponent.addButton2Action(actionListener2);
@@ -398,8 +402,9 @@ public class InformationPanel extends JPanel {
         this.buttonBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Controller controller = ServiceManager.getService(Controller.class);
-                controller.abortBuildFix();
+                if (!Controller.getInstance().abortBuildFix()) {
+                    System.out.println("Could not abort!");
+                }
             }
         });
     }
@@ -410,8 +415,9 @@ public class InformationPanel extends JPanel {
         this.buttonContinue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Controller controller = ServiceManager.getService(Controller.class);
-                controller.startFixingBrokenBuild();
+                if (!Controller.getInstance().startFixingBrokenBuild()) {
+                    System.out.println("Could not prepare broke code!");
+                }
             }
         });
     }
