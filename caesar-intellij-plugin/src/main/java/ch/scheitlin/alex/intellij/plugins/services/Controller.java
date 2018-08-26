@@ -258,8 +258,8 @@ public class Controller {
         return true;
     }
 
-    public String getGitRepositoryOriginUrl() {
-        return this.caesar.getGitRepositoryOriginUrl();
+    public String getGitRepositoryUrl() {
+        return this.caesar.getGitRepositoryUrl();
     }
 
     public String getStashedChanges() {
