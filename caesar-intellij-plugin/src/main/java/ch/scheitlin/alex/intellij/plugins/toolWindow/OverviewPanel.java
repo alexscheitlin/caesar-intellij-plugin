@@ -195,8 +195,8 @@ public class OverviewPanel extends JPanel {
         String selectedProject = null;
         if (selectedItem != null) {
             selectedProject = selectedItem.toString();
-        } else if (Controller.getInstance().getBuildServerProjectName() != null) {
-            selectedProject = Controller.getInstance().getBuildServerProjectName();
+        } else if (Controller.getInstance().getSelectedBuildServerProjectName() != null) {
+            selectedProject = Controller.getInstance().getSelectedBuildServerProjectName();
         }
 
         int selectedIndex = -1;
@@ -244,7 +244,7 @@ public class OverviewPanel extends JPanel {
         if (index > 0) {
             // get name of selected project
             String projectName = this.projectNames.get(index - 1);
-            Controller.getInstance().setBuildServerProjectName(projectName);
+            Controller.getInstance().setSelectedBuildServerProjectName(projectName);
 
             // get the project
             project = Controller.getInstance().getBuildServerProject(projectName);

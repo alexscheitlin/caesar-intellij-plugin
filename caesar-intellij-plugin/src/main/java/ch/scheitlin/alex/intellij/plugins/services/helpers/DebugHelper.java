@@ -21,12 +21,20 @@ import java.util.List;
 
 public class DebugHelper {
     public static List<RunConfiguration> getRunConfigurations(Project project) {
+        if (project == null) {
+            return null;
+        }
+
         final RunManager runManager = RunManager.getInstance(project);
         return runManager.getAllConfigurationsList();
     }
 
     // add a new line break point to the specified line of the given file and activate it
-    public static void addLineBreakpoint(final Project project, final String fileUrl, final int line) {
+    public static boolean addLineBreakpoint(final Project project, final String fileUrl, final int line) {
+        if (project == null || fileUrl == null || fileUrl == "" || line < 0) {
+            return false;
+        }
+
         class MyBreakpointProperties extends XBreakpointProperties<MyBreakpointProperties> {
             public String myOption;
 
@@ -74,16 +82,34 @@ public class DebugHelper {
         WriteCommandAction.runWriteCommandAction(project, runnable);
 
         // toggle breakpoint to activate
-        VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(new File(fileUrl));
+        final VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(new File(fileUrl));
+        if (virtualFile == null) {
+            return false;
+        }
         XDebuggerUtil.getInstance().toggleLineBreakpoint(project, virtualFile, line);
+
+        return true;
     }
 
     // start a run configuration in debugging mode
-    public static void startDebugger(Project project, RunConfiguration runConfiguration) throws ExecutionException {
-        Executor executor = DefaultDebugExecutor.getDebugExecutorInstance();
+    public static boolean startDebugger(Project project, RunConfiguration runConfiguration) {
+        if (project == null || runConfiguration == null) {
+            return false;
+        }
 
-        ExecutionEnvironmentBuilder
-                .create(project, executor, runConfiguration)
-                .buildAndExecute();
+        Executor executor = DefaultDebugExecutor.getDebugExecutorInstance();
+        if (executor == null) {
+            return false;
+        }
+
+        try {
+            ExecutionEnvironmentBuilder
+                    .create(project, executor, runConfiguration)
+                    .buildAndExecute();
+        } catch (ExecutionException ex) {
+            return false;
+        }
+
+        return true;
     }
 }

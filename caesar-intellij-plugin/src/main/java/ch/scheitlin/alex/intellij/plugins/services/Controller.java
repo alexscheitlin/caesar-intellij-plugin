@@ -26,8 +26,6 @@ public class Controller {
 
     private Project project;
     private CaesarToolWindow caesarToolWindow;
-    private String buildServerProjectName;
-    private String buildServerConfigurationName;
 
     private final BuildServerType BUILD_SERVER_TYPE = BuildServerType.TEAM_CITY;
     private final String TOOL_WINDOW_ID = "CAESAR";
@@ -48,6 +46,12 @@ public class Controller {
     // -----------------------------------------------------------------------------------------------------------------
     // CAESAR: connect
     // -----------------------------------------------------------------------------------------------------------------
+
+    // store project name of selected project on overview to go back to same project after coming back to overview
+    private String selectedBuildServerProjectName;
+
+    // store build configuration name of selected build on overview to show it on summary panel
+    private String selectedBuildServerConfigurationName;
 
     // try to login without asking for credentials
     public boolean tryAutoLogin(Project project) {
@@ -120,41 +124,98 @@ public class Controller {
         return this.caesar.getBuildServerInformation().getProject(projectName);
     }
 
+    public String getSelectedBuildServerProjectName() {
+        return this.selectedBuildServerProjectName;
+    }
+
+    public void setSelectedBuildServerProjectName(String projectName) {
+        this.selectedBuildServerProjectName = projectName;
+    }
+
+    public String getSelectedBuildServerBuildConfigurationName() {
+        return this.selectedBuildServerConfigurationName;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // CAESAR: download & process
     // -----------------------------------------------------------------------------------------------------------------
 
-    public void getBuildInformation(String buildConfigurationName, BuildServerBuild build) {
-        this.buildServerConfigurationName = buildConfigurationName;
+    public boolean getBuildInformation(String buildConfigurationName, BuildServerBuild build) {
+        this.selectedBuildServerConfigurationName = buildConfigurationName;
 
         if (!this.caesar.download(build)) {
             System.out.println("Could not download build log from build server!");
+            return false;
         }
 
         if (!this.caesar.process()) {
             System.out.println("Could not process build log!");
+            return false;
         }
 
         updateCaesarToolWindow();
+
+        return true;
+    }
+
+    public String getBuildServerBuildLog() {
+        return this.caesar.getBuildServerBuildLog();
+    }
+
+    public String getMavenBuildLog() {
+        return this.caesar.getMavenBuildLog();
+    }
+
+    public MavenBuild getMavenBuild() {
+        return this.caesar.getMavenBuild();
+    }
+
+    public String getFailedGoal() {
+        MavenGoal failedGoal = this.caesar.getMavenBuild().getFailedGoal();
+        if (failedGoal != null) {
+            return failedGoal.getPlugin().getName() + ":" + failedGoal.getPlugin().getVersion() + ":" + failedGoal.getName();
+        } else {
+            return "No failed goal detected!";
+        }
+    }
+
+    public String getFailureCategory() {
+        String failureCategory = this.caesar.getFailureCategory();
+        if (failureCategory != null) {
+            return failureCategory;
+        } else {
+            return "No category found!";
+        }
+    }
+
+    public List<Error> getErrors() {
+        return this.caesar.getErrors();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // CAESAR: fix
     // -----------------------------------------------------------------------------------------------------------------
 
-    public void startFixingBrokenBuild() {
-        this.caesar.fix(IntelliJHelper.getProjectPath(this.project));
+    public boolean startFixingBrokenBuild() {
+        if (!this.caesar.fix(IntelliJHelper.getProjectPath(this.project))) {
+            return false;
+        }
+
         IntelliJHelper.reloadProjectFiles(this.project);
         updateCaesarToolWindow();
+
+        return true;
     }
 
-    public void debugError(Error error) {
+    public boolean debugError(Error error) {
         String filePath = IntelliJHelper.getProjectPath(this.project) + "/" + error.getFullPath();
 
         int lineNumber = error.getLine() - 1;
 
         // create and toggle a line break point
-        DebugHelper.addLineBreakpoint(this.project, filePath, lineNumber);
+        if (!DebugHelper.addLineBreakpoint(this.project, filePath, lineNumber)) {
+            return false;
+        }
 
         // select run configuration
         // the run configuration for this file needs to exist
@@ -167,31 +228,56 @@ public class Controller {
             }
         }
 
-        try {
-            DebugHelper.startDebugger(this.project, runConfiguration);
-        } catch (ExecutionException ex) {
-            System.out.print(ex.getMessage());
+        if (runConfiguration == null) {
+            return false;
         }
+
+        if (!DebugHelper.startDebugger(this.project, runConfiguration)) {
+            return false;
+        }
+
+        return true;
     }
 
-    public void openErrorInFile(Error error) {
+    public boolean openErrorInFile(Error error) {
         String filePath = IntelliJHelper.getProjectPath(this.project) + "/" + error.getFullPath();
 
         int lineNumber = error.getLine() - 1;
         int columnNumber = error.getColumn() - 1;
 
         // open file
-        IntelliJHelper.openFile(this.project, filePath, lineNumber, columnNumber);
+        if (!IntelliJHelper.openFile(this.project, filePath, lineNumber, columnNumber)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public String getGitRepositoryOriginUrl() {
+        return this.caesar.getGitRepositoryOriginUrl();
+    }
+
+    public String getStashedChanges() {
+        return this.caesar.getStashedChanges();
+    }
+
+    public String getNewBranch() {
+        return this.caesar.getNewBranch();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // CAESAR: finish
     // -----------------------------------------------------------------------------------------------------------------
 
-    public void stopFixingBrokenBuild() {
-        this.caesar.finish();
+    public boolean stopFixingBrokenBuild() {
+        if (!this.caesar.finish()) {
+            return false;
+        }
+
         IntelliJHelper.reloadProjectFiles(this.project);
         updateCaesarToolWindow();
+
+        return true;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -213,10 +299,14 @@ public class Controller {
     // CAESAR: abort
     // -----------------------------------------------------------------------------------------------------------------
 
-    public void abortBuildFix() {
-        this.caesar.abort();
+    public boolean abortBuildFix() {
+        if (!this.caesar.abort()) {
+            return false;
+        }
 
         updateCaesarToolWindow();
+
+        return true;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -269,50 +359,5 @@ public class Controller {
 
     public void hideCaesarToolWindow() {
         IntelliJHelper.hideToolWindow(this.project, this.TOOL_WINDOW_ID);
-    }
-
-    public String getBuildServerProjectName() {
-        return this.buildServerProjectName;
-    }
-
-    public void setBuildServerProjectName(String projectName) {
-        this.buildServerProjectName = projectName;
-    }
-
-    public String getBuildServerBuildConfigurationName() {
-        return this.buildServerConfigurationName;
-    }
-
-    public String getBuildServerBuildLog() {
-        return this.caesar.getBuildServerBuildLog();
-    }
-
-    public MavenBuild getMavenBuild() {
-        return this.caesar.getMavenBuild();
-    }
-
-    public String getBuildStatus() {
-        return this.caesar.getMavenBuild().getStatus().toString();
-    }
-
-    public String getFailedGoal() {
-        if (this.caesar.getMavenBuild().getFailedGoal() != null) {
-            MavenGoal failedGoal = this.caesar.getMavenBuild().getFailedGoal();
-            return failedGoal.getPlugin().getName() + ":" + failedGoal.getPlugin().getVersion() + ":" + failedGoal.getName();
-        } else {
-            return "No failed goal detected!";
-        }
-    }
-
-    public String getFailureCategory() {
-        if (this.caesar.getFailureCategory() != null) {
-            return this.caesar.getFailureCategory();
-        } else {
-            return "No category found!";
-        }
-    }
-
-    public List<Error> getErrors() {
-        return this.caesar.getErrors();
     }
 }
