@@ -1,6 +1,7 @@
 package ch.scheitlin.alex.intellij.plugins.toolWindow;
 
 import ch.scheitlin.alex.build.model.Error;
+import ch.scheitlin.alex.intellij.plugins.dialogs.MultiLineStringDialog;
 import ch.scheitlin.alex.intellij.plugins.services.Controller;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
@@ -9,6 +10,8 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class CaesarToolWindow implements ToolWindowFactory {
@@ -87,7 +90,16 @@ public class CaesarToolWindow implements ToolWindowFactory {
                     newBranch
             );
 
-            this.panelData = new DataPanel(controller.getBuildServerBuildLog(), controller.getMavenBuild());
+            final String buildServerBuildLog = controller.getBuildServerBuildLog();
+            ActionListener showBuildServerBuildLog = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    MultiLineStringDialog dialog = new MultiLineStringDialog();
+                    dialog.showDialog(buildServerBuildLog);
+                }
+            };
+
+            this.panelData = new DataPanel(controller.getMavenBuild(), showBuildServerBuildLog);
 
             setToolWindowContent(this.panelBuildSummary, "Summary", this.panelData, "Data");
         }
