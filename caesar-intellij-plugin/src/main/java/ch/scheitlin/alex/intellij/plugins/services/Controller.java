@@ -74,7 +74,7 @@ public class Controller {
             LoginDialog dialog = new LoginDialog();
 
             // set build server host, username, and password if data was entered in login dialog
-            String[] result = dialog.showDialog(host, username, password);
+            Object[] result = dialog.showDialog(host, username, password);
 
             // if result is null the cancel button was clicked
             if (result == null) {
@@ -82,9 +82,17 @@ public class Controller {
             }
 
             // use the just entered credentials
-            host = result[0];
-            username = result[1];
-            password = result[2];
+            host = (String) result[0];
+            username = (String) result[1];
+            password = (String) result[2];
+
+            // save credentials if remember me button was checked and delete them if not
+            if ((boolean) result[3]) {
+                this.storage.saveBuildServerCredentials(host, username, password);
+            } else {
+                this.storage.deleteBuildServerCredentials();
+            }
+
         }
 
         // check whether the login was successful or not
@@ -110,14 +118,6 @@ public class Controller {
 
     public BuildServerProject getBuildServerProject(String projectName) {
         return this.caesar.getBuildServerInformation().getProject(projectName);
-    }
-
-    public void saveBuildServerCredentials(String host, String username, String password) {
-        this.storage.saveBuildServerCredentials(host, username, password);
-    }
-
-    public void deleteBuildServerCredentials() {
-        this.storage.deleteBuildServerCredentials();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -295,7 +295,7 @@ public class LoginDialog extends JDialog {
         return button;
     }
 
-    public String[] showDialog(String host, String username, String password) {
+    public Object[] showDialog(String host, String username, String password) {
         // show saved team city credentials
         if (host != null && username != null && password != null) {
             this.textFieldHost.setText(host);
@@ -311,10 +311,11 @@ public class LoginDialog extends JDialog {
 
         // return after dispose()
         if (this.loginSuccessful) {
-            return new String[]{
+            return new Object[]{
                     this.textFieldHost.getText(),
                     this.textFieldUsername.getText(),
-                    String.valueOf(passwordField.getPassword())
+                    String.valueOf(passwordField.getPassword()),
+                    this.rememberMe
             };
         } else {
             return null;
@@ -345,17 +346,6 @@ public class LoginDialog extends JDialog {
         }
 
         this.loginSuccessful = true;
-
-        // save or delete credentials
-        if (this.rememberMe) {
-            Controller.getInstance().saveBuildServerCredentials(
-                    this.textFieldHost.getText(),
-                    this.textFieldUsername.getText(),
-                    String.valueOf(passwordField.getPassword())
-            );
-        } else {
-            Controller.getInstance().deleteBuildServerCredentials();
-        }
 
         // dispose login form
         dispose();
