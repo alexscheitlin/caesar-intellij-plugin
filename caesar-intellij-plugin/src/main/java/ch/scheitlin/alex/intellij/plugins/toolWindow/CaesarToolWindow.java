@@ -62,21 +62,27 @@ public class CaesarToolWindow implements ToolWindowFactory {
             setToolWindowContent(this.panelOverview);
 
         } else if (controller.hasDownloaded() || controller.hasProcessed()) {
+            String buildStatus = controller.getMavenBuild().getStatus().toString();
+            String buildStatusText = controller.getSelectedBuild().getStatusText();
+            String failureCategory = controller.getFailureCategory();
+            String failedGoal = controller.getFailedGoalString();
+            String failedMessage = controller.getMavenBuild().getErrorMessage();
             String projectName = controller.getSelectedBuildServerProjectName();
             String buildConfigurationName = controller.getSelectedBuildServerBuildConfigurationName();
-            String buildStatus = controller.getMavenBuild().getStatus().toString();
-            String failedGoal = controller.getFailedGoal();
-            String failureCategory = controller.getFailureCategory();
+            String branchName = controller.getSelectedBuild().getBranch();
             List<Error> errors = controller.getErrors();
             Project project = controller.getIntelliJProject();
 
             // show build information if build log is downloaded (and processed)
             this.panelBuildSummary = new BuildSummaryPanel(
+                    buildStatus,
+                    buildStatusText,
+                    failureCategory,
+                    failedGoal,
+                    failedMessage,
                     projectName,
                     buildConfigurationName,
-                    buildStatus,
-                    failedGoal,
-                    failureCategory,
+                    branchName,
                     errors,
                     project
             );

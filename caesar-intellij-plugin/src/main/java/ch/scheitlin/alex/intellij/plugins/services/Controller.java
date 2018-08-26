@@ -49,8 +49,9 @@ public class Controller {
     // store project name of selected project on overview to go back to same project after coming back to overview
     private String selectedBuildServerProjectName;
 
-    // store build configuration name of selected build on overview to show it on summary panel
+    // store selected build and build configuration name on overview to show it on summary panel
     private String selectedBuildServerConfigurationName;
+    private BuildServerBuild selectedBuild;
 
     // try to login without asking for credentials
     public boolean tryAutoLogin(Project project) {
@@ -135,12 +136,17 @@ public class Controller {
         return this.selectedBuildServerConfigurationName;
     }
 
+    public BuildServerBuild getSelectedBuild() {
+        return this.selectedBuild;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // CAESAR: download & process
     // -----------------------------------------------------------------------------------------------------------------
 
-    public boolean getBuildInformation(String buildConfigurationName, BuildServerBuild build) {
+    public boolean getBuildInformation(BuildServerBuild build, String buildConfigurationName) {
         this.selectedBuildServerConfigurationName = buildConfigurationName;
+        this.selectedBuild = build;
 
         if (!this.caesar.download(build)) {
             System.out.println("Could not download build log from build server!");
@@ -169,7 +175,7 @@ public class Controller {
         return this.caesar.getMavenBuild();
     }
 
-    public String getFailedGoal() {
+    public String getFailedGoalString() {
         MavenGoal failedGoal = this.caesar.getMavenBuild().getFailedGoal();
         if (failedGoal != null) {
             return failedGoal.getPlugin().getName() + ":" + failedGoal.getPlugin().getVersion() + ":" + failedGoal.getName();

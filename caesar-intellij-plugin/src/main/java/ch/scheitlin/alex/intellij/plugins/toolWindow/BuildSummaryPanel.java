@@ -3,11 +3,7 @@ package ch.scheitlin.alex.intellij.plugins.toolWindow;
 import ch.scheitlin.alex.build.swing.ErrorPanel;
 import ch.scheitlin.alex.intellij.plugins.services.Controller;
 import ch.scheitlin.alex.build.model.Error;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
@@ -15,34 +11,54 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.List;
 
 public class BuildSummaryPanel extends JPanel {
     private JPanel panelContent;
+    private JPanel panelSummary;
+    private JLabel labelBuildStatusKey;
+    private JLabel labelBuildStatusValue;
+    private JLabel labelBuildStatusTextKey;
+    private JLabel labelBuildStatusTextValue;
+    private JLabel labelFailureCategoryKey;
+    private JLabel labelFailureCategoryValue;
+    private JLabel labelFailedGoalKey;
+    private JLabel labelFailedGoalValue;
+    private JLabel labelFailedMessageKey;
+    private JLabel labelFailedMessageValue;
     private JLabel labelProjectKey;
     private JLabel labelProjectValue;
     private JLabel labelBuildConfigurationKey;
     private JLabel labelBuildConfigurationValue;
-    private JLabel labelBuildStatusKey;
-    private JLabel labelBuildStatusValue;
-    private JLabel labelFailedGoalKey;
-    private JLabel labelFailedGoalValue;
-    private JLabel labelFailureCategoryKey;
-    private JLabel labelFailureCategoryValue;
+    private JLabel labelBranchKey;
+    private JLabel labelBranchValue;
     private JLabel labelErrorsKey;
     private JPanel panelErrorsValue;
     private JTextPane labelInformation;
     private JButton buttonBack;
     private JButton buttonContinue;
 
-    public BuildSummaryPanel(String projectName,
-                             String buildConfigurationName,
-                             String buildStatus,
-                             String failedGoal,
-                             String failureCategory,
-                             List<Error> errors,
-                             Project project
+    private final String BUILD_STATUS_TITLE = "Build Status:";
+    private final String BUILD_STATUS_TEXT_TITLE = "Status Text:";
+    private final String FAILURE_CATEGORY_TITLE = "Failure Category:";
+    private final String FAILED_GOAL_TITLE = "Failed Goal:";
+    private final String FAILED_MESSAGE_TITLE = "Error Message:";
+    private final String PROJECT_TITLE = "Project:";
+    private final String BUILD_CONFIGURATION_TITLE = "Build Configuration:";
+    private final String BRANCH_NAME_TITLE = "Branch:";
+    private final String ERRORS_TITLE = "Errors:";
+
+    public BuildSummaryPanel(
+            String buildStatus,
+            String buildStatusText,
+            String failureCategory,
+            String failedGoal,
+            String failedMessage,
+            String projectName,
+            String buildConfigurationName,
+            String branchName,
+            List<Error> errors,
+            Project project
     ) {
         // set layout
         this.setLayout(new GridBagLayout());
@@ -51,133 +67,42 @@ public class BuildSummaryPanel extends JPanel {
         // configure and add content panel
         initAndAddContentPanel(20);
 
-        // configure and add label with project title
-        initProjectKeyLabel();
+        this.panelSummary = initSummaryPanel(
+                this.BUILD_STATUS_TITLE, buildStatus,
+                this.BUILD_STATUS_TEXT_TITLE, buildStatusText,
+                this.FAILURE_CATEGORY_TITLE, failureCategory,
+                this.FAILED_GOAL_TITLE, failedGoal,
+                this.FAILED_MESSAGE_TITLE, failedMessage,
+                this.PROJECT_TITLE, projectName,
+                this.BUILD_CONFIGURATION_TITLE, buildConfigurationName,
+                this.BRANCH_NAME_TITLE, branchName
+        );
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 1;
-        c.fill = GridBagConstraints.NONE;
-        c.insets = JBUI.insets(0);
-        c.weightx = 0.0;
-        this.panelContent.add(labelProjectKey, c);
-
-        // configure and add label with project name
-        initProjectValueLabel(projectName);
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 1;
-        c.gridy = 0;
-        c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
         c.weightx = 1.0;
-        this.panelContent.add(labelProjectValue, c);
-
-        // configure and add label with build configuration title
-        initBuildConfigurationKeyLabel();
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 0;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.NONE;
-        c.insets = JBUI.insets(0);
-        c.weightx = 0.0;
-        this.panelContent.add(labelBuildConfigurationKey, c);
-
-        // configure and add label with build configuration name
-        initBuildConfigurationValueLabel(buildConfigurationName);
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 1;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = JBUI.insets(0);
-        c.weightx = 1.0;
-        this.panelContent.add(labelBuildConfigurationValue, c);
-
-        // configure and add label with build status title
-        initBuildStatusKeyLabel();
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 0;
-        c.gridy = 2;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.NONE;
-        c.insets = JBUI.insets(0);
-        c.weightx = 0.0;
-        this.panelContent.add(labelBuildStatusKey, c);
-
-        // configure and add label with build status
-        initBuildStatusValueLabel(buildStatus);
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 1;
-        c.gridy = 2;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = JBUI.insets(0);
-        c.weightx = 1.0;
-        this.panelContent.add(labelBuildStatusValue, c);
-
-        // configure and add label with failed goal title
-        initFailedGoalKeyLabel();
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 0;
-        c.gridy = 3;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.NONE;
-        c.insets = JBUI.insets(0);
-        c.weightx = 0.0;
-        this.panelContent.add(labelFailedGoalKey, c);
-
-        // configure and add label with failed goal
-        initFailedGoalValueLabel(failedGoal);
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 1;
-        c.gridy = 3;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = JBUI.insets(0);
-        c.weightx = 1.0;
-        this.panelContent.add(labelFailedGoalValue, c);
-
-        // configure and add label with failure category title
-        initFailureCategoryKeyLabel();
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 0;
-        c.gridy = 4;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.NONE;
-        c.insets = JBUI.insets(0);
-        c.weightx = 0.0;
-        this.panelContent.add(labelFailureCategoryKey, c);
-
-        // configure and add label with failure category
-        initFailureCategoryValueLabel(failureCategory);
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 1;
-        c.gridy = 4;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = JBUI.insets(0);
-        c.weightx = 1.0;
-        this.panelContent.add(labelFailureCategoryValue, c);
+        this.panelContent.add(this.panelSummary, c);
 
         if (errors != null) {
             // configure and add label with errors title
-            initErrorsKeyLabel();
+            this.labelErrorsKey = initLabel(this.ERRORS_TITLE);
             c.anchor = GridBagConstraints.LINE_START;
             c.gridx = 0;
-            c.gridy = 5;
+            c.gridy = 1;
             c.gridwidth = 1;
             c.fill = GridBagConstraints.NONE;
             c.insets = JBUI.insets(20, 0, 0, 0);
             c.weightx = 0.0;
-            this.panelContent.add(labelErrorsKey, c);
+            this.panelContent.add(this.labelErrorsKey, c);
 
             // configure and add panel with errors
             initErrorsValuePanel(errors, failureCategory, project);
             c.anchor = GridBagConstraints.LINE_START;
             c.gridx = 0;
-            c.gridy = 6;
+            c.gridy = 2;
             c.gridwidth = 2;
             c.fill = GridBagConstraints.HORIZONTAL;
             c.insets = JBUI.insets(0);
@@ -189,7 +114,7 @@ public class BuildSummaryPanel extends JPanel {
         initInformationLabel();
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
-        c.gridy = 7;
+        c.gridy = 3;
         c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(20, 0, 0, 0);
@@ -200,7 +125,7 @@ public class BuildSummaryPanel extends JPanel {
         initBackButton();
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = 4;
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(20, 0, 0, 0);
@@ -211,7 +136,7 @@ public class BuildSummaryPanel extends JPanel {
         initContinueButton();
         c.anchor = GridBagConstraints.LINE_END;
         c.gridx = 1;
-        c.gridy = 8;
+        c.gridy = 4;
         c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(20, 0, 0, 0);
@@ -221,7 +146,7 @@ public class BuildSummaryPanel extends JPanel {
         // add panel to move content to the top
         // (at least one component needs to have weighty greater than 0.0)
         c.gridx = 0;
-        c.gridy = 9;
+        c.gridy = 5;
         c.gridwidth = 2;
         c.fill = GridBagConstraints.BOTH;
         c.insets = JBUI.insets(0);
@@ -245,59 +170,212 @@ public class BuildSummaryPanel extends JPanel {
         this.add(this.panelContent, c);
     }
 
-    private void initProjectKeyLabel() {
-        this.labelProjectKey = new JLabel();
-        this.labelProjectKey.setText("Project:");
+    private JPanel initSummaryPanel(
+            String buildStatusTitle, String buildStatusText,
+            String buildStatusTextTitle, String buildStatusTextText,
+            String failureCategoryTitle, String failureCategoryText,
+            String failedGoalTitle, String failedGoalText,
+            String failedMessageTitle, String failedMessageText,
+            String projectTitle, String projectText,
+            String buildConfigurationTitle, String buildConfigurationText,
+            String branchNameTitle, String branchNameText
+    ) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
+        int gap = 10;
+
+        // configure and add label with build status title
+        this.labelBuildStatusKey = initLabel(buildStatusTitle);
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        c.insets = JBUI.insets(0, 0, 0, 0);
+        c.weightx = 0.0;
+        panel.add(this.labelBuildStatusKey, c);
+
+        // configure and add label with build status
+        this.labelBuildStatusValue = initLabel(buildStatusText);
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 1;
+        c.gridy = 0;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = JBUI.insets(0, gap, 0, 0);
+        c.weightx = 1.0;
+        panel.add(this.labelBuildStatusValue, c);
+
+        // configure and add label with build status text title
+        this.labelBuildStatusTextKey = initLabel(buildStatusTextTitle);
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        c.insets = JBUI.insets(0, 0, 0, 0);
+        c.weightx = 0.0;
+        panel.add(this.labelBuildStatusTextKey, c);
+
+        // configure and add label with build status text
+        this.labelBuildStatusTextValue = initLabel(buildStatusTextText);
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = JBUI.insets(0, gap, 0, 0);
+        c.weightx = 1.0;
+        panel.add(this.labelBuildStatusTextValue, c);
+
+        System.out.println(buildStatusText);
+        if (buildStatusText.equals("FAILURE")) {
+
+            // configure and add label with failure category title
+            this.labelFailureCategoryKey = initLabel(failureCategoryTitle);
+            c.anchor = GridBagConstraints.LINE_START;
+            c.gridx = 0;
+            c.gridy = 2;
+            c.gridwidth = 1;
+            c.fill = GridBagConstraints.NONE;
+            c.insets = JBUI.insets(0, 0, 0, 0);
+            c.weightx = 0.0;
+            panel.add(this.labelFailureCategoryKey, c);
+
+            // configure and add label with failure category
+            this.labelFailureCategoryValue = initLabel(failureCategoryText);
+            c.anchor = GridBagConstraints.LINE_START;
+            c.gridx = 1;
+            c.gridy = 2;
+            c.gridwidth = 1;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.insets = JBUI.insets(0, gap, 0, 0);
+            c.weightx = 1.0;
+            panel.add(this.labelFailureCategoryValue, c);
+
+            if (failedMessageText == null) {
+                // configure and add label with failed goal title
+                this.labelFailedGoalKey = initLabel(failedGoalTitle);
+                c.anchor = GridBagConstraints.LINE_START;
+                c.gridx = 0;
+                c.gridy = 3;
+                c.gridwidth = 1;
+                c.fill = GridBagConstraints.NONE;
+                c.insets = JBUI.insets(0, 0, 0, 0);
+                c.weightx = 0.0;
+                panel.add(this.labelFailedGoalKey, c);
+
+                // configure and add label with failed goal
+                this.labelFailedGoalValue = initLabel(failedGoalText);
+                c.anchor = GridBagConstraints.LINE_START;
+                c.gridx = 1;
+                c.gridy = 3;
+                c.gridwidth = 1;
+                c.fill = GridBagConstraints.HORIZONTAL;
+                c.insets = JBUI.insets(0, gap, 0, 0);
+                c.weightx = 1.0;
+                panel.add(this.labelFailedGoalValue, c);
+            } else {
+                // configure and add label with failed message title
+                this.labelFailedMessageKey = initLabel(failedMessageTitle);
+                c.anchor = GridBagConstraints.LINE_START;
+                c.gridx = 0;
+                c.gridy = 3;
+                c.gridwidth = 1;
+                c.fill = GridBagConstraints.NONE;
+                c.insets = JBUI.insets(0, 0, 0, 0);
+                c.weightx = 0.0;
+                panel.add(this.labelFailedMessageKey, c);
+
+                // configure and add label with failed message
+                this.labelFailedMessageValue = initLabel(failedMessageText);
+                c.anchor = GridBagConstraints.LINE_START;
+                c.gridx = 1;
+                c.gridy = 3;
+                c.gridwidth = 1;
+                c.fill = GridBagConstraints.HORIZONTAL;
+                c.insets = JBUI.insets(0, gap, 0, 0);
+                c.weightx = 1.0;
+                panel.add(this.labelFailedMessageValue, c);
+            }
+        }
+
+        // configure and add label with project title
+        this.labelProjectKey = initLabel(projectTitle);
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 0;
+        c.gridy = 4;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        c.insets = JBUI.insets(0, 0, 0, 0);
+        c.weightx = 0.0;
+        panel.add(this.labelProjectKey, c);
+
+        // configure and add label with project name
+        this.labelProjectValue = initLabel(projectText);
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 1;
+        c.gridy = 4;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = JBUI.insets(0, gap, 0, 0);
+        c.weightx = 1.0;
+        panel.add(this.labelProjectValue, c);
+
+        // configure and add label with build configuration title
+        this.labelBuildConfigurationKey = initLabel(buildConfigurationTitle);
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 0;
+        c.gridy = 5;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        c.insets = JBUI.insets(0, 0, 0, 0);
+        c.weightx = 0.0;
+        panel.add(this.labelBuildConfigurationKey, c);
+
+        // configure and add label with build configuration name
+        this.labelBuildConfigurationValue = initLabel(buildConfigurationText);
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 1;
+        c.gridy = 5;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = JBUI.insets(0, gap, 0, 0);
+        c.weightx = 1.0;
+        panel.add(this.labelBuildConfigurationValue, c);
+
+        // configure and add label with branch name title
+        this.labelBranchKey = initLabel(branchNameTitle);
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 0;
+        c.gridy = 6;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        c.insets = JBUI.insets(0, 0, 0, 0);
+        c.weightx = 0.0;
+        panel.add(this.labelBranchKey, c);
+
+        // configure and add label with branch name
+        this.labelBranchValue = initLabel(branchNameText);
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 1;
+        c.gridy = 6;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = JBUI.insets(0, gap, 0, 0);
+        c.weightx = 1.0;
+        panel.add(this.labelBranchValue, c);
+
+        return panel;
     }
 
-    private void initProjectValueLabel(String projectName) {
-        this.labelProjectValue = new JLabel();
-        this.labelProjectValue.setText(projectName);
-    }
+    private JLabel initLabel(String text) {
+        JLabel label = new JLabel();
+        label.setText(text);
 
-    private void initBuildConfigurationKeyLabel() {
-        this.labelBuildConfigurationKey = new JLabel();
-        this.labelBuildConfigurationKey.setText("Build Configuration:");
-    }
-
-    private void initBuildConfigurationValueLabel(String buildConfigurationName) {
-        this.labelBuildConfigurationValue = new JLabel();
-        this.labelBuildConfigurationValue.setText(buildConfigurationName);
-    }
-
-    private void initBuildStatusKeyLabel() {
-        this.labelBuildStatusKey = new JLabel();
-        this.labelBuildStatusKey.setText("Build Status:");
-    }
-
-    private void initBuildStatusValueLabel(String buildStatus) {
-        this.labelBuildStatusValue = new JLabel();
-        this.labelBuildStatusValue.setText(buildStatus);
-    }
-
-    private void initFailedGoalKeyLabel() {
-        this.labelFailedGoalKey = new JLabel();
-        this.labelFailedGoalKey.setText("Failed Goal:");
-    }
-
-    private void initFailedGoalValueLabel(String failedGoal) {
-        this.labelFailedGoalValue = new JLabel();
-        this.labelFailedGoalValue.setText(failedGoal);
-    }
-
-    private void initFailureCategoryKeyLabel() {
-        this.labelFailureCategoryKey = new JLabel();
-        this.labelFailureCategoryKey.setText("Failure Category:");
-    }
-
-    private void initFailureCategoryValueLabel(String failureCategory) {
-        this.labelFailureCategoryValue = new JLabel();
-        this.labelFailureCategoryValue.setText(failureCategory);
-    }
-
-    private void initErrorsKeyLabel() {
-        this.labelErrorsKey = new JLabel();
-        this.labelErrorsKey.setText("Errors:");
+        return label;
     }
 
     private void initErrorsValuePanel(List<Error> errors, String failureCategory, Project project) {
