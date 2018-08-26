@@ -106,6 +106,7 @@ public class Controller {
         }
 
         updateCaesarToolWindow();
+
         showCaesarToolWindow();
 
         return true;
@@ -295,6 +296,7 @@ public class Controller {
         }
 
         updateCaesarToolWindow();
+
         hideCaesarToolWindow();
 
         return true;
@@ -340,10 +342,6 @@ public class Controller {
 
     // -----------------------------------------------------------------------------------------------------------------
 
-    public Project getIntelliJProject() {
-        return this.project;
-    }
-
     public CaesarToolWindow getCaesarToolWindow() {
         return this.caesarToolWindow;
     }
@@ -358,11 +356,11 @@ public class Controller {
         }
     }
 
-    public void showCaesarToolWindow() {
-        IntelliJHelper.showToolWindow(this.project, this.TOOL_WINDOW_ID);
+    public boolean showCaesarToolWindow() {
+        return IntelliJHelper.showToolWindow(this.project, this.TOOL_WINDOW_ID);
     }
 
-    public void hideCaesarToolWindow() {
-        IntelliJHelper.hideToolWindow(this.project, this.TOOL_WINDOW_ID);
+    public boolean hideCaesarToolWindow() {
+        return IntelliJHelper.hideToolWindow(this.project, this.TOOL_WINDOW_ID);
     }
 }

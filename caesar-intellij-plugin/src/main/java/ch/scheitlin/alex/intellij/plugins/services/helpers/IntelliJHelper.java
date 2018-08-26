@@ -58,7 +58,7 @@ public class IntelliJHelper {
 
         toolWindow.show(null);
 
-        return false;
+        return true;
     }
 
     public static boolean hideToolWindow(Project project, String toolWindowId) {
