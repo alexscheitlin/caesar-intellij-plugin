@@ -75,6 +75,33 @@ public class CaesarToolWindow implements ToolWindowFactory {
             List<Error> errors = controller.getErrors();
             String newBranch = controller.getNewBranch();
 
+            ActionListener fixAction = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!Controller.getInstance().fix()) {
+                        System.out.println("Could not prepare broke code!");
+                    }
+                }
+            };
+
+            ActionListener finishAction = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!Controller.getInstance().finish()) {
+                        System.out.println("Could not finish build fixing!");
+                    }
+                }
+            };
+
+            ActionListener abortAction = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!Controller.getInstance().abort()) {
+                        System.out.println("Could not abort!");
+                    }
+                }
+            };
+
             // show build information if build log is downloaded (and processed) or is in fixing mode
             this.panelBuildSummary = new BuildSummaryPanel(
                     buildStatus,
@@ -87,7 +114,10 @@ public class CaesarToolWindow implements ToolWindowFactory {
                     branchName,
                     errors,
                     controller.isFixing(),
-                    newBranch
+                    newBranch,
+                    fixAction,
+                    finishAction,
+                    abortAction
             );
 
             final String buildServerBuildLog = controller.getBuildServerBuildLog();

@@ -11,8 +11,6 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.util.List;
 
 public class BuildSummaryPanel extends JPanel {
@@ -67,7 +65,10 @@ public class BuildSummaryPanel extends JPanel {
             String branchName,
             List<Error> errors,
             boolean isFixing,
-            String newBranch
+            String newBranch,
+            ActionListener fixAction,
+            ActionListener finishAction,
+            ActionListener abortAction
     ) {
         // set layout
         this.setLayout(new GridBagLayout());
@@ -133,7 +134,7 @@ public class BuildSummaryPanel extends JPanel {
         }
 
         // configure and add button to go back
-        initBackButton(isFixing, this.BACK_BUTTON_OVERVIEW, this.BACK_BUTTON_ABORT);
+        initBackButton(isFixing, this.BACK_BUTTON_OVERVIEW, this.BACK_BUTTON_ABORT, abortAction);
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
         c.gridy = 4;
@@ -145,7 +146,7 @@ public class BuildSummaryPanel extends JPanel {
 
         if (buildStatus.equals("FAILURE")) {
             // configure and add button to continue
-            initContinueButton(isFixing, this.CONTINUE_BUTTON_CHECKOUT, this.CONTINUE_BUTTON_FINISH);
+            initContinueButton(isFixing, this.CONTINUE_BUTTON_CHECKOUT, this.CONTINUE_BUTTON_FINISH, fixAction, finishAction);
             c.anchor = GridBagConstraints.LINE_END;
             c.gridx = 1;
             c.gridy = 4;
@@ -506,7 +507,7 @@ public class BuildSummaryPanel extends JPanel {
         );
     }
 
-    private void initBackButton(boolean isFixing, String overviewText, String abortText) {
+    private void initBackButton(boolean isFixing, String overviewText, String abortText, ActionListener abortAction) {
         this.buttonBack = new JButton();
 
         if (!isFixing) {
@@ -514,40 +515,21 @@ public class BuildSummaryPanel extends JPanel {
         } else {
             this.buttonBack.setText(abortText);
         }
-        this.buttonBack.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!Controller.getInstance().abort()) {
-                    System.out.println("Could not abort!");
-                }
-            }
-        });
+        this.buttonBack.addActionListener(abortAction);
     }
 
-    private void initContinueButton(boolean isFixing, String checkoutText, String finishText) {
+    private void initContinueButton(
+            boolean isFixing, String checkoutText, String finishText,
+            ActionListener fixAction, ActionListener finishAction) {
         this.buttonContinue = new JButton();
 
         if (!isFixing) {
             this.buttonContinue.setText(checkoutText);
-            this.buttonContinue.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!Controller.getInstance().fix()) {
-                        System.out.println("Could not prepare broke code!");
-                    }
-                }
-            });
+            this.buttonContinue.addActionListener(fixAction);
 
         } else {
             this.buttonContinue.setText(finishText);
-            this.buttonContinue.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!Controller.getInstance().finish()) {
-                        System.out.println("Could not finish build fixing!");
-                    }
-                }
-            });
+            this.buttonContinue.addActionListener(finishAction);
         }
     }
 }
