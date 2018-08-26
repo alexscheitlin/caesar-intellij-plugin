@@ -2,7 +2,6 @@ package ch.scheitlin.alex.intellij.plugins.toolWindow;
 
 import ch.scheitlin.alex.build.model.Error;
 import ch.scheitlin.alex.intellij.plugins.services.Controller;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -25,44 +24,42 @@ public class CaesarToolWindow implements ToolWindowFactory {
     private boolean startUp = true;
 
     @Override
-    public void createToolWindowContent(Project project, com.intellij.openapi.wm.ToolWindow toolWindow) {
+    public void createToolWindowContent(Project project, ToolWindow toolWindow) {
         // save provided project and tool window
         this.project = project;
         this.overview = toolWindow;
 
         // save reference to storage
-        // this enables to refresh the list of projects after login
-        Controller controller = ServiceManager.getService(Controller.class);
-        controller.setCaesarToolWindow(this);
+        Controller.getInstance().setCaesarToolWindow(this);
 
         update();
     }
 
     // display one of the panels in this package depending on the build fix helper stage
     public void update() {
-        Controller controller = ServiceManager.getService(Controller.class);
+        Controller controller = Controller.getInstance();
 
         if (controller.isInNoStage()) {
             // try to auto log in if the tool is at startup
-            if (startUp && controller.tryAutoLogin(project)) {
+            if (this.startUp && controller.tryAutoLogin(this.project)) {
                 // only auto login at start up
                 // later on one must be able to logout without automatically login again
-                startUp = false;
+                this.startUp = false;
 
                 this.update();
                 return;
             }
 
             // show login panel if user is not logged in
-            this.panelLogin = new LoginPanel(project);
+            this.panelLogin = new LoginPanel(this.project);
 
-            setToolWindowContent(panelLogin);
+            setToolWindowContent(this.panelLogin);
 
         } else if (controller.isConnected()) {
             // show overview panel if user is connected with the build server
             this.panelOverview = new OverviewPanel();
 
-            setToolWindowContent(panelOverview);
+            setToolWindowContent(this.panelOverview);
 
         } else if (controller.hasDownloaded() || controller.hasProcessed()) {
             String projectName = controller.getBuildServerProjectName();
@@ -96,6 +93,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
         }
     }
 
+    // set one component as tool window content
     private void setToolWindowContent(JComponent component) {
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(component, "", false);
@@ -103,6 +101,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
         this.overview.getContentManager().addContent(content);
     }
 
+    // set two components as tool window content
     private void setToolWindowContent(JComponent component1, String title1, JComponent component2, String title2) {
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content1 = contentFactory.createContent(component1, title1, false);
