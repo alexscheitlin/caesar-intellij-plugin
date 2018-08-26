@@ -131,15 +131,24 @@ public class CaesarToolWindow implements ToolWindowFactory {
             );
 
             final String buildServerBuildLog = controller.getBuildServerBuildLog();
-            ActionListener showBuildServerBuildLog = new ActionListener() {
+            ActionListener buildServerBuildLogAction = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    MultiLineStringDialog dialog = new MultiLineStringDialog();
+                    MultiLineStringDialog dialog = new MultiLineStringDialog("Build Server Build Log");
                     dialog.showDialog(buildServerBuildLog);
                 }
             };
 
-            this.panelData = new DataPanel(controller.getMavenBuild(), showBuildServerBuildLog);
+            final String mavenBuildLog = controller.getMavenBuildLog();
+            ActionListener mavenBuildLogAction = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    MultiLineStringDialog dialog = new MultiLineStringDialog("Maven Build Log");
+                    dialog.showDialog(mavenBuildLog);
+                }
+            };
+
+            this.panelData = new DataPanel(controller.getMavenBuild(), buildServerBuildLogAction, mavenBuildLogAction);
 
             setToolWindowContent(this.panelBuildSummary, "Summary", this.panelData, "Data");
         }

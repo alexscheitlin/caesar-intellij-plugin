@@ -27,7 +27,7 @@ public class MultiLineStringDialog extends JDialog {
     private final String BUTTON_CLOSE_TEXT = "Close";
     private final int BUTTON_CLOSE_WIDTH = 75;
 
-    public MultiLineStringDialog() {
+    public MultiLineStringDialog(String title) {
         // set layout for content panel
         this.panelContent = new JPanel();
         this.panelContent.setLayout(new GridBagLayout());
@@ -78,7 +78,7 @@ public class MultiLineStringDialog extends JDialog {
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        this.setTitle("Raw Build Server Build Log");
+        this.setTitle(title);
         this.setModal(true);
         this.getRootPane().setDefaultButton(this.buttonClose);
     }
@@ -134,10 +134,10 @@ public class MultiLineStringDialog extends JDialog {
             if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]E:.*")) {
                 bold = true;
                 color = "red";
-            } else if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]F:.*")) {
+            } else if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]F:.*") || line.matches("\\[ERROR\\].*")) {
                 bold = true;
                 color = "red";
-            } else if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]W:.*")) {
+            } else if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]W:.*") || line.matches("\\[WARNING\\].*")) {
                 bold = true;
                 color = "#ff8c00"; // dark orange
             } else if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]i:.*")) {
