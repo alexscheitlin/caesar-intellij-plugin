@@ -33,6 +33,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
 
         // save reference to storage
         Controller.getInstance().setCaesarToolWindow(this);
+        Controller.getInstance().setProject(project);
 
         update();
     }
@@ -43,7 +44,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
 
         if (controller.isInNoStage()) {
             // try to auto log in if the tool is at startup
-            if (this.startUp && controller.tryAutoConnect(this.project)) {
+            if (this.startUp && controller.tryAutoConnect()) {
                 // only auto login at start up
                 // later on one must be able to logout without automatically login again
                 this.startUp = false;
@@ -55,7 +56,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
             ActionListener loginAction = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (!Controller.getInstance().connect(project)) {
+                    if (!Controller.getInstance().connect()) {
                         System.out.println("Login failed!");
                     }
                 }

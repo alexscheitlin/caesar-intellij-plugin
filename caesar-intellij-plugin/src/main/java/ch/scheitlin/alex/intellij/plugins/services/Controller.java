@@ -54,19 +54,17 @@ public class Controller {
     private BuildServerBuild selectedBuild;
 
     // try to login without asking for credentials
-    public boolean tryAutoConnect(Project project) {
-        return connect(project, false);
+    public boolean tryAutoConnect() {
+        return connect(false);
     }
 
     // login with asking for credentials
-    public boolean connect(Project project) {
-        return connect(project, true);
+    public boolean connect() {
+        return connect(true);
     }
 
     // login with saved or provided credentials
-    private boolean connect(Project project, boolean openDialog) {
-        this.project = project;
-
+    private boolean connect(boolean openDialog) {
         // get credentials from storage (if the are available)
         List<Pair<String, String>> properties = this.storage.getBuildServerCredentials();
         String host = properties.get(0).getValue();
@@ -341,6 +339,10 @@ public class Controller {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
     public CaesarToolWindow getCaesarToolWindow() {
         return this.caesarToolWindow;
