@@ -110,16 +110,18 @@ public class BuildSummaryPanel extends JPanel {
             this.panelContent.add(panelErrorsValue, c);
         }
 
-        // configure and add label with information message
-        initInformationLabel();
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 0;
-        c.gridy = 3;
-        c.gridwidth = 2;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = JBUI.insets(20, 0, 0, 0);
-        c.weightx = 1.0;
-        this.panelContent.add(labelInformation, c);
+        if (buildStatus.equals("FAILURE")) {
+            // configure and add label with information message
+            initInformationLabel();
+            c.anchor = GridBagConstraints.LINE_START;
+            c.gridx = 0;
+            c.gridy = 3;
+            c.gridwidth = 2;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.insets = JBUI.insets(20, 0, 0, 0);
+            c.weightx = 1.0;
+            this.panelContent.add(labelInformation, c);
+        }
 
         // configure and add button to go back
         initBackButton();
@@ -132,16 +134,18 @@ public class BuildSummaryPanel extends JPanel {
         c.weightx = 0.0;
         this.panelContent.add(buttonBack, c);
 
-        // configure and add button to continue
-        initContinueButton();
-        c.anchor = GridBagConstraints.LINE_END;
-        c.gridx = 1;
-        c.gridy = 4;
-        c.gridwidth = 1;
-        c.fill = GridBagConstraints.NONE;
-        c.insets = JBUI.insets(20, 0, 0, 0);
-        c.weightx = 0.0;
-        this.panelContent.add(buttonContinue, c);
+        if (buildStatus.equals("FAILURE")) {
+            // configure and add button to continue
+            initContinueButton();
+            c.anchor = GridBagConstraints.LINE_END;
+            c.gridx = 1;
+            c.gridy = 4;
+            c.gridwidth = 1;
+            c.fill = GridBagConstraints.NONE;
+            c.insets = JBUI.insets(20, 0, 0, 0);
+            c.weightx = 0.0;
+            this.panelContent.add(buttonContinue, c);
+        }
 
         // add panel to move content to the top
         // (at least one component needs to have weighty greater than 0.0)
