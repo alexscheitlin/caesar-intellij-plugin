@@ -48,6 +48,11 @@ public class BuildSummaryPanel extends JPanel {
     private final String BRANCH_NAME_TITLE = "Branch:";
     private final String ERRORS_TITLE = "Errors:";
 
+    private final String BACK_BUTTON_OVERVIEW = "Back to Overview";
+    private final String BACK_BUTTON_ABORT = "Abort";
+    private final String CONTINUE_BUTTON_CHECKOUT = "Checkout";
+    private final String CONTINUE_BUTTON_FINISH = "Finish";
+
     public BuildSummaryPanel(
             String buildStatus,
             String buildStatusText,
@@ -58,7 +63,9 @@ public class BuildSummaryPanel extends JPanel {
             String buildConfigurationName,
             String branchName,
             List<Error> errors,
-            Project project
+            Project project,
+            boolean isFixing,
+            String newBranch
     ) {
         // set layout
         this.setLayout(new GridBagLayout());
@@ -112,7 +119,7 @@ public class BuildSummaryPanel extends JPanel {
 
         if (buildStatus.equals("FAILURE")) {
             // configure and add label with information message
-            initInformationLabel();
+            initInformationLabel(isFixing, this.CONTINUE_BUTTON_CHECKOUT, this.CONTINUE_BUTTON_FINISH, newBranch);
             c.anchor = GridBagConstraints.LINE_START;
             c.gridx = 0;
             c.gridy = 3;
@@ -124,7 +131,7 @@ public class BuildSummaryPanel extends JPanel {
         }
 
         // configure and add button to go back
-        initBackButton();
+        initBackButton(isFixing, this.BACK_BUTTON_OVERVIEW, this.BACK_BUTTON_ABORT);
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
         c.gridy = 4;
@@ -136,7 +143,7 @@ public class BuildSummaryPanel extends JPanel {
 
         if (buildStatus.equals("FAILURE")) {
             // configure and add button to continue
-            initContinueButton();
+            initContinueButton(isFixing, this.CONTINUE_BUTTON_CHECKOUT, this.CONTINUE_BUTTON_FINISH);
             c.anchor = GridBagConstraints.LINE_END;
             c.gridx = 1;
             c.gridy = 4;
@@ -234,7 +241,6 @@ public class BuildSummaryPanel extends JPanel {
         c.weightx = 1.0;
         panel.add(this.labelBuildStatusTextValue, c);
 
-        System.out.println(buildStatusText);
         if (buildStatusText.equals("FAILURE")) {
 
             // configure and add label with failure category title
@@ -458,7 +464,7 @@ public class BuildSummaryPanel extends JPanel {
         }
     }
 
-    private void initInformationLabel() {
+    private void initInformationLabel(boolean isFixing, String checkoutText, String finishText, String newBranch) {
         this.labelInformation = new JTextPane();
         this.labelInformation.setEditable(false);
         this.labelInformation.setCursor(null);
@@ -468,20 +474,32 @@ public class BuildSummaryPanel extends JPanel {
 
         String fontFamily = UIManager.getFont("Label.font").getFamily();
         int fontSize = UIManager.getFont("Label.font").getSize();
-        String information = "<p>Your local code may be different from the one that failed on the build server!" +
-                " Explore the errors in your local code using the <b><i>Show</i></b> buttons above.</p>" +
-                "<p>Use the <b><i>Checkout</i></b> button below to change to the code that caused the build failure " +
-                "and explore the errors there. <i>A new branch will be created and uncommitted changes will be " +
-                "stashed automatically.<i></p>";
+        String information = "";
+
+        if (!isFixing) {
+            information = "<p>Your local code may be different from the one that failed on the build server!" +
+                    " Explore the errors in your local code using the <b>Show</b> buttons above.</p>" +
+                    "<p>Use the <b>" + checkoutText + "</b> button below to change to the code that caused the build " +
+                    "failure and explore the errors there. <i>A new branch will be created and uncommitted changes " +
+                    "will be stashed automatically.<i></p>";
+        } else {
+            information = "<p>You are now on branch <b>" + newBranch + "</b> showing the code that caused the build failure.</p>" +
+                    "<p>Once you are finished, click the <b>" + finishText + "</b> button.</p>";
+        }
 
         this.labelInformation.setText(
                 "<div style='font-family:" + fontFamily + ";font-size:" + fontSize + ";'>" + information + "</div>"
         );
     }
 
-    private void initBackButton() {
+    private void initBackButton(boolean isFixing, String overviewText, String abortText) {
         this.buttonBack = new JButton();
-        this.buttonBack.setText("Back to Overview");
+
+        if (!isFixing) {
+            this.buttonBack.setText(overviewText);
+        } else {
+            this.buttonBack.setText(abortText);
+        }
         this.buttonBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -492,16 +510,30 @@ public class BuildSummaryPanel extends JPanel {
         });
     }
 
-    private void initContinueButton() {
+    private void initContinueButton(boolean isFixing, String checkoutText, String finishText) {
         this.buttonContinue = new JButton();
-        this.buttonContinue.setText("Checkout");
-        this.buttonContinue.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!Controller.getInstance().startFixingBrokenBuild()) {
-                    System.out.println("Could not prepare broke code!");
+
+        if (!isFixing) {
+            this.buttonContinue.setText(checkoutText);
+            this.buttonContinue.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!Controller.getInstance().startFixingBrokenBuild()) {
+                        System.out.println("Could not prepare broke code!");
+                    }
                 }
-            }
-        });
+            });
+
+        } else {
+            this.buttonContinue.setText(finishText);
+            this.buttonContinue.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!Controller.getInstance().stopFixingBrokenBuild()) {
+                        System.out.println("Could not finish build fixing!");
+                    }
+                }
+            });
+        }
     }
 }

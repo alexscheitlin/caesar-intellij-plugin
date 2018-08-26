@@ -18,7 +18,6 @@ public class CaesarToolWindow implements ToolWindowFactory {
     private OverviewPanel panelOverview;
     private BuildSummaryPanel panelBuildSummary;
     private DataPanel panelData;
-    private FixPanel panelFix;
 
     private Project project;
     private boolean startUp = true;
@@ -61,7 +60,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
 
             setToolWindowContent(this.panelOverview);
 
-        } else if (controller.hasDownloaded() || controller.hasProcessed()) {
+        } else if (controller.hasDownloaded() || controller.hasProcessed() || controller.isFixing()) {
             String buildStatus = controller.getMavenBuild().getStatus().toString();
             String buildStatusText = controller.getSelectedBuild().getStatusText();
             String failureCategory = controller.getFailureCategory();
@@ -72,8 +71,9 @@ public class CaesarToolWindow implements ToolWindowFactory {
             String branchName = controller.getSelectedBuild().getBranch();
             List<Error> errors = controller.getErrors();
             Project project = controller.getIntelliJProject();
+            String newBranch = controller.getNewBranch();
 
-            // show build information if build log is downloaded (and processed)
+            // show build information if build log is downloaded (and processed) or is in fixing mode
             this.panelBuildSummary = new BuildSummaryPanel(
                     buildStatus,
                     buildStatusText,
@@ -84,18 +84,14 @@ public class CaesarToolWindow implements ToolWindowFactory {
                     buildConfigurationName,
                     branchName,
                     errors,
-                    project
+                    project,
+                    controller.isFixing(),
+                    newBranch
             );
 
             this.panelData = new DataPanel(controller.getBuildServerBuildLog(), controller.getMavenBuild());
 
             setToolWindowContent(this.panelBuildSummary, "Summary", this.panelData, "Data");
-
-        } else if (controller.isFixing()) {
-            // show build fix panel if user is fixing a broken build
-            this.panelFix = new FixPanel();
-
-            setToolWindowContent(this.panelFix);
         }
     }
 
