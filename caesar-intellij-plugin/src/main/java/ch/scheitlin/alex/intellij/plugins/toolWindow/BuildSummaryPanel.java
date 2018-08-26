@@ -63,7 +63,6 @@ public class BuildSummaryPanel extends JPanel {
             String buildConfigurationName,
             String branchName,
             List<Error> errors,
-            Project project,
             boolean isFixing,
             String newBranch
     ) {
@@ -106,7 +105,7 @@ public class BuildSummaryPanel extends JPanel {
             this.panelContent.add(this.labelErrorsKey, c);
 
             // configure and add panel with errors
-            initErrorsValuePanel(errors, failureCategory, project);
+            initErrorsValuePanel(errors, failureCategory, isFixing);
             c.anchor = GridBagConstraints.LINE_START;
             c.gridx = 0;
             c.gridy = 2;
@@ -388,7 +387,7 @@ public class BuildSummaryPanel extends JPanel {
         return label;
     }
 
-    private void initErrorsValuePanel(List<Error> errors, String failureCategory, Project project) {
+    private void initErrorsValuePanel(List<Error> errors, String failureCategory, boolean isFixing) {
         if (errors == null) {
             return;
         }
@@ -399,9 +398,9 @@ public class BuildSummaryPanel extends JPanel {
         for (int i = 0; i < errors.size(); i++) {
             // create new error swing component
             String actionButton1Text = "Show";
-            String actionButton2Text = "Debug";
-            if (failureCategory != "TESTING") {
-                actionButton2Text = null;
+            String actionButton2Text = null;
+            if (failureCategory == "TESTING" && isFixing) {
+                actionButton2Text = "Debug";
             }
             ErrorPanel errorComponent = new ErrorPanel(errors.get(i), actionButton1Text, actionButton2Text);
 

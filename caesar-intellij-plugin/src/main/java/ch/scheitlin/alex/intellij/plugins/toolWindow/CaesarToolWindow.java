@@ -70,7 +70,6 @@ public class CaesarToolWindow implements ToolWindowFactory {
             String buildConfigurationName = controller.getSelectedBuildServerBuildConfigurationName();
             String branchName = controller.getSelectedBuild().getBranch();
             List<Error> errors = controller.getErrors();
-            Project project = controller.getIntelliJProject();
             String newBranch = controller.getNewBranch();
 
             // show build information if build log is downloaded (and processed) or is in fixing mode
@@ -84,7 +83,6 @@ public class CaesarToolWindow implements ToolWindowFactory {
                     buildConfigurationName,
                     branchName,
                     errors,
-                    project,
                     controller.isFixing(),
                     newBranch
             );
