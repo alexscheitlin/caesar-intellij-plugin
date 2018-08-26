@@ -1,9 +1,6 @@
 package ch.scheitlin.alex.intellij.plugins.dialogs;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -26,6 +23,14 @@ public class MultiLineStringDialog extends JDialog {
     private final int LABEL_MULTI_LINE_STRING_HEIGHT = 750;
     private final String BUTTON_CLOSE_TEXT = "Close";
     private final int BUTTON_CLOSE_WIDTH = 75;
+    private final Color GREEN = new Color(0, 97, 0);
+    private final Color DARK_GREEN = new Color(0, 177, 0);
+    private final Color RED = new Color(156, 0, 6);
+    private final Color DARK_RED = new Color(189, 0, 6);
+    private final Color ORANGE = new Color(156, 87, 0);
+    private final Color DARK_ORANGE = new Color(255, 143, 0);
+    private final Color BLACK = Color.BLACK;
+    private final Color WHITE = Color.WHITE;
 
     public MultiLineStringDialog(String title) {
         // set layout for content panel
@@ -118,7 +123,7 @@ public class MultiLineStringDialog extends JDialog {
         return button;
     }
 
-    private void setText(String text) {
+    private void setText(String text, Color green, Color red, Color orange, Color textColor) {
         StringBuilder htmlBuilder = new StringBuilder();
 
         String fontFamily = "Courier New";
@@ -133,19 +138,19 @@ public class MultiLineStringDialog extends JDialog {
             String color;
             if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]E:.*")) {
                 bold = true;
-                color = "red";
+                color = "#" + Integer.toHexString(red.getRGB()).substring(2);
             } else if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]F:.*") || line.matches("\\[ERROR\\].*")) {
                 bold = true;
-                color = "red";
+                color = "#" + Integer.toHexString(red.getRGB()).substring(2);
             } else if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]W:.*") || line.matches("\\[WARNING\\].*")) {
                 bold = true;
-                color = "#ff8c00"; // dark orange
+                color = "#" + Integer.toHexString(orange.getRGB()).substring(2);
             } else if (line.matches("\\[\\d{2}:\\d{2}:\\d{2}\\]i:.*")) {
                 bold = true;
-                color = "green";
+                color = "#" + Integer.toHexString(green.getRGB()).substring(2);
             } else {
                 bold = false;
-                color = "black";
+                color = "#" + Integer.toHexString(textColor.getRGB()).substring(2);
             }
 
             String newLine = line.replaceAll("\t", tabReplacement);
@@ -160,9 +165,26 @@ public class MultiLineStringDialog extends JDialog {
         this.labelMultiLineString.setText(htmlBuilder.toString());
     }
 
-    public void showDialog(String multiLineString) {
+    public void showDialog(String multiLineString, boolean darkTheme) {
         this.multiLineString = multiLineString;
-        this.setText(multiLineString);
+
+        Color green;
+        Color red;
+        Color orange;
+        Color textColor;
+        if (darkTheme) {
+            green = this.DARK_GREEN;
+            red = this.DARK_RED;
+            orange = this.DARK_ORANGE;
+            textColor = this.WHITE;
+        } else {
+            green = this.GREEN;
+            red = this.RED;
+            orange = this.ORANGE;
+            textColor = this.BLACK;
+        }
+
+        this.setText(multiLineString, green, red, orange, textColor);
 
         this.pack();
 

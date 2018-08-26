@@ -137,7 +137,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     MultiLineStringDialog dialog = new MultiLineStringDialog("Build Server Build Log");
-                    dialog.showDialog(buildServerBuildLog);
+                    dialog.showDialog(buildServerBuildLog, darkTheme);
                 }
             };
 
@@ -146,7 +146,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     MultiLineStringDialog dialog = new MultiLineStringDialog("Maven Build Log");
-                    dialog.showDialog(mavenBuildLog);
+                    dialog.showDialog(mavenBuildLog, darkTheme);
                 }
             };
 
