@@ -3,7 +3,7 @@ package ch.scheitlin.alex.intellij.plugins.toolWindow;
 import ch.scheitlin.alex.build.swing.ErrorPanel;
 import ch.scheitlin.alex.intellij.plugins.services.Controller;
 import ch.scheitlin.alex.build.model.Error;
-import com.intellij.openapi.project.Project;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
@@ -11,6 +11,8 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.List;
 
 public class BuildSummaryPanel extends JPanel {
@@ -37,6 +39,7 @@ public class BuildSummaryPanel extends JPanel {
     private JTextPane labelInformation;
     private JButton buttonBack;
     private JButton buttonContinue;
+    private JScrollPane scrollPane;
 
     private final String BUILD_STATUS_TITLE = "Build Status:";
     private final String BUILD_STATUS_TEXT_TITLE = "Status Text:";
@@ -86,7 +89,7 @@ public class BuildSummaryPanel extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
         c.gridy = 0;
-        c.gridwidth = 1;
+        c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0);
         c.weightx = 1.0;
@@ -98,7 +101,7 @@ public class BuildSummaryPanel extends JPanel {
             c.anchor = GridBagConstraints.LINE_START;
             c.gridx = 0;
             c.gridy = 1;
-            c.gridwidth = 1;
+            c.gridwidth = 2;
             c.fill = GridBagConstraints.NONE;
             c.insets = JBUI.insets(20, 0, 0, 0);
             c.weightx = 0.0;
@@ -152,17 +155,6 @@ public class BuildSummaryPanel extends JPanel {
             c.weightx = 0.0;
             this.panelContent.add(buttonContinue, c);
         }
-
-        // add panel to move content to the top
-        // (at least one component needs to have weighty greater than 0.0)
-        c.gridx = 0;
-        c.gridy = 5;
-        c.gridwidth = 2;
-        c.fill = GridBagConstraints.BOTH;
-        c.insets = JBUI.insets(0);
-        c.weightx = 1.0;
-        c.weighty = 1.0;
-        this.panelContent.add(new JPanel(), c);
     }
 
     private void initAndAddContentPanel(int padding) {
@@ -177,7 +169,55 @@ public class BuildSummaryPanel extends JPanel {
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 1.0;
         c.weighty = 1.0;
-        this.add(this.panelContent, c);
+
+        // create panel to add padding
+        JPanel paddingPanel = new JPanel();
+        paddingPanel.setLayout(new GridBagLayout());
+        paddingPanel.add(this.panelContent, c);
+
+        // create panel to stick content to the top
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BorderLayout());
+        topPanel.add(paddingPanel);
+
+        // add vertical scroll bar
+        this.scrollPane = new JBScrollPane(topPanel);
+        this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        this.scrollPane.setBorder(null);
+        c.gridx = 0;
+        c.gridy = 0;
+        c.insets = JBUI.insets(0);
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        this.add(this.scrollPane, c);
+
+        // resize scroll pane content when summary panel is resized
+        this.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Dimension dimension = new Dimension(getWidth() - 2 * padding, panelContent.getPreferredSize().height);
+
+                panelContent.setMaximumSize(dimension);
+                panelContent.setPreferredSize(dimension);
+                panelContent.setMinimumSize(dimension);
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
+        });
     }
 
     private JPanel initSummaryPanel(
@@ -201,7 +241,6 @@ public class BuildSummaryPanel extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
         c.gridy = 0;
-        c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0, 0, 0, 0);
         c.weightx = 0.0;
@@ -212,7 +251,6 @@ public class BuildSummaryPanel extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 1;
         c.gridy = 0;
-        c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0, gap, 0, 0);
         c.weightx = 1.0;
@@ -223,7 +261,6 @@ public class BuildSummaryPanel extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
         c.gridy = 1;
-        c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0, 0, 0, 0);
         c.weightx = 0.0;
@@ -234,7 +271,6 @@ public class BuildSummaryPanel extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 1;
         c.gridy = 1;
-        c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0, gap, 0, 0);
         c.weightx = 1.0;
@@ -247,7 +283,6 @@ public class BuildSummaryPanel extends JPanel {
             c.anchor = GridBagConstraints.LINE_START;
             c.gridx = 0;
             c.gridy = 2;
-            c.gridwidth = 1;
             c.fill = GridBagConstraints.NONE;
             c.insets = JBUI.insets(0, 0, 0, 0);
             c.weightx = 0.0;
@@ -258,7 +293,6 @@ public class BuildSummaryPanel extends JPanel {
             c.anchor = GridBagConstraints.LINE_START;
             c.gridx = 1;
             c.gridy = 2;
-            c.gridwidth = 1;
             c.fill = GridBagConstraints.HORIZONTAL;
             c.insets = JBUI.insets(0, gap, 0, 0);
             c.weightx = 1.0;
@@ -270,7 +304,6 @@ public class BuildSummaryPanel extends JPanel {
                 c.anchor = GridBagConstraints.LINE_START;
                 c.gridx = 0;
                 c.gridy = 3;
-                c.gridwidth = 1;
                 c.fill = GridBagConstraints.NONE;
                 c.insets = JBUI.insets(0, 0, 0, 0);
                 c.weightx = 0.0;
@@ -281,7 +314,6 @@ public class BuildSummaryPanel extends JPanel {
                 c.anchor = GridBagConstraints.LINE_START;
                 c.gridx = 1;
                 c.gridy = 3;
-                c.gridwidth = 1;
                 c.fill = GridBagConstraints.HORIZONTAL;
                 c.insets = JBUI.insets(0, gap, 0, 0);
                 c.weightx = 1.0;
@@ -292,7 +324,6 @@ public class BuildSummaryPanel extends JPanel {
                 c.anchor = GridBagConstraints.LINE_START;
                 c.gridx = 0;
                 c.gridy = 3;
-                c.gridwidth = 1;
                 c.fill = GridBagConstraints.NONE;
                 c.insets = JBUI.insets(0, 0, 0, 0);
                 c.weightx = 0.0;
@@ -303,7 +334,6 @@ public class BuildSummaryPanel extends JPanel {
                 c.anchor = GridBagConstraints.LINE_START;
                 c.gridx = 1;
                 c.gridy = 3;
-                c.gridwidth = 1;
                 c.fill = GridBagConstraints.HORIZONTAL;
                 c.insets = JBUI.insets(0, gap, 0, 0);
                 c.weightx = 1.0;
@@ -316,7 +346,6 @@ public class BuildSummaryPanel extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
         c.gridy = 4;
-        c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0, 0, 0, 0);
         c.weightx = 0.0;
@@ -327,7 +356,6 @@ public class BuildSummaryPanel extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 1;
         c.gridy = 4;
-        c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0, gap, 0, 0);
         c.weightx = 1.0;
@@ -338,7 +366,6 @@ public class BuildSummaryPanel extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
         c.gridy = 5;
-        c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0, 0, 0, 0);
         c.weightx = 0.0;
@@ -349,7 +376,6 @@ public class BuildSummaryPanel extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 1;
         c.gridy = 5;
-        c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0, gap, 0, 0);
         c.weightx = 1.0;
@@ -360,7 +386,6 @@ public class BuildSummaryPanel extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
         c.gridy = 6;
-        c.gridwidth = 1;
         c.fill = GridBagConstraints.NONE;
         c.insets = JBUI.insets(0, 0, 0, 0);
         c.weightx = 0.0;
@@ -371,7 +396,6 @@ public class BuildSummaryPanel extends JPanel {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 1;
         c.gridy = 6;
-        c.gridwidth = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = JBUI.insets(0, gap, 0, 0);
         c.weightx = 1.0;
