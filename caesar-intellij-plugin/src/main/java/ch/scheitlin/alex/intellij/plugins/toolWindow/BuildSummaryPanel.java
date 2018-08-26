@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
-public class InformationPanel extends JPanel {
+public class BuildSummaryPanel extends JPanel {
     private JPanel panelContent;
     private JLabel labelProjectKey;
     private JLabel labelProjectValue;
@@ -36,13 +36,13 @@ public class InformationPanel extends JPanel {
     private JButton buttonBack;
     private JButton buttonContinue;
 
-    public InformationPanel(String projectName,
-                            String buildConfigurationName,
-                            String buildStatus,
-                            String failedGoal,
-                            String failureCategory,
-                            List<Error> errors,
-                            Project project
+    public BuildSummaryPanel(String projectName,
+                             String buildConfigurationName,
+                             String buildStatus,
+                             String failedGoal,
+                             String failureCategory,
+                             List<Error> errors,
+                             Project project
     ) {
         // set layout
         this.setLayout(new GridBagLayout());

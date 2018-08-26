@@ -12,7 +12,6 @@ import ch.scheitlin.alex.intellij.plugins.services.helpers.IntelliJHelper;
 import ch.scheitlin.alex.intellij.plugins.toolWindow.CaesarToolWindow;
 import ch.scheitlin.alex.maven.MavenBuild;
 import ch.scheitlin.alex.maven.MavenGoal;
-import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;

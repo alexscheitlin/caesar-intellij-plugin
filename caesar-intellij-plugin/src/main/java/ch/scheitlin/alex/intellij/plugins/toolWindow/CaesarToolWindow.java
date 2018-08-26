@@ -16,7 +16,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
     private ToolWindow overview;
     private LoginPanel panelLogin;
     private OverviewPanel panelOverview;
-    private InformationPanel panelInformation;
+    private BuildSummaryPanel panelBuildSummary;
     private RawDataPanel panelRawData;
     private FixPanel panelFix;
 
@@ -71,7 +71,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
             Project project = controller.getIntelliJProject();
 
             // show build information if build log is downloaded (and processed)
-            this.panelInformation = new InformationPanel(
+            this.panelBuildSummary = new BuildSummaryPanel(
                     projectName,
                     buildConfigurationName,
                     buildStatus,
@@ -83,7 +83,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
 
             this.panelRawData = new RawDataPanel(controller.getBuildServerBuildLog(), controller.getMavenBuild());
 
-            setToolWindowContent(this.panelInformation, "Summary", this.panelRawData, "Raw Data");
+            setToolWindowContent(this.panelBuildSummary, "Summary", this.panelRawData, "Raw Data");
 
         } else if (controller.isFixing()) {
             // show build fix panel if user is fixing a broken build
