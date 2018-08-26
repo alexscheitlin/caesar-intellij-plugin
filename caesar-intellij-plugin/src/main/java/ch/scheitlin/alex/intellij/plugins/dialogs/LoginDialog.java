@@ -44,8 +44,16 @@ public class LoginDialog extends JDialog {
     private JPanel panelContent;
 
     // appearance constants
-    private final int BUTTON_WIDTH = 75;
+    private final String HOST_TITLE = "Host:";
+    private final String USERNAME_TITLE = "Username:";
+    private final String PASSWORD_TITLE = "Password:";
+    private final String REMEMBER_ME_TITLE = "Remember Me";
+    private final String OK_BUTTON_TITLE = "OK";
+    private final String CANCEL_BUTTON_TITLE = "Cancel";
     private final int TEXT_FIELD_WIDTH = 175;
+    private final int BUTTON_WIDTH = 75;
+    private final String ICON_RESOURCE_PATH = "/icons/icon_16x16.png";
+    private final String DIALOG_TITLE = "Log in to Build Server";
 
     public LoginDialog() {
         // set layout for content panel
@@ -54,7 +62,7 @@ public class LoginDialog extends JDialog {
         GridBagConstraints c = new GridBagConstraints();
 
         // initialize panel with input fields
-        this.panelInput = initInputPanel("Host:", "Username:", "Password:", "Remember Me", this.TEXT_FIELD_WIDTH);
+        this.panelInput = initInputPanel(this.HOST_TITLE, this.USERNAME_TITLE, this.PASSWORD_TITLE, this.REMEMBER_ME_TITLE, this.TEXT_FIELD_WIDTH);
         c.anchor = GridBagConstraints.NORTH;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
@@ -64,7 +72,7 @@ public class LoginDialog extends JDialog {
         this.panelContent.add(this.panelInput, c);
 
         // initialize panel with control buttons
-        this.panelControls = initControlPanel("OK", "Cancel", this.BUTTON_WIDTH);
+        this.panelControls = initControlPanel(this.OK_BUTTON_TITLE, this.CANCEL_BUTTON_TITLE, this.BUTTON_WIDTH);
         c.anchor = GridBagConstraints.SOUTHEAST;
         c.fill = GridBagConstraints.NONE;
         c.gridx = 0;
@@ -93,10 +101,10 @@ public class LoginDialog extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         // set icon
-        Image icon = new ImageIcon(LoginDialog.class.getResource("/icons/icon_16x16.png")).getImage();
+        Image icon = new ImageIcon(LoginDialog.class.getResource(this.ICON_RESOURCE_PATH)).getImage();
         setIconImage(icon);
 
-        this.setTitle("Log in to Build Server");
+        this.setTitle(this.DIALOG_TITLE);
         this.setModal(true);
         this.getRootPane().setDefaultButton(this.buttonOK);
         this.setLocationRelativeTo(null);    // center on screen
