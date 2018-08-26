@@ -155,69 +155,60 @@ public class BuildSummaryPanel extends JPanel {
             c.weightx = 0.0;
             this.panelContent.add(buttonContinue, c);
         }
+
+        // add panel to stick content to the top
+        JPanel panel = new JPanel();
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 0;
+        c.gridy = 5;
+        c.gridwidth = 2;
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = JBUI.insets(0, 0, 0, 0);
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        this.panelContent.add(panel, c);
     }
 
     private void initAndAddContentPanel(int padding) {
         this.panelContent = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        // request max size to better place the components and add padding to the content
-        this.panelContent = new JPanel(new GridBagLayout());
+        // create panel to add padding
+        JPanel paddingPanel = new JPanel();
+        paddingPanel.setLayout(new GridBagLayout());
+        c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
         c.gridy = 0;
         c.insets = JBUI.insets(padding);
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 1.0;
         c.weighty = 1.0;
-
-        // create panel to add padding
-        JPanel paddingPanel = new JPanel();
-        paddingPanel.setLayout(new GridBagLayout());
         paddingPanel.add(this.panelContent, c);
 
-        // create panel to stick content to the top
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new BorderLayout());
-        topPanel.add(paddingPanel);
-
-        // add vertical scroll bar
-        this.scrollPane = new JBScrollPane(topPanel);
+        // create panel with vertical scroll bar
+        JPanel scrollBarPanel = new JPanel();
+        scrollBarPanel.setLayout(new GridBagLayout());
+        this.scrollPane = new JBScrollPane(paddingPanel);
         this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.scrollPane.setBorder(null);
+        c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
         c.gridy = 0;
         c.insets = JBUI.insets(0);
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 1.0;
         c.weighty = 1.0;
-        this.add(this.scrollPane, c);
+        scrollBarPanel.add(this.scrollPane, c);
 
-        // resize scroll pane content when summary panel is resized
-        this.addComponentListener(new ComponentListener() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                Dimension dimension = new Dimension(getWidth() - 2 * padding, panelContent.getPreferredSize().height);
-
-                panelContent.setMaximumSize(dimension);
-                panelContent.setPreferredSize(dimension);
-                panelContent.setMinimumSize(dimension);
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-
-            }
-        });
+        // add panel to summary panel
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.insets = JBUI.insets(0);
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        this.add(scrollBarPanel, c);
     }
 
     private JPanel initSummaryPanel(
