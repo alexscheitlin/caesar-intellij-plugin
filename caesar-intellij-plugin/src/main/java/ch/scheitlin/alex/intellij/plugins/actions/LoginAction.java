@@ -21,7 +21,7 @@ public class LoginAction extends AnAction {
 
         // disable and don't show item on the menu if user is logged in
         Controller controller = Controller.getInstance();
-        presentation.setEnabled(!controller.isConnected());
-        presentation.setVisible(!controller.isConnected());
+        presentation.setEnabled(!controller.isLoggedIn());
+        presentation.setVisible(!controller.isLoggedIn());
     }
 }

@@ -339,6 +339,10 @@ public class Controller {
         return this.caesar.isFixing();
     }
 
+    public boolean isLoggedIn() {
+        return !this.caesar.isInNoStage();
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
 
     public void setProject(Project project) {
