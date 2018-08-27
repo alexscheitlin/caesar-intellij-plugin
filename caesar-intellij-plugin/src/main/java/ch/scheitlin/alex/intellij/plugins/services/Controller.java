@@ -154,6 +154,7 @@ public class Controller {
 
         if (!this.caesar.process()) {
             System.out.println("Could not process build log!");
+            this.caesar.abort();
             return false;
         }
 
