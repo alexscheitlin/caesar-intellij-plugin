@@ -198,7 +198,6 @@ public class ErrorPanel extends JPanel {
         label.setEditable(false);
         label.setCursor(null);
         label.setOpaque(false);
-        label.setFocusable(false);
 
         label.setText(message);
 
