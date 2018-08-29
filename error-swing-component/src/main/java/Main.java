@@ -13,7 +13,7 @@ public class Main {
         // create frame
         JFrame frame = new JFrame();
         frame.setLayout(new GridBagLayout());
-        frame.setSize(new Dimension(200, 200));
+        frame.setSize(new Dimension(500, 500));
 
         // create new error swing components
         List<Error> errors = getDummyErrors();

@@ -79,7 +79,7 @@ public class ErrorPanel extends JPanel {
         c.gridheight = 1;
         c.gridwidth = 2;
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 2;
         c.weightx = 1.0;
         this.add(this.labelMessage, c);
 
@@ -213,6 +213,15 @@ public class ErrorPanel extends JPanel {
     private JButton initActionButton(String text) {
         JButton button = new JButton();
         button.setText(text);
+
+        Dimension size = new Dimension(40, 20);
+        button.setMinimumSize(size);
+        button.setPreferredSize(size);
+        button.setMaximumSize(size);
+
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.BLACK, 0),
+                BorderFactory.createLineBorder(Color.GRAY, 1)));
 
         return button;
     }
