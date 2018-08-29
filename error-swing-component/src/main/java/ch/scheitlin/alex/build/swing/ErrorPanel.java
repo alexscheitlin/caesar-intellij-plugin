@@ -159,7 +159,7 @@ public class ErrorPanel extends JPanel {
             textBuilder.append(path + "/");
         }
         textBuilder.append(file);
-        textBuilder.append(" - [" + line + ":" + column + "]");
+        textBuilder.append(" : " + line);
 
         label.setText(textBuilder.toString());
 
