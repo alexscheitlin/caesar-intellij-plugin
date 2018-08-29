@@ -82,6 +82,7 @@ public class ErrorPanel extends JPanel {
         c.gridy = 2;
         c.weightx = 1.0;
         this.add(this.labelMessage, c);
+        this.labelMessage.setVisible(this.showMore);
 
         // initialize button 1 to start action 1
         this.buttonAction1 = initActionButton(this.actionButton1Text);
@@ -110,6 +111,7 @@ public class ErrorPanel extends JPanel {
         }
 
         // resize behaviour
+        /*
         this.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -135,6 +137,7 @@ public class ErrorPanel extends JPanel {
 
             }
         });
+        */
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 String labelText = showMore ? SHOW_LESS_TEXT : SHOW_MORE_TEXT;
@@ -201,11 +204,13 @@ public class ErrorPanel extends JPanel {
 
         label.setText(message);
 
+        /*
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 resizeMessageLabel();
             }
         });
+        */
 
         return label;
     }
@@ -235,11 +240,13 @@ public class ErrorPanel extends JPanel {
         String labelContent = "<html><span style='color: " + this.SHOW_MORE_TEXT_ENABLED_COLOR + ";'>" + labelText + "</span></html>";
 
         labelShowMore.setText(labelContent);
+        labelMessage.setVisible(showMore);
 
         // label error message settings
-        resizeMessageLabel();
+        //resizeMessageLabel();
     }
 
+    /*
     private void resizeMessageLabel() {
         // set size
         int width;
@@ -295,6 +302,7 @@ public class ErrorPanel extends JPanel {
         FontRenderContext frc = new FontRenderContext(affinetransform, true, true);
         return (int) (font.getStringBounds(text, frc).getWidth());
     }
+    */
 
     public void addButton1Action(ActionListener actionListener) {
         this.buttonAction1.addActionListener(actionListener);
