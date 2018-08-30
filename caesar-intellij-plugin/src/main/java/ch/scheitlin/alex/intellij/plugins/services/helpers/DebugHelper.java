@@ -12,6 +12,8 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.XDebuggerUtil;
+import com.intellij.xdebugger.XSourcePosition;
+import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointManager;
 import com.intellij.xdebugger.breakpoints.XBreakpointProperties;
 import com.intellij.xdebugger.breakpoints.XLineBreakpointType;
@@ -54,7 +56,7 @@ public class DebugHelper {
 
         class MyLineBreakpointType extends XLineBreakpointType<MyBreakpointProperties> {
             public MyLineBreakpointType() {
-                super("it", "title");
+                super("id", "title");
             }
 
             @Override
@@ -68,9 +70,20 @@ public class DebugHelper {
             }
         }
 
+        final XDebuggerUtil debuggerUtil = XDebuggerUtil.getInstance();
         final XBreakpointManager breakpointManager = XDebuggerManager.getInstance(project).getBreakpointManager();
         final MyLineBreakpointType MY_LINE_BREAKPOINT_TYPE = new MyLineBreakpointType();
         final MyBreakpointProperties MY_LINE_BREAKPOINT_PROPERTIES = new MyBreakpointProperties();
+
+        // disable all other breakpoints
+        for (XBreakpoint breakpoint : breakpointManager.getAllBreakpoints()) {
+            if (breakpoint.isEnabled()) {
+                XSourcePosition position = breakpoint.getSourcePosition();
+                if (position != null) {
+                    debuggerUtil.toggleLineBreakpoint(project, position.getFile(), position.getLine());
+                }
+            }
+        }
 
         // add new line break point
         Runnable runnable = () -> breakpointManager.addLineBreakpoint(
@@ -86,7 +99,7 @@ public class DebugHelper {
         if (virtualFile == null) {
             return false;
         }
-        XDebuggerUtil.getInstance().toggleLineBreakpoint(project, virtualFile, line);
+        debuggerUtil.toggleLineBreakpoint(project, virtualFile, line);
 
         return true;
     }
