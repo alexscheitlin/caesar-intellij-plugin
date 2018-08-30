@@ -32,7 +32,7 @@ This project contains the following sub projects:
 | [Build Server Swing Component](build-server-swing-component) | Represents data of a build server model graphically using `javax.swing` components. |
 | [Maven Swing Component](maven-swing-component) | Represents data of a maven model graphically using `javax.swing` components. |
 | [Error Swing Component](error-swing-component) | Represents data of a error model graphically using `javax.swing` components. |
-| [IntelliJ Plugin](intellij-build-failure-resolution-assistant) | Assists in fixing build failures by downloading a build log, parsing and summarizing it, reporting its status and possible errors, stashing open local changes, checking out the failed version, providing hints on where possible errors happened, and let the user fix the error. |
+| [IntelliJ Plugin](caesar-intellij-plugin) | Assists in fixing build failures by downloading a build log, parsing and summarizing it, reporting its status and possible errors, stashing open local changes, checking out the failed version, providing hints on where possible errors happened, and let the user fix the error. |
 
 ## Architecture
 
