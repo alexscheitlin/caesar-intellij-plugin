@@ -22,13 +22,11 @@ public class CaesarToolWindow implements ToolWindowFactory {
     private BuildSummaryPanel panelBuildSummary;
     private DataPanel panelData;
 
-    private Project project;
     private boolean startUp = true;
 
     @Override
     public void createToolWindowContent(Project project, ToolWindow toolWindow) {
-        // save provided project and tool window
-        this.project = project;
+        // save provided tool window
         this.overview = toolWindow;
 
         // save reference to storage
