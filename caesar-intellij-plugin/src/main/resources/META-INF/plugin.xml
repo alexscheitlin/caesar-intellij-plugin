@@ -1,18 +1,12 @@
 <idea-plugin>
     <id>ch.scheitlin.alex.intellij.plugins.intellij-build-failure-resolution-assistant</id>
     <name>CAESAR</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="alex.scheitlin@gmail.com">Alex Scheitlin</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    <b>Ci Assistant for Efficient (Build Failure) Summarization And Resolution</b><br>
+    <em>Helps fixing broken builds by downloading and summarizing build logs.</em>
     ]]></description>
-
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="ch.scheitlin.alex.intellij.plugins.services.Controller"/>
