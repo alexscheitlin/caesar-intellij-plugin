@@ -221,14 +221,16 @@ public class Controller {
         updateCaesarToolWindow();
     }
 
-    public boolean debugError(Error error) {
+    public void debugError(Error error) {
         String filePath = IntelliJHelper.getProjectPath(this.project) + "/" + error.getFullPath();
 
         int lineNumber = error.getLine() - 1;
 
         // create and toggle a line break point
         if (!DebugHelper.addLineBreakpoint(this.project, filePath, lineNumber)) {
-            return false;
+            String title = "Debug Error";
+            String content = "Could not add breakpoint!";
+            Controller.getInstance().pushNotification(title, content);
         }
 
         // select run configuration
@@ -242,15 +244,11 @@ public class Controller {
             }
         }
 
-        if (runConfiguration == null) {
-            return false;
+        if (runConfiguration == null || !DebugHelper.startDebugger(this.project, runConfiguration)) {
+            String title = "Debug Error";
+            String content = "Could not start debugger!";
+            Controller.getInstance().pushNotification(title, content);
         }
-
-        if (!DebugHelper.startDebugger(this.project, runConfiguration)) {
-            return false;
-        }
-
-        return true;
     }
 
     public boolean openErrorInFile(Error error) {

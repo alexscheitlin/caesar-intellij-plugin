@@ -437,9 +437,7 @@ public class BuildSummaryPanel extends JPanel {
                 // debug error action
                 ActionListener actionListener2 = new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        if (!Controller.getInstance().debugError(that.getError())) {
-                            System.out.println("Could not start debugger!");
-                        }
+                        Controller.getInstance().debugError(that.getError());
                     }
                 };
                 errorComponent.addButton2Action(actionListener2);
