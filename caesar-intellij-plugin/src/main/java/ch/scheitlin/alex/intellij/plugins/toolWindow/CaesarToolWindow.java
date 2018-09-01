@@ -101,10 +101,12 @@ public class CaesarToolWindow implements ToolWindowFactory {
             boolean darkTheme = controller.hasDarkTheme();
 
             final String buildServerBuildLog = controller.getBuildServerBuildLog();
-            ActionListener buildServerBuildLogAction = getBuildServerBuildLogActionListener(buildServerBuildLog, darkTheme);
+            ActionListener buildServerBuildLogAction = getMultilineStringDialogActionListener(
+                    "Build Server Build Log", buildServerBuildLog, darkTheme);
 
             final String mavenBuildLog = controller.getMavenBuildLog();
-            ActionListener mavenBuildLogAction = getMavenBuildLogActionListener(mavenBuildLog, darkTheme);
+            ActionListener mavenBuildLogAction = getMultilineStringDialogActionListener(
+                    "Maven Build Log", mavenBuildLog, darkTheme);
 
             this.panelData = new DataPanel(
                     controller.getMavenBuild(), darkTheme,
@@ -158,21 +160,11 @@ public class CaesarToolWindow implements ToolWindowFactory {
         };
     }
 
-    private ActionListener getBuildServerBuildLogActionListener(String buildLog, boolean darkTheme) {
+    private ActionListener getMultilineStringDialogActionListener(String title, String buildLog, boolean darkTheme) {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MultiLineStringDialog dialog = new MultiLineStringDialog("Build Server Build Log");
-                dialog.showDialog(buildLog, darkTheme);
-            }
-        };
-    }
-
-    private ActionListener getMavenBuildLogActionListener(String buildLog, boolean darkTheme) {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MultiLineStringDialog dialog = new MultiLineStringDialog("Maven Build Log");
+                MultiLineStringDialog dialog = new MultiLineStringDialog(title);
                 dialog.showDialog(buildLog, darkTheme);
             }
         };
