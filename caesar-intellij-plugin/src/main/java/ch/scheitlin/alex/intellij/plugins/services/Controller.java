@@ -296,16 +296,18 @@ public class Controller {
     // CAESAR: disconnect
     // -----------------------------------------------------------------------------------------------------------------
 
-    public boolean disconnect() {
+    public void disconnect() {
         if (!this.caesar.disconnect()) {
-            return false;
+            String title = "Connection Error";
+            String content = "Could not disconnect from build server!";
+            Controller.getInstance().pushNotification(title, content);
+
+            return;
         }
 
         updateCaesarToolWindow();
 
         hideCaesarToolWindow();
-
-        return true;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
