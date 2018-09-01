@@ -131,9 +131,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!Controller.getInstance().fix()) {
-                    System.out.println("Could not prepare broke code!");
-                }
+                Controller.getInstance().fix();
             }
         };
     }

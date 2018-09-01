@@ -204,15 +204,17 @@ public class Controller {
     // CAESAR: fix
     // -----------------------------------------------------------------------------------------------------------------
 
-    public boolean fix() {
+    public void fix() {
         if (!this.caesar.fix(IntelliJHelper.getProjectPath(this.project))) {
-            return false;
+            String title = "Fix Error";
+            String content = "Could not prepare broke code!";
+            Controller.getInstance().pushNotification(title, content);
+
+            return;
         }
 
         IntelliJHelper.reloadProjectFiles(this.project);
         updateCaesarToolWindow();
-
-        return true;
     }
 
     public boolean debugError(Error error) {
