@@ -316,14 +316,14 @@ public class Controller {
     // CAESAR: abort
     // -----------------------------------------------------------------------------------------------------------------
 
-    public boolean abort() {
+    public void abort() {
         if (!this.caesar.abort()) {
-            return false;
+            String title = "Abort Error";
+            String content = "Could not abort!";
+            Controller.getInstance().pushNotification(title, content);
         }
 
         updateCaesarToolWindow();
-
-        return true;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
