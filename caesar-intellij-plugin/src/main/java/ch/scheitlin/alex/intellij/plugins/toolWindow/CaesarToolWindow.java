@@ -120,9 +120,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!Controller.getInstance().connect()) {
-                    System.out.println("Login failed!");
-                }
+                Controller.getInstance().connect();
             }
         };
     }

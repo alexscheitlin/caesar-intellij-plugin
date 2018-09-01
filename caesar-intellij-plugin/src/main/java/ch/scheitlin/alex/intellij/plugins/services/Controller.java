@@ -59,8 +59,12 @@ public class Controller {
     }
 
     // login with asking for credentials
-    public boolean connect() {
-        return connect(true);
+    public void connect() {
+        if (!connect(true)) {
+            String title = "Connection Error";
+            String content = "Could not connect to build server!";
+            Controller.getInstance().pushNotification(title, content);
+        }
     }
 
     // login with saved or provided credentials
