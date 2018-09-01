@@ -1,5 +1,8 @@
 package ch.scheitlin.alex.intellij.plugins.services.helpers;
 
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -114,5 +117,17 @@ public class IntelliJHelper {
         }
 
         return manager.getToolWindow(id);
+    }
+
+    public static void pushNotification(String pluginId, String title, String content) {
+        if (pluginId == null || title == null || content == null) {
+            return;
+        }
+
+        // create notification
+        Notification notification = new Notification(pluginId, title, content, NotificationType.INFORMATION);
+
+        // show notification
+        Notifications.Bus.notify(notification);
     }
 }

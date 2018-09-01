@@ -108,7 +108,6 @@ public class Controller {
         showCaesarToolWindow();
 
         return true;
-
     }
 
     public BuildServer fetchBuildServerInformation() {
@@ -373,5 +372,9 @@ public class Controller {
 
     public boolean hasDarkTheme() {
         return IntelliJHelper.hasDarkTheme();
+    }
+
+    public void pushNotification(String title, String content) {
+        IntelliJHelper.pushNotification(this.TOOL_WINDOW_ID, title, content);
     }
 }
