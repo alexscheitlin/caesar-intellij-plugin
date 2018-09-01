@@ -11,7 +11,9 @@ public class LoginAction extends AnAction {
     public void actionPerformed(AnActionEvent e) {
         // log in via the Controller application service
         if (!Controller.getInstance().connect()) {
-            System.out.println("Could not connect to build server!");
+            String title = "Connection Error";
+            String content = "Could not connect to build server!";
+            Controller.getInstance().pushNotification(title, content);
         }
     }
 
