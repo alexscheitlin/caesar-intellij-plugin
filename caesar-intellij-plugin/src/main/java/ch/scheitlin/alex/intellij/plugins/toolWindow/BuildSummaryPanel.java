@@ -426,9 +426,7 @@ public class BuildSummaryPanel extends JPanel {
             // show file action
             ActionListener actionListener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if (!Controller.getInstance().openErrorInFile(that.getError())) {
-                        System.out.println("Could not open file!");
-                    }
+                    Controller.getInstance().openErrorInFile(that.getError());
                 }
             };
             errorComponent.addButton1Action(actionListener);

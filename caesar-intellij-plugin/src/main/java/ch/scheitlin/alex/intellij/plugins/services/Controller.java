@@ -251,7 +251,7 @@ public class Controller {
         }
     }
 
-    public boolean openErrorInFile(Error error) {
+    public void openErrorInFile(Error error) {
         String filePath = IntelliJHelper.getProjectPath(this.project) + "/" + error.getFullPath();
 
         int lineNumber = error.getLine() - 1;
@@ -259,10 +259,10 @@ public class Controller {
 
         // open file
         if (!IntelliJHelper.openFile(this.project, filePath, lineNumber, columnNumber)) {
-            return false;
+            String title = "Editor Error";
+            String content = "Could not open file!";
+            Controller.getInstance().pushNotification(title, content);
         }
-
-        return true;
     }
 
     public String getGitRepositoryUrl() {
