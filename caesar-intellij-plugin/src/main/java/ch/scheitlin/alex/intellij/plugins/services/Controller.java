@@ -142,24 +142,28 @@ public class Controller {
     // CAESAR: download & process
     // -----------------------------------------------------------------------------------------------------------------
 
-    public boolean downloadAndProcess(BuildServerBuild build, String buildConfigurationName) {
+    public void downloadAndProcess(BuildServerBuild build, String buildConfigurationName) {
         this.selectedBuildServerConfigurationName = buildConfigurationName;
         this.selectedBuild = build;
 
         if (!this.caesar.download(build)) {
-            System.out.println("Could not download build log from build server!");
-            return false;
+            String title = "Download Error";
+            String content = "Could not download build log from build server!";
+            Controller.getInstance().pushNotification(title, content);
+
+            return;
         }
 
         if (!this.caesar.process()) {
-            System.out.println("Could not process build log!");
+            String title = "Process Error";
+            String content = "Could not process build log!";
+            Controller.getInstance().pushNotification(title, content);
+
             this.caesar.abort();
-            return false;
+            return;
         }
 
         updateCaesarToolWindow();
-
-        return true;
     }
 
     public String getBuildServerBuildLog() {
