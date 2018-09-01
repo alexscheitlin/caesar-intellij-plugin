@@ -140,9 +140,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!Controller.getInstance().finish()) {
-                    System.out.println("Could not finish build fixing!");
-                }
+                Controller.getInstance().finish();
             }
         };
     }

@@ -279,15 +279,17 @@ public class Controller {
     // CAESAR: finish
     // -----------------------------------------------------------------------------------------------------------------
 
-    public boolean finish() {
+    public void finish() {
         if (!this.caesar.finish()) {
-            return false;
+            String title = "Finish Error";
+            String content = "Could not finish build fixing!";
+            Controller.getInstance().pushNotification(title, content);
+
+            return;
         }
 
         IntelliJHelper.reloadProjectFiles(this.project);
         updateCaesarToolWindow();
-
-        return true;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
