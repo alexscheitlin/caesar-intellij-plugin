@@ -11,7 +11,9 @@ public class LogoutAction extends AnAction {
     public void actionPerformed(AnActionEvent e) {
         // log out via the Controller application service
         if (!Controller.getInstance().disconnect()) {
-            System.out.println("Could not disconnect from build server!");
+            String title = "Connection Error";
+            String content = "Could not disconnect from build server!";
+            Controller.getInstance().pushNotification(title, content);
         }
     }
 
