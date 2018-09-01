@@ -51,14 +51,7 @@ public class CaesarToolWindow implements ToolWindowFactory {
                 return;
             }
 
-            ActionListener loginAction = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!Controller.getInstance().connect()) {
-                        System.out.println("Login failed!");
-                    }
-                }
-            };
+            ActionListener loginAction = getLoginActionListener();
 
             // show login panel if user is not logged in
             this.panelLogin = new LoginPanel(loginAction);
@@ -83,32 +76,9 @@ public class CaesarToolWindow implements ToolWindowFactory {
             List<Error> errors = controller.getErrors();
             String newBranch = controller.getNewBranch();
 
-            ActionListener fixAction = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!Controller.getInstance().fix()) {
-                        System.out.println("Could not prepare broke code!");
-                    }
-                }
-            };
-
-            ActionListener finishAction = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!Controller.getInstance().finish()) {
-                        System.out.println("Could not finish build fixing!");
-                    }
-                }
-            };
-
-            ActionListener abortAction = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!Controller.getInstance().abort()) {
-                        System.out.println("Could not abort!");
-                    }
-                }
-            };
+            ActionListener fixAction = getFixActionListener();
+            ActionListener finishAction = getFinishActionListener();
+            ActionListener abortAction = getAbortActionListener();
 
             // show build information if build log is downloaded (and processed) or is in fixing mode
             this.panelBuildSummary = new BuildSummaryPanel(
@@ -131,22 +101,10 @@ public class CaesarToolWindow implements ToolWindowFactory {
             boolean darkTheme = controller.hasDarkTheme();
 
             final String buildServerBuildLog = controller.getBuildServerBuildLog();
-            ActionListener buildServerBuildLogAction = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    MultiLineStringDialog dialog = new MultiLineStringDialog("Build Server Build Log");
-                    dialog.showDialog(buildServerBuildLog, darkTheme);
-                }
-            };
+            ActionListener buildServerBuildLogAction = getBuildServerBuildLogActionListener(buildServerBuildLog, darkTheme);
 
             final String mavenBuildLog = controller.getMavenBuildLog();
-            ActionListener mavenBuildLogAction = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    MultiLineStringDialog dialog = new MultiLineStringDialog("Maven Build Log");
-                    dialog.showDialog(mavenBuildLog, darkTheme);
-                }
-            };
+            ActionListener mavenBuildLogAction = getMavenBuildLogActionListener(mavenBuildLog, darkTheme);
 
             this.panelData = new DataPanel(
                     controller.getMavenBuild(), darkTheme,
@@ -154,6 +112,70 @@ public class CaesarToolWindow implements ToolWindowFactory {
 
             setToolWindowContent(this.panelBuildSummary, "Summary", this.panelData, "Data");
         }
+    }
+
+    private ActionListener getLoginActionListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!Controller.getInstance().connect()) {
+                    System.out.println("Login failed!");
+                }
+            }
+        };
+    }
+
+    private ActionListener getFixActionListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!Controller.getInstance().fix()) {
+                    System.out.println("Could not prepare broke code!");
+                }
+            }
+        };
+    }
+
+    private ActionListener getFinishActionListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!Controller.getInstance().finish()) {
+                    System.out.println("Could not finish build fixing!");
+                }
+            }
+        };
+    }
+
+    private ActionListener getAbortActionListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!Controller.getInstance().abort()) {
+                    System.out.println("Could not abort!");
+                }
+            }
+        };
+    }
+
+    private ActionListener getBuildServerBuildLogActionListener(String buildLog, boolean darkTheme) {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MultiLineStringDialog dialog = new MultiLineStringDialog("Build Server Build Log");
+                dialog.showDialog(buildLog, darkTheme);
+            }
+        };
+    }
+
+    private ActionListener getMavenBuildLogActionListener(String buildLog, boolean darkTheme) {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MultiLineStringDialog dialog = new MultiLineStringDialog("Maven Build Log");
+                dialog.showDialog(buildLog, darkTheme);
+            }
+        };
     }
 
     // set one component as tool window content
