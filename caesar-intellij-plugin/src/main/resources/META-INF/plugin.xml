@@ -4,8 +4,9 @@
     <vendor email="alex.scheitlin@gmail.com">Alex Scheitlin</vendor>
 
     <description><![CDATA[
-    <b>Ci Assistant for Efficient (Build Failure) Summarization And Resolution</b><br>
-    <em>Helps fixing broken builds by downloading and summarizing build logs.</em>
+    <p><a href="https://github.com/alexscheitlin/caesar-intellij-plugin">GitHub</p>
+    <p><b>Ci Assistant for Efficient (Build Failure) Summarization And Resolution</b></p>
+    <p><em>Helps fixing broken builds by downloading and summarizing build logs.</em></p>
     ]]></description>
 
     <extensions defaultExtensionNs="com.intellij">
