@@ -35,12 +35,6 @@ intellij {
     version '2018.1.1'
 }
 
-patchPluginXml {
-    changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
-}
-
 task fatJar(type: Jar) {
     classifier = 'all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
