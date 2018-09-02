@@ -13,6 +13,7 @@ import ch.scheitlin.alex.intellij.plugins.toolWindow.CaesarToolWindow;
 import ch.scheitlin.alex.maven.MavenBuild;
 import ch.scheitlin.alex.maven.MavenGoal;
 import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.ide.ui.EditorOptionsTopHitProvider;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import javafx.util.Pair;
@@ -55,20 +56,27 @@ public class Controller {
 
     // try to login without asking for credentials
     public boolean tryAutoConnect() {
-        return connect(false);
+        try {
+            connect(false);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     // login with asking for credentials
     public void connect() {
-        if (!connect(true)) {
+        try {
+            connect(true);
+        } catch (Exception ex) {
             String title = "Connection Error";
-            String content = "Could not connect to build server!";
-            Controller.getInstance().pushNotification(title, content);
+            String content = ex.getMessage();
+            pushNotification(title, content);
         }
     }
 
     // login with saved or provided credentials
-    private boolean connect(boolean openDialog) {
+    private void connect(boolean openDialog) throws Exception {
         // get credentials from storage (if the are available)
         List<Pair<String, String>> properties = this.storage.getBuildServerCredentials();
         String host = properties.get(0).getValue();
@@ -85,7 +93,7 @@ public class Controller {
 
             // if result is null the cancel button was clicked
             if (result == null) {
-                return false;
+                throw new Exception("Credentials not found!");
             }
 
             // use the just entered credentials
@@ -103,15 +111,10 @@ public class Controller {
         }
 
         // check whether the login was successful or not
-        if (!this.caesar.connect(host, username, password)) {
-            return false;
-        }
+        this.caesar.connect(host, username, password);
 
         updateCaesarToolWindow();
-
         showCaesarToolWindow();
-
-        return true;
     }
 
     public BuildServer fetchBuildServerInformation() {
@@ -150,20 +153,30 @@ public class Controller {
         this.selectedBuildServerConfigurationName = buildConfigurationName;
         this.selectedBuild = build;
 
-        if (!this.caesar.download(build)) {
+        try {
+            this.caesar.download(build);
+        } catch (Exception ex) {
             String title = "Download Error";
-            String content = "Could not download build log from build server!";
-            Controller.getInstance().pushNotification(title, content);
+            String content = ex.getMessage();
+            pushNotification(title, content);
 
             return;
         }
 
-        if (!this.caesar.process()) {
+        try {
+            this.caesar.process();
+        } catch (Exception ex) {
             String title = "Process Error";
-            String content = "Could not process build log!";
-            Controller.getInstance().pushNotification(title, content);
+            String content = ex.getMessage();
+            pushNotification(title, content);
 
-            this.caesar.abort();
+            try {
+                this.caesar.abort();
+            } catch (Exception e) {
+                title = "Abort Error";
+                content = e.getMessage();
+                pushNotification(title, content);
+            }
             return;
         }
 
@@ -209,10 +222,12 @@ public class Controller {
     // -----------------------------------------------------------------------------------------------------------------
 
     public void fix() {
-        if (!this.caesar.fix(IntelliJHelper.getProjectPath(this.project))) {
+        try {
+            this.caesar.fix(IntelliJHelper.getProjectPath(this.project));
+        } catch (Exception ex) {
             String title = "Fix Error";
-            String content = "Could not prepare broke code!";
-            Controller.getInstance().pushNotification(title, content);
+            String content = ex.getMessage();
+            pushNotification(title, content);
 
             return;
         }
@@ -230,7 +245,7 @@ public class Controller {
         if (!DebugHelper.addLineBreakpoint(this.project, filePath, lineNumber)) {
             String title = "Debug Error";
             String content = "Could not add breakpoint!";
-            Controller.getInstance().pushNotification(title, content);
+            pushNotification(title, content);
         }
 
         // select run configuration
@@ -247,7 +262,7 @@ public class Controller {
         if (runConfiguration == null || !DebugHelper.startDebugger(this.project, runConfiguration)) {
             String title = "Debug Error";
             String content = "Could not start debugger!";
-            Controller.getInstance().pushNotification(title, content);
+            pushNotification(title, content);
         }
     }
 
@@ -261,7 +276,7 @@ public class Controller {
         if (!IntelliJHelper.openFile(this.project, filePath, lineNumber, columnNumber)) {
             String title = "Editor Error";
             String content = "Could not open file!";
-            Controller.getInstance().pushNotification(title, content);
+            pushNotification(title, content);
         }
     }
 
@@ -282,10 +297,12 @@ public class Controller {
     // -----------------------------------------------------------------------------------------------------------------
 
     public void finish() {
-        if (!this.caesar.finish()) {
+        try {
+            this.caesar.finish();
+        } catch (Exception ex) {
             String title = "Finish Error";
-            String content = "Could not finish build fixing!";
-            Controller.getInstance().pushNotification(title, content);
+            String content = ex.getMessage();
+            pushNotification(title, content);
 
             return;
         }
@@ -299,16 +316,17 @@ public class Controller {
     // -----------------------------------------------------------------------------------------------------------------
 
     public void disconnect() {
-        if (!this.caesar.disconnect()) {
+        try {
+            this.caesar.disconnect();
+        } catch (Exception ex) {
             String title = "Connection Error";
-            String content = "Could not disconnect from build server!";
-            Controller.getInstance().pushNotification(title, content);
+            String content = ex.getMessage();
+            pushNotification(title, content);
 
             return;
         }
 
         updateCaesarToolWindow();
-
         hideCaesarToolWindow();
     }
 
@@ -317,10 +335,14 @@ public class Controller {
     // -----------------------------------------------------------------------------------------------------------------
 
     public void abort() {
-        if (!this.caesar.abort()) {
+        try {
+            this.caesar.abort();
+        } catch (Exception ex) {
             String title = "Abort Error";
-            String content = "Could not abort!";
-            Controller.getInstance().pushNotification(title, content);
+            String content = ex.getMessage();
+            pushNotification(title, content);
+
+            return;
         }
 
         updateCaesarToolWindow();
