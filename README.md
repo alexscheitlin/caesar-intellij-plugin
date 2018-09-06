@@ -40,6 +40,13 @@ The following visualization shows how the different sub projects interact.
 
 ![Architecture](assets/architecture.png)
 
+## Features
+
+- CAESAR workflow (read more [here](https://github.com/alexscheitlin/caesar))
+- store build server credentials between IDE restarts
+- open files at line where the error happened
+- add breakpoints at the error line and debug them (only for failed tests and if there is already an existing run configuration set in the IDE for the test file)
+
 ## Authors
 
 - **Alex Scheitlin** - *Initial work* - [alexscheitlin](https://github.com/alexscheitlin)
