@@ -7,6 +7,8 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+// saves and loads build server credentials to persistently access them between restarts of the IDE
+// http://www.jetbrains.org/intellij/sdk/docs/basics/persisting_state_of_components.html
 public class Storage {
     private final String HOST = "BUILD_SERVER_HOST";
     private final String USERNAME = "BUILD_SERVER_USERNAME";

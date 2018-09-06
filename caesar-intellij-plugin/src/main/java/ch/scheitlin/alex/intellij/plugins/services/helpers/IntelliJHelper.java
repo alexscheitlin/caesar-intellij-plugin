@@ -14,10 +14,12 @@ import javax.swing.*;
 import java.io.File;
 
 public class IntelliJHelper {
+    // returns whether a dark theme is used (currently only the intellij 'darcula' is checked)
     public static boolean hasDarkTheme() {
         return UIManager.getLookAndFeel().getName().contains("Darcula");
     }
 
+    // gets a intellij project as a virtual file
     public static VirtualFile getProjectDirectoryFile(Project project) {
         if (project == null) {
             return null;
@@ -26,6 +28,7 @@ public class IntelliJHelper {
         return project.getBaseDir();
     }
 
+    // gets the path to a intellij project
     public static String getProjectPath(Project project) {
         if (project == null) {
             return null;
@@ -39,6 +42,8 @@ public class IntelliJHelper {
         return projectDirectory.getPath();
     }
 
+    // reloads all files of a intellij project
+    // (helpful if for example a file was changed outside the ide, e.g. with git)
     public static boolean reloadProjectFiles(Project project) {
         if (project == null) {
             return false;
@@ -54,6 +59,7 @@ public class IntelliJHelper {
         return true;
     }
 
+    // shows a tool window (specified by its id) in a intellij project
     public static boolean showToolWindow(Project project, String toolWindowId) {
         if (project == null || toolWindowId == null || toolWindowId == "") {
             return false;
@@ -69,6 +75,7 @@ public class IntelliJHelper {
         return true;
     }
 
+    // hides a tool window (specified by its id) in a intellij project
     public static boolean hideToolWindow(Project project, String toolWindowId) {
         if (project == null || toolWindowId == null || toolWindowId == "") {
             return false;
@@ -84,6 +91,7 @@ public class IntelliJHelper {
         return true;
     }
 
+    // opens a file within a intellij project
     public static boolean openFile(Project project, String filePath, int lineNumber, int columnNumber) {
         if (project == null || filePath == null || filePath == "") {
             return false;
@@ -106,6 +114,7 @@ public class IntelliJHelper {
         return true;
     }
 
+    // gets a tool window specified by its id
     private static ToolWindow getToolWindowById(Project project, String id) {
         if (project == null || id == null || id == "") {
             return null;
@@ -119,6 +128,7 @@ public class IntelliJHelper {
         return manager.getToolWindow(id);
     }
 
+    // creates a new notification
     public static void pushNotification(String pluginId, String title, String content) {
         if (pluginId == null || title == null || content == null) {
             return;

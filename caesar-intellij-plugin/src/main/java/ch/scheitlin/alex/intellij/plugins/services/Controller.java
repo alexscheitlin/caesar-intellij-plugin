@@ -13,7 +13,6 @@ import ch.scheitlin.alex.intellij.plugins.toolWindow.CaesarToolWindow;
 import ch.scheitlin.alex.maven.MavenBuild;
 import ch.scheitlin.alex.maven.MavenGoal;
 import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.ide.ui.EditorOptionsTopHitProvider;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import javafx.util.Pair;

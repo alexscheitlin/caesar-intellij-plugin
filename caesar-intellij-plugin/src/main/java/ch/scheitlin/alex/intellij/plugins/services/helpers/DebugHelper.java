@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.List;
 
 public class DebugHelper {
+    // get a list of all run configurations of a intellij project
     public static List<RunConfiguration> getRunConfigurations(Project project) {
         if (project == null) {
             return null;
